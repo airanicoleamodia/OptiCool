@@ -66,3 +66,113 @@ exports.login = async (req, res, next) => {
     }
 
 }
+
+exports.getSingleUser = async (req, res, next) => {
+
+    try {
+
+        const user = await User.findById(req.params.id);
+
+        res.json({
+            user,
+            success: true,
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        })
+    }
+
+}
+
+exports.updateUser = async (req, res, next) => {
+
+    try {
+
+        const file = req.file;
+
+        if (file) {
+            req.body.avatar = await File.uploadSingle({ filePath: file.path });
+        }
+
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        console.log(user);
+
+        sendToken(user, 200, res, 'successfully updated!')
+
+    } catch (err) {
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        })
+    }
+
+}
+
+exports.sendCode = async (req, res, next) => {
+
+    try {
+
+        const user = await User.findById(req.params.id);
+
+        await user.getResetPasswordCode();
+        await user.save();
+        await user.sendResetPasswordCode();
+
+        return res.json({
+            message: "Code sent to your email",
+            success: true,
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        })
+    }
+
+}
+
+exports.verifyCode = async (req, res, next) => {
+
+
+    try {
+
+        const user = await User.findById(req.params.id);
+
+        const status = await user.verifyCode(req.body.code);
+
+        if (status === 'expired') {
+
+            return res.status(400).json({
+                message: "code expired",
+                success: true,
+            })
+
+        }
+
+        if (status === 'wrong') {
+
+            return res.status(400).json({
+                message: "code does not matched",
+                success: true,
+            })
+
+        }
+
+        return res.json({
+            message: "You can now change your password",
+            success: true,
+        })
+
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        })
+    }
+}

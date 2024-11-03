@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const { generateCode, sendEmail } = require('../utils/mailer');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -37,8 +38,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'user'
     },
+    resetPasswordCode: String,
+    resetPasswordCodeExpire: Date,
     resetPasswordToken: String,
-    resetPasswordExpire: Date
+    resetPasswordExpire: Date,
 }, { timestamps: true })
 
 userSchema.pre('save', async function (next) {
@@ -74,6 +77,39 @@ userSchema.methods.getResetPasswordToken = async function () {
     this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
     return resetToken;
+}
+
+userSchema.methods.getResetPasswordCode = async function () {
+    const code = await generateCode(6);
+    this.resetPasswordCode = code.trim();
+    this.resetPasswordCodeExpire = Date.now() + 5 * 60 * 1000;
+    return code;
+}
+
+userSchema.methods.sendResetPasswordCode = async function () {
+    await sendEmail({
+        email: this.email,
+        subject: 'OptiCool - Reset password code',
+        message: `This is your verification code ${this.resetPasswordCode}. This will be valid in 5 minutes`
+    })
+}
+
+userSchema.methods.verifyCode = async function (inputtedCode) {
+
+    if (this.resetPasswordCodeExpire < Date.now()) {
+        return 'expired'
+    }
+
+    if (this.resetPasswordCode !== inputtedCode) {
+        return 'wrong'
+    }
+
+    this.resetPasswordCode = null
+    this.resetPasswordCodeExpire = null
+    this.save();
+
+    return 'success'
+
 }
 
 module.exports = mongoose.model('User', userSchema)
