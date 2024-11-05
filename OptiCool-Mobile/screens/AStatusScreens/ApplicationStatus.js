@@ -3,12 +3,13 @@ import React from 'react'
 import { Button, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Dashboard() {
+
+export default function ApplicationStatus() {
 
     return (
         <SafeAreaView>
             <View>
-            <Text>DASHBOARD TO</Text>
+            <Text>Application Status</Text>
             </View>
         </SafeAreaView>
     )
