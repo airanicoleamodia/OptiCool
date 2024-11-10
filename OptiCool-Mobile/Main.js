@@ -1,25 +1,19 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import AuthNavigation from './navigators/AuthNavigation'
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native'; // Ensure this is only here once
 import { useSelector } from 'react-redux';
+import AuthNavigation from './navigators/AuthNavigation';
 import BottomTabs from './navigators/BottomTabs';
 
 export default function Main() {
-
-    const { isLogin, user, token } = useSelector(state => state.auth);
+    const { isLogin } = useSelector((state) => state.auth);
 
     return (
-
         <NavigationContainer>
-
-            {isLogin ?
+            {isLogin ? (
                 <BottomTabs />
-                :
+            ) : (
                 <AuthNavigation />
-            }
-
+            )}
         </NavigationContainer>
-
-    )
+    );
 }
