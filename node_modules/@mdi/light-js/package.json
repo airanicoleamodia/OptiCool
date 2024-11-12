@@ -1,0 +1,37 @@
+{
+  "name": "@mdi/light-js",
+  "version": "0.2.63",
+  "description": "Dist for Material Design Icons Light for JS/TypeScript",
+  "main": "commonjs/mdil.js",
+  "module": "mdil.js",
+  "types": "mdil.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "npm update && npm run buildjs && npm run es5 && npm run commonjs",
+    "buildjs": "node build.js",
+    "es5": "tsc -d mdil.ts --target es5 --module es2015",
+    "commonjs": "tsc -d mdil.ts --outDir commonjs",
+    "umd": "tsc -d mdil.ts --module UMD --outDir umd",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Templarian/MaterialDesignLight-JS.git"
+  },
+  "keywords": [
+    "Material",
+    "Design",
+    "Icons",
+    "mdi"
+  ],
+  "author": "Austin Andrews",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Templarian/MaterialDesignLight-JS/issues"
+  },
+  "homepage": "https://github.com/Templarian/MaterialDesignLight-JS#readme",
+  "devDependencies": {
+    "@mdi/light-svg": "^0.2.63",
+    "@mdi/util": "^0.2.0"
+  }
+}

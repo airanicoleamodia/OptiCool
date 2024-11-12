@@ -1,1 +1,6 @@
-{}
+{
+  "dependencies": {
+    "@mdi/light-js": "^0.2.63",
+    "@mdi/react": "^1.6.1"
+  }
+}
