@@ -31,23 +31,7 @@ const styles = StyleSheet.create({
     marginBottom: -16,
     marginLeft: 9,
   },
-  greeting: {
-    fontSize: 24,
-    fontWeight: 'normal', // This makes "Hey" thinner
-    color: '#050a20', // Ensure text is visible on background
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold', // This makes "John" bolder
-    color: '#4f5e70', // Ensure text is visible on background
-  },
-  avatar: {
-    marginTop: -5,
-    marginRight: 5,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
+
   singleStatusCard: {
     backgroundColor: '#ebf2fa', // Unified background for the single box
     borderRadius: 10,
@@ -95,7 +79,8 @@ const styles = StyleSheet.create({
     padding: 16,
     flex: 1,
     alignItems: 'center',
-    marginHorizontal: 5, // Add horizontal margin between cards
+    marginHorizontal: 5, 
+    position: 'relative',
 
   },
   applianceText: {
@@ -135,6 +120,20 @@ const styles = StyleSheet.create({
   },
   tempValue: {
     fontSize: 20,
+    fontWeight: 'bold',
+  },
+  reportButton: {
+    position: 'absolute', 
+    bottom: 10, 
+    right: 15,   
+    backgroundColor: '#ff5c5c',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  reportButtonText: {
+    color: '#fff',
     fontWeight: 'bold',
   },
 });
