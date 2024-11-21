@@ -10,7 +10,6 @@ import { useSelector } from "react-redux"
 import { MaterialCommunityIcons } from 'react-native-vector-icons'
 import Environment from "../screens/EStatusScreens/EnvironmentStatus"
 
-
 const Tab = createBottomTabNavigator()
 
 export default function BottomTabs() {
@@ -38,27 +37,9 @@ export default function BottomTabs() {
             />
 
 
-            <Tab.Screen
-                name="ControlPage"
-                component={ControlPage}
-                options={{
-                    tabBarShowLabel: false,
-                    tabBarIcon: ({ color }) => {
-                        return <MaterialCommunityIcons name='air-conditioner' size={30} color={'#96a8fa'} />
-                    },
-                }}
-            />
+        
 
-            {/* <Tab.Screen
-                name="HomePage"
-                component={HomePage}
-                options={{
-                    tabBarShowLabel: false,
-                    tabBarIcon: ({ color }) => {
-                        return <MaterialCommunityIcons name='plus' size={30} color={'#96a8fa'} /> // Correct icon name
-                    },
-                }}
-            /> */}
+           
 
             <Tab.Screen
                 name="Environment Status"
@@ -67,7 +48,7 @@ export default function BottomTabs() {
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color }) => {
 
-                        return <MaterialCommunityIcons name='leaf-circle' size={35} color={'#96a8fa'} />
+                        return <MaterialCommunityIcons name='widgets' size={35} color={'#96a8fa'} />
                     },
                 }}
             />

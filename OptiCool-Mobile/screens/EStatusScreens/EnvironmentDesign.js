@@ -7,80 +7,136 @@ const { width, height } = Dimensions.get('window');
 const maxContainerWidth = (width - 20) / 2; // Adjust the divisor for number of containers and margin
 
 const styles = StyleSheet.create({
-  outerCon: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop:  height * 0.05,
-    marginBottom:  height * 0.05,
-  },
   container: {
-    // width: maxContainerWidth, // Use the calculated maximum width
-    width: maxContainerWidth,
-    height: height * 0.35, // Keep a consistent height
+    flex: 1,
+  },
+  background: {
+    flex: 1, // This will make the ImageBackground take the full screen
+    justifyContent: 'flex-start', // Align the content from the top
+    padding: 16, // Add padding to ensure content is not too close to edges
+  },
+  header: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: '3%', // Horizontal margin for spacing
+    marginBottom: 20,
+    marginTop: 10,
+    marginLeft: 8,
   },
-  innerContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: height * 0.04, // 4% of screen height for vertical padding
-    paddingHorizontal: width * 0.05, // 5% of screen width for horizontal padding
-    gap: 20,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#002569',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 25,
-    borderRadius: 25,
+  intro: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: 'grey',
+    marginTop: 10,
+    marginBottom: -16,
+    marginLeft: 9,
   },
-  up: {
-    fontStyle: 'bold',
-    fontWeight: '600',
-    fontSize: width * 0.05, // Responsive font size
-    lineHeight: height * 0.04, // Adjust line height based on height
-    textAlign: 'center',
-    color: '#000000',
+  greeting: {
+    fontSize: 24,
+    fontWeight: 'normal', // This makes "Hey" thinner
+    color: '#050a20', // Ensure text is visible on background
   },
-  percent: {
-    fontStyle: 'normal',
-    fontWeight: '700',
-    fontSize: width * 0.1, // Responsive font size
-    lineHeight: height * 0.1, // Adjust line height based on height
-    textAlign: 'center',
-    color: '#000000',
+  name: {
+    fontSize: 24,
+    fontWeight: 'bold', // This makes "John" bolder
+    color: '#4f5e70', // Ensure text is visible on background
   },
-  bottom: {
-    fontStyle: 'normal',
-    fontWeight: '600',
-    fontSize: width * 0.05, // Responsive font size
-    lineHeight: height * 0.04, // Adjust line height based on height
-    textAlign: 'center',
-    color: '#000000',
+  avatar: {
+    marginTop: -5,
+    marginRight: 5,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
-  customIcon: {
-    position: 'absolute',
-    width: width * 0.15, // Responsive icon size
-    height: width * 0.15, // Keep icon square
-    top: -height * 0.02, // Adjust vertical position as needed
-    right: -width * 0.05, // Position it slightly outside the top-right corner
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 25,
-    borderRadius: 25,
+  singleStatusCard: {
+    backgroundColor: '#ebf2fa', // Unified background for the single box
+    borderRadius: 10,
+    padding: 16,
+    flexDirection: 'row', // Arrange items in a row
+    justifyContent: 'space-around', // Space out items evenly
+    alignItems: 'center', // Align items vertically in the center
+    marginBottom: 20,
+  },
+  statusItem: {
+    alignItems: 'center', // Center align text inside each item
+    flex: 1, // Ensure each item takes up equal space
+  },
+  statusText: {
+    fontWeight: 'bold',
+    fontSize: 10,
+    color: '#9eaab8',
+    marginLeft: 10,
+  },
+  statusValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4f5e70',
+    marginLeft: 30,
+  },
+  mainRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    marginTop: 15,
   },
   
+  cityTemp: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  cityName: {
+    fontSize: 16,
+    color: '#000',
+  },
+  applianceCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 16,
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 5, // Add horizontal margin between cards
+
+  },
+  applianceText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingBottom: 10,
+  },
+  applianceStatus: {
+    color: 'green',
+  },
+  applianceStatusInactive: {
+    color: 'red',
+  },
+
+  emptyCard: {
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    padding: 16,
+    flex: 1,
+    marginLeft: 10,
+  },
+  tempRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  tempCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 16,
+    flex: 1,
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  tempLabel: {
+    fontSize: 16,
+  },
+  tempValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 });
 
 export default styles;

@@ -1,69 +1,61 @@
-import { View, Image, ScrollView } from 'react-native';
+import { View, Image, ScrollView, ImageBackground } from 'react-native';
 import React from 'react';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './EnvironmentDesign';
+import opticoolImage from '../../assets/opticool.png';
 
 export default function EnvironmentStatus() {
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View style={styles.outerCon}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
-                        <View style={styles.container}>
-                            <View style={styles.innerContainer}>
-                                <Text style={styles.up}>INSIDE</Text>
-                                <Text style={styles.percent}>50 %</Text>
-                                <Text style={styles.bottom}>HUMIDITY</Text>
-                                <Image
-                                    source={require('../../assets/waterdroplet.png')} 
-                                    style={styles.customIcon}
-                                />
-                            </View>
-                        </View>
+        <SafeAreaView style={styles.container}>
+        {/* Make sure the ImageBackground takes up the whole screen */}
+        <ImageBackground
+            source={opticoolImage}
+            style={styles.background}
+            resizeMode="cover"
+        >
+    
 
-                        <View style={styles.container}>
-                            <View style={styles.innerContainer}>
-                                <Text style={styles.up}>OUTSIDE</Text>
-                                <Text style={styles.percent}>70 %</Text>
-                                <Text style={styles.bottom}>HUMIDITY</Text>
-                                <Image
-                                    source={require('../../assets/waterdroplet.png')} 
-                                    style={styles.customIcon}
-                                />
-                            </View>
-                        </View>
-                    </View>
+            <View style={styles.mainRow}>
+                <View style={styles.applianceCard}>
+                    <Text style={styles.applianceText}>Temperature Sensor 1</Text>
+                    <Text style={styles.applianceStatus}>Status: Active</Text>
                 </View>
-
-                <View style={styles.outerCon}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
-                        <View style={styles.container}>
-                            <View style={styles.innerContainer}>
-                                <Text style={styles.up}>INSIDE</Text>
-                                <Text style={styles.percent}>27°C</Text>
-                                <Text style={styles.bottom}>TEMPERATURE</Text>
-                                <Image
-                                    source={require('../../assets/waterdroplet.png')} 
-                                    style={styles.customIcon}
-                                />
-                            </View>
-                        </View>
-
-                        <View style={styles.container}>
-                            <View style={styles.innerContainer}>
-                                <Text style={styles.up}>OUTSIDE</Text>
-                                <Text style={styles.percent}>37°C</Text>
-                                <Text style={styles.bottom}>TEMPERATURE</Text>
-                                <Image
-                                    source={require('../../assets/waterdroplet.png')} 
-                                    style={styles.customIcon}
-                                />
-                            </View>
-                        </View>
-                    </View>
+             
+                <View style={styles.applianceCard}>
+                    <Text style={styles.applianceText}>Temperature Sensor 2</Text>
+                    <Text style={styles.applianceStatus}>Status: Active</Text>
                 </View>
-            </ScrollView>
-        </SafeAreaView>
+            </View>
+
+            <View style={styles.mainRow}>
+                <View style={styles.applianceCard}>
+                    <Text style={styles.applianceText}>Temperature Sensor 3</Text>
+                    <Text style={styles.applianceStatus}>Status: Active</Text>
+                </View>
+             
+                <View style={styles.applianceCard}>
+                    <Text style={styles.applianceText}>Temperature Sensor 4</Text>
+                    <Text style={styles.applianceStatus}>Status: Active</Text>
+                </View>
+            </View>
+
+            <View style={styles.mainRow}>
+                <View style={styles.applianceCard}>
+                    <Text style={styles.applianceText}>Exhaust Fan</Text>
+                    <Text style={styles.applianceStatusInactive}>Status: Inactive</Text>
+                </View>
+            </View>
+
+            <View style={styles.mainRow}>
+                <View style={styles.applianceCard}>
+                    <Text style={styles.applianceText}>Power Consumption Meter</Text>
+                    <Text style={styles.applianceStatusInactive}>Status: Inactive</Text>
+                </View>
+            </View>
+            
+      
+        </ImageBackground>
+    </SafeAreaView>
     );
 }

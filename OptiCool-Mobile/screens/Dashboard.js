@@ -8,7 +8,7 @@ import axios from 'axios'; // Import axios
 
 
 export default function Dashboard() {
-    const { user } = useSelector(state => state.auth);
+    const { user, token } = useSelector(state => state.auth);
     const [userData, setUserData] = useState({avatar: ''});
     const [weatherData, setWeatherData] = useState(null);
     const [locationKey, setLocationKey] = useState(null);
@@ -98,7 +98,7 @@ export default function Dashboard() {
                 {/* Header Section */}
                 <Text style={styles.intro}>Manage Room</Text>
                 <View style={styles.header}>
-                    <Text style={styles.greeting}>Hey, <Text style={styles.name}>John!</Text></Text>
+                    <Text style={styles.greeting}>Hey, <Text style={styles.name}>{user.username}</Text></Text>
                     <Avatar.Image
                         source={{ uri: user.avatar?.url || 'https://example.com/default-avatar.png' }} // Use user's avatar or a default one
                         size={40}
