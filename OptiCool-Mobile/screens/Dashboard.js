@@ -6,63 +6,42 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { Avatar, Button, TextInput, FAB } from 'react-native-paper';
 import axios from 'axios'; // Import axios
 
+const baseURL = 'http://dataservice.accuweather.com';  // AccuWeather API base URL
+const apiKey = 'w7QpVKXN9JLuj6zTFcwBo6OqvgfQG1vW';  // Replace with your API key
+const locationKey = '759349';  
+
 
 export default function Dashboard() {
-    const { user, token } = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
     const [userData, setUserData] = useState({avatar: ''});
     const [weatherData, setWeatherData] = useState(null);
-    const [locationKey, setLocationKey] = useState(null);
 
     // Your API key from AccuWeather
     const API_KEY = 'VamNFemH3boIKHxrAXCTfUD0u5LiYytV';
     const baseURL = 'http://dataservice.accuweather.com';
 
-      // Function to get the location key using the city name
-      const getLocationKey = async (cityName) => {
-        try {
-            const response = await axios.get(
-                `${baseURL}/locations/v1/cities/search`,
-                {
-                    params: {
-                        apikey: API_KEY,
-                        q: cityName,
-                    },
-                }
-            );
-            const key = response.data[0]?.Key;
-            setLocationKey(key);
-            return key;
-        } catch (error) {
-            console.error('Error getting location key:', error);
-        }
-    };
+  // Fetch weather data
+  const fetchWeatherData = async () => {
+    try {
+        const { data } = await axios.get(`${baseURL}/currentconditions/v1/${locationKey}`, {
+            params: {
+                apikey: apiKey,
+                language: 'en-us',
+                details: true, // Fetch detailed weather info
+            },
+        });
+        setWeatherData(data[0]);  // Assuming the data is in an array
+    } catch (error) {
+        console.error("Error fetching weather data:", error);
+    }
+};
 
-    // Function to get weather data using the location key
-    const getWeatherData = async (key) => {
-        try {
-            const response = await axios.get(
-                `${baseURL}/currentconditions/v1/${key}`,
-                {
-                    params: { apikey: API_KEY },
-                }
-            );
-            setWeatherData(response.data[0]);
-        } catch (error) {
-            console.error('Error getting weather data:', error);
-        }
-    };
-
-    // Load user info and weather data when the component is focused
-    useFocusEffect(
-        useCallback(() => {
-            const fetchWeather = async () => {
-                await setUserOriginalInfo();
-                const key = await getLocationKey('Taguig City');
-                if (key) await getWeatherData(key);
-            };
-            fetchWeather();
-        }, [user])
-    );
+useFocusEffect(
+    useCallback(() => {
+        setUserOriginalInfo();
+        fetchWeatherData();  // Fetch weather data on focus
+    }, [user])
+);
     
     const setUserOriginalInfo = async () => {
 
