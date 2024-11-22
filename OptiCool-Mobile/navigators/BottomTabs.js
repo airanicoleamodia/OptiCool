@@ -79,7 +79,7 @@ export default function BottomTabs() {
 
 
 
-            {user?.role === 'admin' && (
+           
                 <Tab.Screen
                     name="Reports"
                     component={Report}
@@ -90,7 +90,7 @@ export default function BottomTabs() {
                         },
                     }}
                 />
-            )}
+           
 
             <Tab.Screen
                 name="Accounts"
