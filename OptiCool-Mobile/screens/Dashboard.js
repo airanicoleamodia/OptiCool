@@ -40,8 +40,11 @@ const textLength = weatherData?.WeatherText?.length || 0;
 
 const dynamicStyles = StyleSheet.create({
     tempLabel: {
-        fontSize: textLength > 12 ? 11 : textLength > 10 ? 14 : 16,
+        fontSize: textLength > 12 ? 11 : textLength > 10 ? 12 : 16,
         fontWeight: 'bold',
+        color: '#4f5e70',
+        marginLeft: 30,
+
     
     },
 });
