@@ -48,11 +48,7 @@ export default function EnvironmentStatus() {
     return (
         <SafeAreaView style={styles.container}>
             
-            <ImageBackground
-                source={opticoolImage}
-                style={styles.background}
-                resizeMode="cover"
-            >
+            <View style={[styles.background, { backgroundColor: '#eaf2fd' }]}> 
                 <View style={styles.mainRow}>
                     <View style={styles.applianceCard}>
                         <Text style={styles.applianceText}>Temperature Sensor 1</Text>
@@ -106,7 +102,7 @@ export default function EnvironmentStatus() {
                         <Text style={styles.reportButtonText}>Report</Text>
                     </TouchableOpacity>
                 </View>
-            </ImageBackground>
+            </View>
         </SafeAreaView>
     );
 }
