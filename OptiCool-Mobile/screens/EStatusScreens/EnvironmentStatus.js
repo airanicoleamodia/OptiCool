@@ -1,45 +1,42 @@
-import { View, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
+import { View, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import axios from 'axios';  // Importing axios
-import { MaterialCommunityIcons } from 'react-native-vector-icons'; // Import the icons
+import axios from 'axios';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import baseURL from '../../assets/common/baseUrl';
-import { useNavigation } from '@react-navigation/native'; // Use this hook
 
-
-  
 export default function EnvironmentStatus() {
-    const navigation = useNavigation(); // Initialize navigation
-    const [submitting, setSubmitting] = useState(false);  // Initialize submitting state
+    const navigation = useNavigation();
+    const [submitting, setSubmitting] = useState(false);
 
     const handleReport = async (appliance, status, setSubmitting) => {
-        setSubmitting(true); // Set submitting to true when the report is being sent
+        setSubmitting(true);
 
         try {
-            // Send the report data to the server using axios
             const { data } = await axios.post(`${baseURL}/ereports/ereport`, { appliance, status });
 
             if (data.success) {
                 Alert.alert(
-                    "Report",
+                    'Report',
                     data.message,
-                    [{ text: "OK", onPress: () => console.log(`${appliance} report acknowledged`) }],
+                    [{ text: 'OK', onPress: () => console.log(`${appliance} report acknowledged`) }],
                     { cancelable: false }
                 );
             } else {
                 Alert.alert(
-                    "Error",
+                    'Error',
                     data.message,
-                    [{ text: "OK" }],
+                    [{ text: 'OK' }],
                     { cancelable: false }
                 );
             }
         } catch (error) {
             Alert.alert(
-                "Network Error",
-                "Could not send the report. Please try again later.",
-                [{ text: "OK" }],
+                'Network Error',
+                'Could not send the report. Please try again later.',
+                [{ text: 'OK' }],
                 { cancelable: false }
             );
         } finally {
@@ -59,6 +56,21 @@ export default function EnvironmentStatus() {
                 <TouchableOpacity style={styles.menuButton} onPress={() => console.log('Menu pressed')}>
                     <MaterialCommunityIcons name="dots-vertical" size={30} color="#000" />
                 </TouchableOpacity>
+            </View>
+
+            {/* Circular Display */}
+            <View style={styles.circleContainer}>
+                {/* Outer Circle */}
+                <View style={styles.outerCircle}>
+                    {/* Inner Circle */}
+                    <View style={styles.innerCircle}>
+                        <Text style={styles.coolingText}>COOLING</Text>
+                        <Text style={styles.temperatureText}>28°</Text>
+                        <Text style={styles.snowflakeIcon}>❄</Text>
+                    </View>
+                </View>
+                {/* Target Temperature Display */}
+                {/* <Text style={styles.targetTemperature}>20°</Text> */}
             </View>
 
             <View style={styles.background}>
@@ -118,8 +130,6 @@ export default function EnvironmentStatus() {
     );
 }
 
-// Move the styles definition here (you only need to declare it once)
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -147,6 +157,53 @@ const styles = StyleSheet.create({
     background: {
         backgroundColor: '#eaf2fd',
         flex: 1,
+    },
+    circleContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 20,
+    },
+    outerCircle: {
+        width: 200,
+        height: 200,
+        borderRadius: 100,
+        backgroundColor: '#EAF6FF',
+        borderWidth: 30,
+        borderColor: '#96a8fa',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    innerCircle: {
+        width: 140,
+        height: 140,
+        borderRadius: 70,
+        backgroundColor: '#F5FAFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    coolingText: {
+        fontSize: 13,
+        fontWeight: 'bold',
+        color: '#9eaab8',
+        marginTop: 15,
+        marginBottom: -5,
+    },
+    temperatureText: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        color: '#4f5e70',
+        marginVertical: 5,
+    },
+    snowflakeIcon: {
+        fontSize: 20,
+        color: '#6C9AB2',
+        marginTop: 5,
+    },
+    targetTemperature: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        marginTop: 20,
     },
     mainRow: {
         flexDirection: 'row',
