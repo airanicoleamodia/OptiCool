@@ -17,4 +17,10 @@ router.get('/sendcode/:id', isAuthenticated, userController.sendCode);
 
 router.post('/verifycode/:id', isAuthenticated, userController.verifyCode);
 
+router.get('/all', userController.listAll);
+
+router.delete('/delete/:id', userController.deleteUser);
+
+router.put('/update/role/:id', userController.updateRole);
+
 module.exports = router;    

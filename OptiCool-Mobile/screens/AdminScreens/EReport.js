@@ -238,7 +238,7 @@
 //         </SafeAreaView>
 //     );
 // }
-    
+
 
 // const styles = StyleSheet.create({
 //     container: {
@@ -276,6 +276,7 @@ import baseURL from '../../assets/common/baseUrl';
 import { useFocusEffect } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit'; // Import BarChart
 import opticoolImage from '../../assets/opticool.png';
+import UsersAll from './UsersAll';
 
 export default function EReport() {
     const [reports, setReports] = useState([]);
@@ -306,7 +307,7 @@ export default function EReport() {
                         const adjustedFrequencies = frequencies.length > 0 ? frequencies.concat(1) : [1];
 
                         setChartData({
-                            labels: Object.keys(applianceCounts).map(label => 
+                            labels: Object.keys(applianceCounts).map(label =>
                                 label.length > 5 ? label.slice(0, 5) + '...' : label
                             ), // Truncate labels if they exceed 5 characters
                             datasets: [
@@ -341,8 +342,8 @@ export default function EReport() {
                 }
             };
 
-            fetchReports(); 
-        }, []) 
+            fetchReports();
+        }, [])
     );
 
     // Function to format the report date to only show month and day
@@ -364,7 +365,7 @@ export default function EReport() {
                             <Card.Content>
                                 {chartData ? (
                                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                                     <BarChart
+                                        <BarChart
                                             data={{
                                                 labels: chartData.labels,
                                                 datasets: chartData.datasets,
@@ -386,7 +387,7 @@ export default function EReport() {
                                                 propsForBackgroundLines: {
                                                     strokeDasharray: '', // Solid gridlines
                                                 },
-                                                barPercentage: 1, 
+                                                barPercentage: 1,
                                                 categoryPercentage: 0.5,
                                             }}
                                             style={{
@@ -394,7 +395,7 @@ export default function EReport() {
                                                 borderRadius: 5,
                                                 alignItems: 'flex-start',
                                                 paddingVertical: 30, // Remove any extra left padding
-                                            
+
                                             }}
                                             verticalLabelRotation={270} // Rotate the labels to be vertical
                                             horizontal={true} // Make the bars horizontal
@@ -411,6 +412,8 @@ export default function EReport() {
                             </Card.Content>
                         </Card>
                     </View>
+
+                    <UsersAll />
                 </ScrollView>
             </ImageBackground>
         </SafeAreaView>

@@ -3,12 +3,14 @@ import { NavigationContainer } from '@react-navigation/native'; // Ensure this i
 import { useSelector } from 'react-redux';
 import AuthNavigation from './navigators/AuthNavigation';
 import BottomTabs from './navigators/BottomTabs';
+import { StatusBar } from 'react-native';
 
 export default function Main() {
     const { isLogin } = useSelector((state) => state.auth);
 
     return (
         <NavigationContainer>
+            <StatusBar backgroundColor={'blue'} />
             {isLogin ? (
                 <BottomTabs />
             ) : (

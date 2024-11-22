@@ -176,3 +176,71 @@ exports.verifyCode = async (req, res, next) => {
         })
     }
 }
+
+
+exports.listAll = async (req, res, next) => {
+    try {
+
+        console.log("Asdsad")
+
+        const users = await User.find({});
+
+        return res.json({
+            message: "All users",
+            success: true,
+            users: users,
+        })
+
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        })
+    }
+}
+
+
+exports.deleteUser = async (req, res, next) => {
+    try {
+
+        console.log(req.params.id)
+
+        await User.findByIdAndDelete(req.params.id);
+
+        return res.json({
+            message: "User Deleted",
+            success: true,
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        })
+    }
+}
+
+
+exports.updateRole = async (req, res, next) => {
+    try {
+
+        const user = await User.findById(req.params.id);
+
+        user.role = req.body.role;
+
+        user.save();
+
+        return res.json({
+            message: "User Deleted",
+            success: true,
+            user: user,
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        })
+    }
+}
