@@ -9,6 +9,8 @@ import { Avatar } from "react-native-paper"
 import { useSelector } from "react-redux"
 import { MaterialCommunityIcons } from 'react-native-vector-icons'
 import Environment from "../screens/EStatusScreens/EnvironmentStatus"
+import Report from "../screens/AdminScreens/EReport"
+
 
 const Tab = createBottomTabNavigator()
 
@@ -61,6 +63,19 @@ export default function BottomTabs() {
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color }) => {
                         return <MaterialCommunityIcons name='lightning-bolt' size={30} color={'#96a8fa'} />
+                    },
+                }}
+            />
+
+
+
+            <Tab.Screen
+                name="Reports"
+                component={Report}
+                options={{
+                    tabBarShowLabel: false,
+                    tabBarIcon: ({ color }) => {
+                        return <MaterialCommunityIcons name='alert-decagram' size={30} color={'#96a8fa'} />
                     },
                 }}
             />

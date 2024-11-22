@@ -151,8 +151,8 @@ useFocusEffect(
                          {/* Accuweather Forecast  */}
                          <View style={styles.singleStatusCard}>
                     <View style={styles.statusItem}>
-                        <Text style={styles.statusText}>humidity</Text>
-                        <Text style={styles.statusValue}>{weatherData.RelativeHumidity}%</Text>
+                        <Text style={styles.statusText}>Humidity</Text>
+                        {/* <Text style={styles.statusValue}>{weatherData?.RelativeHumidity}%</Text> */}
                     </View>
                     <View style={styles.statusItem}>
                         <Text style={styles.statusText}>feels like</Text>

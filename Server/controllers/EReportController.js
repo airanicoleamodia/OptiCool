@@ -30,3 +30,21 @@ exports.sendReport = async (req, res, next) => {
         });
     }
 };
+
+exports.getAllReports = async (req, res, next) => {
+    try {
+        const reports = await Report.find();
+
+        if (!reports || reports.length === 0) {
+            return res.status(404).json({ message: 'No reports found.' });
+        }
+
+        return res.status(200).json({ reports });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: 'Something went wrong while fetching the reports. Please try again later.',
+            success: false,
+        });
+    }
+};
