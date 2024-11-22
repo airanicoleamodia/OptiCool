@@ -1,173 +1,176 @@
-import { View } from 'react-native'
-import React from 'react'
-import { Button, Text } from 'react-native-paper';
+// import { View } from 'react-native'
+// import React from 'react'
+// import { Button, Text } from 'react-native-paper';
+// import { SafeAreaView } from 'react-native-safe-area-context';
+
+// export default function ElectricityUsage() {
+
+//     return (
+//         <SafeAreaView>
+//             <View>
+
+//             </View>
+//         </SafeAreaView>
+//     )
+// }
+
+
+
+
+import React from 'react';
+import { View, Dimensions, ScrollView } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function ElectricityUsage() {
+// Generate dummy data
+const generateDummyData = () => {
+    const dummyData = [];
+    const totalDays = 60; // 60 days of reports
+    const hoursPerDay = 12;
+
+    for (let day = 1; day <= totalDays; day++) {
+        const hourlyUsage = [];
+        for (let hour = 1; hour <= hoursPerDay; hour++) {
+            hourlyUsage.push(parseFloat((Math.random() * 5 + 1).toFixed(2))); // Random usage between 1 to 6 kWh
+        }
+        dummyData.push({
+            day: day,
+            date: new Date(2024, 0, day), // Assuming data starts from Jan 1, 2024
+            hourlyUsage: hourlyUsage,
+        });
+    }
+    return dummyData;
+};
+
+// Aggregate data by week and month
+const aggregateData = (data) => {
+    const weeklyData = [];
+    const monthlyData = [];
+
+    let weekTotal = 0;
+    let monthTotal = 0;
+    let weekCount = 0;
+
+    data.forEach((dayData, index) => {
+        const dailyTotal = dayData.hourlyUsage.reduce((a, b) => a + b, 0);
+        weekTotal += dailyTotal;
+        monthTotal += dailyTotal;
+
+        if ((index + 1) % 5 === 0) {
+            weeklyData.push(parseFloat(weekTotal.toFixed(2)));
+            weekTotal = 0;
+            weekCount += 1;
+        }
+
+        if (weekCount === 4) {
+            monthlyData.push(parseFloat(monthTotal.toFixed(2)));
+            monthTotal = 0;
+            weekCount = 0;
+        }
+    });
+
+    return { weeklyData, monthlyData };
+};
+
+const ElectricityUsage = () => {
+    const data = generateDummyData();
+    const { weeklyData, monthlyData } = aggregateData(data);
+
+    // Hourly data for the first day
+    const hourlyData = data[0].hourlyUsage;
 
     return (
         <SafeAreaView>
-            <View>
+            <ScrollView>
+                {/* Hourly Chart */}
+                <View>
+                    <LineChart
+                        data={{
+                            labels: Array.from({ length: hourlyData.length }, (_, i) => `Hr ${i + 1}`),
+                            datasets: [
+                                {
+                                    data: hourlyData,
+                                },
+                            ],
+                        }}
+                        width={Dimensions.get('window').width - 16}
+                        height={300}
+                        yAxisSuffix=" kWh"
+                        chartConfig={{
+                            backgroundColor: '#e26a00',
+                            backgroundGradientFrom: '#fb8c00',
+                            backgroundGradientTo: '#ffa726',
+                            decimalPlaces: 2,
+                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        }}
+                        style={{
+                            marginVertical: 8,
+                            borderRadius: 16,
+                        }}
+                    />
+                </View>
 
-            </View>
+                {/* Weekly Chart */}
+                <View>
+                    <LineChart
+                        data={{
+                            labels: weeklyData.map((_, index) => `Week ${index + 1}`),
+                            datasets: [
+                                {
+                                    data: weeklyData,
+                                },
+                            ],
+                        }}
+                        width={Dimensions.get('window').width - 16}
+                        height={300}
+                        yAxisSuffix=" kWh"
+                        chartConfig={{
+                            backgroundColor: '#1e2923',
+                            backgroundGradientFrom: '#08130d',
+                            backgroundGradientTo: '#1e2923',
+                            decimalPlaces: 2,
+                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        }}
+                        style={{
+                            marginVertical: 8,
+                            borderRadius: 16,
+                        }}
+                    />
+                </View>
+
+                {/* Monthly Chart */}
+                <View>
+                    <LineChart
+                        data={{
+                            labels: monthlyData.map((_, index) => `Month ${index + 1}`),
+                            datasets: [
+                                {
+                                    data: monthlyData,
+                                },
+                            ],
+                        }}
+                        width={Dimensions.get('window').width - 16}
+                        height={300}
+                        yAxisSuffix=" kWh"
+                        chartConfig={{
+                            backgroundColor: '#022173',
+                            backgroundGradientFrom: '#1E3A8A',
+                            backgroundGradientTo: '#3B82F6',
+                            decimalPlaces: 2,
+                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                        }}
+                        style={{
+                            marginVertical: 8,
+                            borderRadius: 16,
+                        }}
+                    />
+                </View>
+            </ScrollView>
         </SafeAreaView>
-    )
-}
+    );
+};
 
-// import React, { useState } from 'react';
-// import { View, StyleSheet, ScrollView, Animated } from 'react-native';
-// import { Text, Card, Title, Button, DataTable } from 'react-native-paper';
-// import { SafeAreaView } from 'react-native-safe-area-context';
-// import { LineChart } from 'react-native-chart-kit';
-// import { PinchGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
-
-// // Dummy Data
-// const electricityConsumptionData = {
-//   day: Array.from({ length: 24 }, (_, index) => ({
-//     hour: `${index}:00`,
-//     usage_kWh: (Math.random() * 1.5 + 1.5).toFixed(2),
-//   })),
-//   week: Array.from({ length: 30 }, (_, index) => {
-//     const dailyUsage = Array.from({ length: 24 }, (_, i) => parseFloat((Math.random() * 1.5 + 1.5).toFixed(2)));
-//     const totalUsage = dailyUsage.reduce((sum, current) => sum + current, 0);
-//     const cost = (totalUsage * 0.8).toFixed(2); // Example: Cost per kWh = 0.8
-
-//     return {
-//       date: `2024-11-${(index + 1).toString().padStart(2, '0')}`,
-//       usage_kWh: totalUsage.toFixed(2),
-//       cost: cost,
-//     };
-//   }),
-//   month: Array.from({ length: 30 }, (_, index) => {
-//     const weeklyData = electricityConsumptionData.week.slice(index * 7, (index + 1) * 7); // Select 7 days for each week
-//     const totalUsageForMonth = weeklyData.reduce((sum, record) => sum + parseFloat(record.usage_kWh), 0);
-//     const totalCostForMonth = weeklyData.reduce((sum, record) => sum + parseFloat(record.cost), 0);
-
-//     return {
-//       date: `2024-11-${(index + 1).toString().padStart(2, '0')}`,
-//       usage_kWh: totalUsageForMonth.toFixed(2),
-//       cost: totalCostForMonth.toFixed(2),
-//     };
-//   }),
-// };
-
-// const ElectricityUsage = () => {
-//   const [view, setView] = useState('week'); // Default view is weekly
-//   const scale = new Animated.Value(1); // To control the zoom scale
-
-//   // Handle pinch gesture scaling
-//   const onPinchGestureEvent = Animated.event(
-//     [{ nativeEvent: { scale } }],
-//     { useNativeDriver: true }
-//   );
-
-//   // Prepare data for the chart
-//   const prepareChartData = (data) => {
-//     return {
-//       labels: data ? data.map((record) => record.hour || record.date) : [],
-//       datasets: [
-//         {
-//           data: data ? data.map((record) => parseFloat(record.usage_kWh)) : [],
-//         },
-//       ],
-//     };
-//   };
-
-//   // Check if data exists for the selected view, and prepare the chart data
-//   const chartData = prepareChartData(electricityConsumptionData[view] || []); // Add fallback to avoid undefined error
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <ScrollView contentContainerStyle={styles.scrollView}>
-//         <View style={styles.buttonsContainer}>
-//           <Button mode="contained" onPress={() => setView('day')}>
-//             Daily
-//           </Button>
-//           <Button mode="contained" onPress={() => setView('week')}>
-//             Weekly
-//           </Button>
-//           <Button mode="contained" onPress={() => setView('month')}>
-//             Monthly
-//           </Button>
-//         </View>
-
-//         <View style={styles.reportContainer}>
-//           <GestureHandlerRootView style={{ flex: 1 }}>
-//             <PinchGestureHandler onGestureEvent={onPinchGestureEvent}>
-//               <Animated.View style={{ transform: [{ scale }] }}>
-//                 <LineChart
-//                   data={chartData}
-//                   width={350}
-//                   height={220}
-//                   chartConfig={{
-//                     backgroundColor: '#e26a00',
-//                     backgroundGradientFrom: '#fb8c00',
-//                     backgroundGradientTo: '#ffdd00',
-//                     decimalPlaces: 2,
-//                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-//                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-//                     style: {
-//                       borderRadius: 16,
-//                     },
-//                   }}
-//                   style={styles.chart}
-//                 />
-//               </Animated.View>
-//             </PinchGestureHandler>
-//           </GestureHandlerRootView>
-
-//           {/* Data Table */}
-//           <Card style={styles.card}>
-//             <Title style={styles.cardTitle}>{`${view.charAt(0).toUpperCase() + view.slice(1)} Report`}</Title>
-//             <DataTable>
-//               <DataTable.Header>
-//                 <DataTable.Title>{view === 'day' ? 'Hour' : 'Date'}</DataTable.Title>
-//                 <DataTable.Title numeric>Usage (kWh)</DataTable.Title>
-//               </DataTable.Header>
-
-//               {electricityConsumptionData[view] && electricityConsumptionData[view].map((record, index) => (
-//                 <DataTable.Row key={index}>
-//                   <DataTable.Cell>{record.hour || record.date}</DataTable.Cell>
-//                   <DataTable.Cell numeric>{record.usage_kWh}</DataTable.Cell>
-//                 </DataTable.Row>
-//               ))}
-//             </DataTable>
-//           </Card>
-//         </View>
-//       </ScrollView>
-//     </SafeAreaView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 20,
-//     paddingHorizontal: 10,
-//   },
-//   scrollView: {
-//     paddingBottom: 20,
-//   },
-//   buttonsContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     marginBottom: 20,
-//   },
-//   reportContainer: {
-//     marginTop: 10,
-//   },
-//   card: {
-//     marginBottom: 10,
-//     padding: 10,
-//     backgroundColor: '#f9f9f9',
-//   },
-//   cardTitle: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//   },
-//   chart: {
-//     marginBottom: 20,
-//   },
-// });
-
-// export default ElectricityUsage;
+export default ElectricityUsage;
