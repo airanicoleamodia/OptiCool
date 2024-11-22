@@ -72,12 +72,12 @@ export default function UsersAll() {
     const updateRole = async ({ id, role }) => {
 
         try {
-            
+
             const { data } = await axios.put(`${baseURL}/users/update/role/${id}`, {
                 role: role,
             })
 
-            Alert.alert("", "Successfully deleted!");
+            Alert.alert("", "Successfully updated!");
             getUsers()
 
         } catch (err) {
