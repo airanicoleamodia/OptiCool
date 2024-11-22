@@ -71,6 +71,21 @@ export default function EnvironmentStatus() {
                 </View>
                 {/* Target Temperature Display */}
                 {/* <Text style={styles.targetTemperature}>20°</Text> */}
+                <View style={styles.statusRow}>
+                    {/* Ceiling Fan Card */}
+                    <View style={styles.statusCard}>
+                        <MaterialCommunityIcons name="fan" size={30} color="#6C9AB2" />
+                        <Text style={styles.statusCardText}>Ceiling Fan</Text>
+                        <Text style={styles.statusCardStatus}>Active</Text>
+                    </View>
+
+                    {/* Exhaust Fan Card */}
+                    <View style={styles.statusCard}>
+                        <MaterialCommunityIcons name="fan" size={30} color="#6C9AB2" />
+                        <Text style={styles.statusCardText}>Exhaust</Text>
+                        <Text style={styles.statusCardStatus}>Active</Text>
+                    </View>
+                </View>
             </View>
 
             <View style={styles.background}>
@@ -204,6 +219,37 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
         marginTop: 20,
+    },
+    statusRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between', // Add space between cards
+        marginHorizontal: 20, // Add padding on the sides
+        marginTop: 20,
+    },
+    statusCard: {
+        backgroundColor: '#c3cfdd',
+        borderRadius: 40,
+        width: 150,
+        height: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
+        marginHorizontal: 10, // Add horizontal spacing between cards
+    },
+    statusCardText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginTop: 5,
+    },
+    statusCardStatus: {
+        fontSize: 14,
+        color: 'green',
+        fontWeight: 'bold',
     },
     mainRow: {
         flexDirection: 'row',
