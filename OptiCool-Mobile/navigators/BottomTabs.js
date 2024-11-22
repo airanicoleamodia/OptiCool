@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator()
 
 export default function BottomTabs() {
 
-    const { user } = useSelector(state => state.auth);
+    const { user, } = useSelector(state => state.auth);
 
     return (
         <Tab.Navigator
@@ -79,7 +79,7 @@ export default function BottomTabs() {
 
 
 
-           
+            {user.role === 'admin' && (
                 <Tab.Screen
                     name="Reports"
                     component={Report}
@@ -90,7 +90,8 @@ export default function BottomTabs() {
                         },
                     }}
                 />
-           
+            )}
+
 
             <Tab.Screen
                 name="Accounts"

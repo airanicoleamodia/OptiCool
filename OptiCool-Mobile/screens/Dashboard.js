@@ -16,7 +16,7 @@
 //     const baseURL = 'http://dataservice.accuweather.com';  // AccuWeather API base URL
 //     const apiKey = 'I8m0OklfM6lIEJGIAl7Sa96aZSGY6Enm';  // Replace with your API key
 //     const locationKey = '759349';  
-    
+
 
 //   // Fetch weather data
 //   const fetchWeatherData = async () => {
@@ -47,7 +47,7 @@
 //         color: '#4f5e70',
 //         marginLeft: 30,
 
-    
+
 //     },
 // });
 
@@ -57,7 +57,7 @@
 //         fetchWeatherData();  // Fetch weather data on focus
 //     }, [user])
 // );
-    
+
 //     const setUserOriginalInfo = async () => {
 
 //         const { data } = await axios.get(`${baseURL}/users/getsingle/${user._id}`, {
@@ -72,14 +72,14 @@
 //         })
 //     }
 
-    
+
 //     useFocusEffect(
 //         useCallback(() => {
 //             setUserOriginalInfo()
 //         }, [user])
 //     )
 
-    
+
 //     return (
 //         <SafeAreaView style={styles.container}>
 //             <ImageBackground
@@ -87,7 +87,7 @@
 //                 style={styles.background}
 //                 resizeMode="cover"
 //             >
-               
+
 //                 <Text style={styles.intro}>Manage Room</Text>
 //                 <View style={styles.header}>
 //                     <Text style={styles.greeting}>Hey, <Text style={styles.name}>{user.username}</Text></Text>
@@ -321,7 +321,7 @@ import { Avatar, Button, TextInput, FAB } from 'react-native-paper';
 import axios from 'axios'; // Import axios
 
 export default function Dashboard() {
-    const { user } = useSelector(state => state.auth);
+    const { user, token } = useSelector(state => state.auth);
     const [userData, setUserData] = useState({ avatar: '' });
     const [weatherData, setWeatherData] = useState(null);
     const [lastRequestTime, setLastRequestTime] = useState(null); // Store the last API request time
