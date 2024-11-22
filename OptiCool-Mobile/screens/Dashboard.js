@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react'
-import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
@@ -35,6 +35,17 @@ export default function Dashboard() {
         console.error("Error fetching weather data:", error);
     }
 };
+
+const textLength = weatherData?.WeatherText?.length || 0;
+
+const dynamicStyles = StyleSheet.create({
+    tempLabel: {
+        fontSize: textLength > 12 ? 11 : textLength > 10 ? 14 : 16,
+        fontWeight: 'bold',
+    
+    },
+});
+
 
 useFocusEffect(
     useCallback(() => {
@@ -124,7 +135,7 @@ useFocusEffect(
                 {/* Temperature Details */}
                 <View style={styles.mainRow}>
                     <View style={styles.weatherCard}>
-                        <Text style={styles.cityTemp}>{weatherData?.Temperature?.Metric?.Value || '--'}°</Text>
+                        <Text style={styles.cityTemp}>{weatherData?.Temperature?.Metric?.Value || '--'}°C</Text>
                         <Text style={styles.cityName}>Taguig City</Text>
                     </View>
                     <View style={styles.applianceCard}>
@@ -132,6 +143,23 @@ useFocusEffect(
                         <Text style={styles.applianceStatus}>Status: Active</Text>
                     </View>
                 </View>
+
+
+                         {/* Accuweather Forecast  */}
+                         <View style={styles.singleStatusCard}>
+                    <View style={styles.statusItem}>
+                        <Text style={styles.statusText}>humidity</Text>
+                        <Text style={styles.statusValue}>{weatherData.RelativeHumidity}%</Text>
+                    </View>
+                    <View style={styles.statusItem}>
+                        <Text style={styles.statusText}>feels like</Text>
+                        <Text style={styles.statusValue}>{weatherData?.RealFeelTemperature?.Metric?.Value|| '--'}°C</Text>
+                    </View>
+                    <View style={styles.statusItem}>
+                        <Text style={styles.statusText}>Condition</Text>
+                        <Text style={dynamicStyles.tempLabel}>{weatherData?.WeatherText}</Text>
+                    </View>
+                </View>    
             </ImageBackground>
         </SafeAreaView>
     );
@@ -270,4 +298,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+
 });
