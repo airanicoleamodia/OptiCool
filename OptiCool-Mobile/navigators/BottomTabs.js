@@ -58,11 +58,12 @@ export default function BottomTabs() {
                 options={{
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color }) => {
-
                         return <MaterialCommunityIcons name='widgets' size={35} color={'#96a8fa'} />
                     },
+                    tabBarStyle: { display: 'none' }, // Hides the tab bar on this screen
                 }}
             />
+
 
 
             <Tab.Screen
