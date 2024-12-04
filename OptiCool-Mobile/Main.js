@@ -10,7 +10,11 @@ export default function Main() {
 
     return (
         <NavigationContainer>
-            <StatusBar backgroundColor={'blue'} />
+            <StatusBar 
+                translucent 
+                backgroundColor="transparent" 
+                barStyle="dark-content" 
+            />
             {isLogin ? (
                 <BottomTabs />
             ) : (
