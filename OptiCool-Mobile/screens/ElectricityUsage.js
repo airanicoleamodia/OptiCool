@@ -18,10 +18,11 @@
 
 
 import React from 'react';
-import { View, Dimensions, ScrollView } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
+import { View, Dimensions, ScrollView, Text } from 'react-native';
+import { LineChart, BarChart } from 'react-native-chart-kit';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import HumidityUsage from './HumidityUsage';
+import TemperatureUsage from './TemperatureUsage';
 // Generate dummy data
 const generateDummyData = () => {
     const dummyData = [];
@@ -35,7 +36,7 @@ const generateDummyData = () => {
         }
         dummyData.push({
             day: day,
-            date: new Date(2024, 0, day), // Assuming data starts from Jan 1, 2024
+            date: new Date(2024, 0, day), 
             hourlyUsage: hourlyUsage,
         });
     }
@@ -82,11 +83,15 @@ const ElectricityUsage = () => {
     return (
         <SafeAreaView>
             <ScrollView>
-                {/* Hourly Chart */}
+            <Text style={{ fontSize: 24, marginVertical: 8, 
+                fontWeight: 'bold', textAlign: 'center', marginBottom: 20, marginTop: 20, marginLeft: 5 }}>POWER CONSUMPTION REPORT</Text>
+
                 <View>
+                <Text style={{ fontSize: 18, marginVertical: 8, fontWeight: 'bold', marginLeft: 10  }}>Daily</Text>
+    
                     <LineChart
                         data={{
-                            labels: Array.from({ length: hourlyData.length }, (_, i) => `Hr ${i + 1}`),
+                            labels: Array.from({ length: hourlyData.length }, (_, i) => `H${i + 1}`),
                             datasets: [
                                 {
                                     data: hourlyData,
@@ -97,9 +102,9 @@ const ElectricityUsage = () => {
                         height={300}
                         yAxisSuffix=" kWh"
                         chartConfig={{
-                            backgroundColor: '#e26a00',
-                            backgroundGradientFrom: '#fb8c00',
-                            backgroundGradientTo: '#ffa726',
+                            backgroundColor: '#154003',
+                            backgroundGradientFrom: '#5aa739',
+                            backgroundGradientTo: '#e2e93e',
                             decimalPlaces: 2,
                             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -111,11 +116,12 @@ const ElectricityUsage = () => {
                     />
                 </View>
 
-                {/* Weekly Chart */}
+                <Text style={{ fontSize: 18, marginVertical: 8, fontWeight: 'bold', marginLeft: 10  }}>Weekly</Text>
+
                 <View>
                     <LineChart
                         data={{
-                            labels: weeklyData.map((_, index) => `Week ${index + 1}`),
+                            labels: weeklyData.map((_, index) => `W${index + 1}`),
                             datasets: [
                                 {
                                     data: weeklyData,
@@ -126,9 +132,9 @@ const ElectricityUsage = () => {
                         height={300}
                         yAxisSuffix=" kWh"
                         chartConfig={{
-                            backgroundColor: '#1e2923',
-                            backgroundGradientFrom: '#08130d',
-                            backgroundGradientTo: '#1e2923',
+                            backgroundColor: '#8b3204',
+                            backgroundGradientFrom: '#cd591d',
+                            backgroundGradientTo: '#e2e93e',
                             decimalPlaces: 2,
                             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -140,7 +146,8 @@ const ElectricityUsage = () => {
                     />
                 </View>
 
-                {/* Monthly Chart */}
+                <Text style={{ fontSize: 18, marginVertical: 8, fontWeight: 'bold', marginLeft: 10  }}>Monthly</Text>
+
                 <View>
                     <LineChart
                         data={{
@@ -155,9 +162,9 @@ const ElectricityUsage = () => {
                         height={300}
                         yAxisSuffix=" kWh"
                         chartConfig={{
-                            backgroundColor: '#022173',
-                            backgroundGradientFrom: '#1E3A8A',
-                            backgroundGradientTo: '#3B82F6',
+                            backgroundColor: '#36048b',
+                            backgroundGradientFrom: '#834be0',
+                            backgroundGradientTo: '#e93e91',
                             decimalPlaces: 2,
                             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -168,6 +175,10 @@ const ElectricityUsage = () => {
                         }}
                     />
                 </View>
+
+                
+                <HumidityUsage data={data} />
+                <TemperatureUsage data={data} />
             </ScrollView>
         </SafeAreaView>
     );
