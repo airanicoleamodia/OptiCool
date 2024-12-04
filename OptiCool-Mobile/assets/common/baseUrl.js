@@ -4,8 +4,9 @@ let baseURL = '';
 
 {
     Platform.OS == 'android'
-        ? baseURL = 'https://opticool.onrender.com/api/v1'
-        : baseURL = 'https://opticool.onrender.com/api/v1'
+        ? baseURL = 'http://192.168.68.114:4000/api/v1'
+        : baseURL = 'http://192.168.68.114:4000/api/v1'
 }
+
 
 export default baseURL;
