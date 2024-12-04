@@ -1,33 +1,16 @@
-// import { Platform } from 'react-native'
-
-// let baseURL = '';
-
-// {
-//     Platform.OS == 'android'
-//         ? baseURL = 'http://192.168.68.114:4000/api/v1'
-//         : baseURL = 'http://192.168.68.114:4000/api/v1'
-// }
-
-
-// export default baseURL;
-
-
-
-
-
-
-
 import { Platform } from 'react-native'
 
 let baseURL = '';
 
 {
     Platform.OS == 'android'
-        ? baseURL = 'https://opticool.onrender.com/api/v1'
-        : baseURL = 'https://opticool.onrender.com/api/v1'
+        ? baseURL = 'http://192.168.0.20:4000/api/v1'
+        : baseURL = 'http://192.168.0.20:4000/api/v1'
 }
 
+
 export default baseURL;
+
 
 // import { Platform } from 'react-native'
 
@@ -35,8 +18,8 @@ export default baseURL;
 
 // {
 //     Platform.OS == 'android'
-//         ? baseURL = 'https://opticool.onrender.com/api/v1/'
-//         : baseURL = 'https://opticool.onrender.com/api/v1/'
+//         ? baseURL = 'https://opticool.onrender.com/api/v1'
+//         : baseURL = 'https://opticool.onrender.com/api/v1'
 // }
 
 // export default baseURL;
