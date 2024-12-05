@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "OptiCool-Mobile",
-    "slug": "OptiCool-Mobile",
+    "name": "OptiCool",
+    "slug": "OptiCool",
     "version": "1.0.0",
+    "plugins": ["expo-notifications"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

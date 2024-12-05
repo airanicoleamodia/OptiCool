@@ -9,13 +9,13 @@ import { MaterialCommunityIcons } from 'react-native-vector-icons'
 import appliancesTesting from './testing/appliancesTesting';
 import baseURL from '../assets/common/baseUrl';
 
-
 export default function Dashboard() {
     const { user, token } = useSelector(state => state.auth);
     const [userData, setUserData] = useState({ avatar: '' });
     const [weatherData, setWeatherData] = useState(null);
     const [lastRequestTime, setLastRequestTime] = useState(null);
     const [isRequesting, setIsRequesting] = useState(false);
+    const navigation = useNavigation();
 
     const [isDropdownVisible, setDropdownVisible] = useState(false); // Dropdown state
     const AccuweatherbaseURL = 'http://dataservice.accuweather.com';
@@ -83,6 +83,7 @@ export default function Dashboard() {
         }
     }
 
+
     // Toggle dropdown visibility
     const toggleDropdown = () => setDropdownVisible(!isDropdownVisible);
 
@@ -90,6 +91,10 @@ export default function Dashboard() {
     const handleOptionSelect = (option) => {
         setDropdownVisible(false);
         console.log(`${option} selected`);
+
+        // Make sure you have a screen called 'NotifTestScreen' in your navigation setup
+        navigation.navigate(option);
+        
     };
 
 
@@ -131,7 +136,7 @@ export default function Dashboard() {
                     </View>
                     {/* Alert Icon (beside avatar) */}
                     <MaterialCommunityIcons
-                        name="bell"  
+                        name="bell"
                         size={24}
                         color="#6ea4dd"
                         onPress={() => alert('Alert clicked!')}
@@ -164,7 +169,7 @@ export default function Dashboard() {
                             <TouchableOpacity onPress={() => handleOptionSelect('Settings')} style={styles.dropdownItem}>
                                 <Text style={styles.dropdownText}>Settings</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleOptionSelect('Settings')} style={styles.dropdownItem}>
+                            <TouchableOpacity onPress={() => handleOptionSelect('NotifScreen')} style={styles.dropdownItem}>
                                 <Text style={styles.dropdownText}>Notif Test</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => handleOptionSelect('Logout')} style={styles.dropdownItem}>
