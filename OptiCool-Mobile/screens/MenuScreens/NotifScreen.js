@@ -2,78 +2,98 @@ import React, { useEffect } from 'react';
 import { Button, View, StyleSheet, Text } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
-// Configure Notification Behavior
-Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: false,
-    }),
-});
 export default function NotifScreen() {
-   // Simulated thresholds
-   const TEMPERATURE_THRESHOLD = 30;
-   const HUMIDITY_THRESHOLD = 70;
+    const TEMPERATURE_THRESHOLD = 30;
+    const HUMIDITY_THRESHOLD = 70;
 
-   // Mock function to generate random data
-   const generateMockSensorData = () => {
-       return {
-           temperature: Math.floor(Math.random() * 50), // 0-50
-           humidity: Math.floor(Math.random() * 100), // 0-100
-       };
-   };
+    // Request notification permissions inside the component
+    useEffect(() => {
+        const requestPermissions = async () => {
+            const { status } = await Notifications.requestPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Permission to receive notifications is required!');
+            }
+        };
+        requestPermissions();
 
-   // Function to trigger a notification
-   const sendNotification = async (title, body) => {
-       await Notifications.scheduleNotificationAsync({
-           content: {
-               title,
-               body,
-               data: { additionalData: 'This is simulated.' },
-           },
-           trigger: null, // Send immediately
-       });
-   };
+        const interval = setInterval(() => {
+            simulateAndCheckConditions();
+        }, 10000); // 10 seconds
 
-   // Simulate sensor conditions and check thresholds
-   const simulateAndCheckConditions = () => {
-       const { temperature, humidity } = generateMockSensorData();
-       console.log(`Temperature: ${temperature}°C, Humidity: ${humidity}%`);
+        return () => clearInterval(interval); // Cleanup
+    }, []); // Empty dependency array to run only once
 
-       if (temperature > TEMPERATURE_THRESHOLD) {
-           sendNotification(
-               'Temperature Alert 🚨',
-               `Temperature exceeded: ${temperature}°C!`
-           );
-       }
+    // Handle notifications
+    Notifications.setNotificationHandler({
+        handleNotification: async (notification) => {
+            console.log('Received notification:', notification); // Log the notification
+            return {
+                shouldShowAlert: true,
+                shouldPlaySound: true,
+                shouldSetBadge: false,
+            };
+        },
+    });
 
-       if (humidity > HUMIDITY_THRESHOLD) {
-           sendNotification(
-               'Humidity Alert 💧',
-               `Humidity exceeded: ${humidity}%!`
-           );
-       }
-   };
+    const generateMockSensorData = () => {
+        return {
+            temperature: Math.floor(Math.random() * 50),
+            humidity: Math.floor(Math.random() * 100),
+        };
+    };
 
-   // Simulate periodic checks every 10 seconds
-   useEffect(() => {
-       const interval = setInterval(() => {
-           simulateAndCheckConditions();
-       }, 10000); // 10 seconds
+    const sendNotification = async (title, body) => {
+        console.log(`Sending notification: ${title} - ${body}`);
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title,
+                body,
+                data: { additionalData: 'This is simulated.' },
+            },
+            trigger: { seconds: 1 }, // Trigger notification immediately
+        });
+    };
 
-       return () => clearInterval(interval); // Cleanup
-   }, []);
+    const simulateAndCheckConditions = () => {
+        const { temperature, humidity } = generateMockSensorData();
+        console.log(`Temperature: ${temperature}°C, Humidity: ${humidity}%`);
 
-   return (
-       <View style={styles.container}>
-           <Text style={styles.title}>Mock Testing Notifications</Text>
-           <Button
-               title="Trigger Manual Notification"
-               onPress={simulateAndCheckConditions}
-           />
-       </View>
-   );
+        if (temperature > TEMPERATURE_THRESHOLD) {
+            sendNotification(
+                'Temperature Alert 🚨',
+                `Temperature exceeded: ${temperature}°C!`
+            );
+        }
+
+        if (humidity > HUMIDITY_THRESHOLD) {
+            sendNotification(
+                'Humidity Alert 💧',
+                `Humidity exceeded: ${humidity}%!`
+            );
+        }
+    };
+
+    // Add listener for notifications in background or when app is closed
+    Notifications.addNotificationReceivedListener((notification) => {
+        console.log('Notification received in background:', notification);
+    });
+
+    // Manually trigger notification
+    const manualNotification = () => {
+        sendNotification('Manual Notification', 'This is a manually triggered notification.');
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Mock Testing Notifications</Text>
+            <Button
+                title="Trigger Manual Notification"
+                onPress={manualNotification}
+            />
+        </View>
+    );
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
