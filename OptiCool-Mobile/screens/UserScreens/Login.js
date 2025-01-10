@@ -43,7 +43,7 @@ export default function Login({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text variant='headlineSmall' style={{ textAlign: 'center', marginBottom: 20 }}>Welcome back!</Text>
+            <Text variant='headlineSmall' style={{ textAlign: 'center', marginBottom: 20, fontSize: 20 }}>Welcome back!</Text>
             <Formik
                 initialValues={{
                     email: '',
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         justifyContent: 'center',
+        backgroundColor: '#e2e2e7', 
     },
     submitButton: {
         marginTop: 0,
