@@ -7,6 +7,7 @@ import BottomTabs from './navigators/BottomTabs';
 import { StatusBar } from 'react-native';
 import MenuNavigation from './navigators/MenuNavigations';
 import NotifScreen from './screens/MenuScreens/NotifScreen';
+import UpdateProfile from './screens/UserScreens/UpdateProfile';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ export default function Main() {
 
                         <Stack.Screen name='BottomTabs' component={BottomTabs} />
                         <Stack.Screen name='NotifScreen' component={NotifScreen} />
+                        <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
 
                     </Stack.Navigator>
                 </>

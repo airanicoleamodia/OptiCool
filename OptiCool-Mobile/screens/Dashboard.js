@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     color: "#4f5e70",
   },
   alertIconContainer: {
-    marginRight: -75,
+    marginRight: -150,
     marginTop: -8, // Space between alert icon and avatar
   },
   avatar: {
@@ -408,15 +408,24 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: "100%", 
   },
+  WeatherText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#4f5e70",
+    textAlign: "center",
+    width: "100%", 
+  },
   mainRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 10,
-    marginTop: 15,
+    marginTop: 0,
   },
+  
   weatherCard: {
     backgroundColor: "#b3e5fc",
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 16,
     flex: 1,
     marginRight: 10,
@@ -473,5 +482,6 @@ const styles = StyleSheet.create({
   tempValue: {
     fontSize: 20,
     fontWeight: "bold",
+    marginLeft: -10,
   },
 });

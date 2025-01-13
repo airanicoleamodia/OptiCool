@@ -22,16 +22,12 @@ export default function BottomTabs() {
         <Tab.Navigator
             initialRouteName="Dashboard"
             screenOptions={{
-                tabBarShowLabel: false, // This hides the labels for all tab screens
+                tabBarShowLabel: true, 
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: '#fff', // Set background color for the tab bar
-                    borderTopWidth: 0, // Remove top border
-                    borderTopLeftRadius: 35, // Round the top-left corner
-                    borderTopRightRadius: 35, // Round the top-right corner
-                    borderBottomLeftRadius: 0, // Keep bottom-left corner square
-                    borderBottomRightRadius: 0, // Keep bottom-right corner square
-                    height: 60, // Adjust height of the tab bar
+                    backgroundColor: '#fff', 
+                    borderTopWidth: 0, 
+                    height: 50, // Adjust height of the tab bar
                     marginBottom: 0, // Optional: Add some space at the bottom
                     shadowColor: '#000', // Optional: Add shadow effect
                     shadowOffset: { width: 0, height: 10 }, // Shadow offset
@@ -45,7 +41,7 @@ export default function BottomTabs() {
                 name="Dashboard"
                 component={Dashboard}
                 options={{
-                    tabBarShowLabel: false,
+                    tabBarShowLabel: true,
                     tabBarIcon: ({ color }) => {
                         return <MaterialCommunityIcons name='home' size={30} color={'#96a8fa'} />
                     },
@@ -53,12 +49,12 @@ export default function BottomTabs() {
             />
 
             <Tab.Screen
-                name="Environment Status"
+                name="Status"
                 component={Environment}
                 options={{
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color }) => {
-                        return <MaterialCommunityIcons name='widgets' size={35} color={'#96a8fa'} />
+                        return <MaterialCommunityIcons name='widgets' size={30} color={'#96a8fa'} />
                     },
                     tabBarStyle: { display: 'none' }, // Hides the tab bar on this screen
                 }}
@@ -67,7 +63,7 @@ export default function BottomTabs() {
 
 
             <Tab.Screen
-                name="ElectricityUsage"
+                name="Usage"
                 component={ElectricityUsage}
                 options={{
                     tabBarShowLabel: false,
@@ -84,7 +80,7 @@ export default function BottomTabs() {
                     name="Reports"
                     component={Report}
                     options={{
-                        tabBarShowLabel: false,
+                        tabBarShowLabel: true,
                         tabBarIcon: ({ color }) => {
                             return <MaterialCommunityIcons name='alert-decagram' size={30} color={'#96a8fa'} />;
                         },
@@ -101,7 +97,7 @@ export default function BottomTabs() {
                     headerShown: false,
                     tabBarIcon: ({ color }) => {
                         // return <Avatar.Image size={30} source={{ uri: user.avatar.url }} />
-                        return <MaterialCommunityIcons name='account-circle' size={35} color={'#96a8fa'} />
+                        return <MaterialCommunityIcons name='account-circle' size={30} color={'#96a8fa'} />
                     },
                 }}
             />

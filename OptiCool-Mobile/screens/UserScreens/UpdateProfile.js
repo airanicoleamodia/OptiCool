@@ -6,14 +6,7 @@ import React, {
   useLayoutEffect,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Avatar,
-  Button,
-  TextInput,
-  FAB,
-  Text,
-  IconButton,
-} from "react-native-paper";
+import { Avatar, Button, TextInput, FAB, Text } from "react-native-paper";
 import { removeAuth, setAuth } from "../../states/authSlice";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
@@ -21,7 +14,7 @@ import mime from "mime";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
 
-export default function Profile() {
+export default function UpdateProfile() {
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
   const navigation = useNavigation();
@@ -159,172 +152,73 @@ export default function Profile() {
         <Avatar.Image source={{ uri: userData.avatar?.url }} size={120} />
       </View>
 
-      <Text
-        style={{
-          fontSize: 18,
-          fontWeight: "bold",
-          alignSelf: "center",
-          marginTop: 10,
-        }}
-      >
-        {userData.username}
-      </Text>
+      {/* User Information */}
+      <TextInput
+        mode="outlined"
+        label="Username"
+        disabled={!isEditing}
+        onChangeText={(value) =>
+          setUserData((prev) => ({ ...prev, username: value }))
+        }
+        value={userData.username}
+        style={{ marginTop: 20 }}
+      />
 
-      <Text
-        style={{
-          fontSize: 16,
-          color: "#555",
-          alignSelf: "center",
-          marginTop: -5,
-          marginBottom: 10,
-        }}
-      >
-        {userData.email}
-      </Text>
+      <TextInput
+        mode="outlined"
+        label="Email"
+        disabled={!isEditing}
+        onChangeText={(value) =>
+          setUserData((prev) => ({ ...prev, email: value }))
+        }
+        value={userData.email}
+        style={{ marginTop: 10 }}
+      />
 
-      {user.role === "admin" ? (
-        // If user is admin, show both buttons in a row
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginTop: 10,
-          }}
-        >
+      {/* Edit/Update Buttons */}
+      {isEditing ? (
+        <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
           <Button
+            style={{ flex: 1 }}
             mode="contained"
-            onPress={() => navigation.navigate("UpdateProfile")} // Navigates to UpdateProfile.js
-            style={{
-              backgroundColor: "#000000",
-              width: "48%", // Adjust width to fit both buttons in a row
+            onPress={() => {
+              update(); // Call your update function
+              navigation.goBack(); // Navigate back after updating
             }}
+            disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            Edit Profile
+            Update
           </Button>
 
           <Button
-            mode="contained"
-            onPress={() => navigation.navigate("Dashboard")} // Navigates to Dashboard screen
-            style={{
-              backgroundColor: "#FFFFFF",
-              width: "48%", // Adjust width to fit both buttons in a row
+            style={{ flex: 1 }}
+            mode="outlined"
+            onPress={() => {
+              setIsEditing(false);
+              setUserOriginalInfo();
+              navigation.goBack(); // Navigate back when canceling
             }}
-            icon="view-dashboard" // Dashboard icon
-            textColor="#000000"
+            disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            Dashboard
+            Cancel
           </Button>
         </View>
       ) : (
-        // If user is not admin, only show the Edit Profile button
         <Button
           mode="contained"
-          onPress={() => navigation.navigate("UpdateProfile")} // Navigates to UpdateProfile.js
-          style={{
-            marginTop: 10,
-            backgroundColor: "#000000",
-            width: "60%",
-            alignSelf: "center",
+          onPress={() => {
+            setIsEditing(true);
           }}
+          style={{ marginTop: 20 }}
         >
           Edit Profile
         </Button>
       )}
 
-      {/* Divider */}
-      <View
-        style={{
-          height: 1,
-          backgroundColor: "#ccc",
-          marginVertical: 35,
-        }}
-      ></View>
-
-      <View
-        style={{
-          marginTop: -30,
-          alignItems: "flex-start",
-          width: "100%",
-          paddingLeft: 20,
-        }}
-      >
-        {[
-          { label: "Settings", icon: "cog", route: "Settings" },
-          { label: "Details", icon: "credit-card", route: "BillingDetails" },
-          {
-            label: "Information",
-            icon: "information-outline",
-            route: "Information",
-          },
-          {
-            label: "Log out",
-            icon: "logout",
-            action: () => dispatch(removeAuth()),
-          },
-        ].map((item, index) => (
-          <View
-            key={index}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "90%",
-              marginVertical: 10,
-            }}
-          >
-            {/* Icon and Text */}
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {/* Rounded Cube for Icon */}
-              <View
-                style={{
-                  backgroundColor: "#f0f0f0", // Light background for better visibility
-                  borderRadius: 10, // Rounded corners
-                  width: 36,
-                  height: 36,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginRight: 15,
-                }}
-              >
-                <IconButton
-                  icon={item.icon}
-                  size={20}
-                  color="#000000"
-                  style={{ margin: 0 }} // Remove additional margins from IconButton
-                />
-              </View>
-              {/* Menu Text */}
-              <Button
-                mode="text"
-                onPress={
-                  item.action
-                    ? item.action
-                    : () => navigation.navigate(item.route)
-                }
-                textColor="#000000"
-                contentStyle={{
-                  justifyContent: "flex-start",
-                }}
-                style={{ margin: 0 }}
-              >
-                {item.label}
-              </Button>
-            </View>
-
-            {/* Arrow Icon (exclude for Log out if needed) */}
-            {!item.action && (
-              <IconButton
-                icon="chevron-right"
-                size={20}
-                color="#000000"
-                style={{ margin: 0 }}
-              />
-            )}
-          </View>
-        ))}
-      </View>
-
-      {/* <Button
+      {/* Change Password & Logout Buttons */}
+      <Button
         mode="contained"
         onPress={() => navigation.navigate("ResetPasswordCode")}
         style={{ marginTop: 20 }}
@@ -338,7 +232,7 @@ export default function Profile() {
         style={{ marginTop: 10 }}
       >
         Logout
-      </Button> */}
+      </Button>
     </View>
   );
 }
