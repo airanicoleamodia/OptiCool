@@ -22,7 +22,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Avatar, Button, TextInput, FAB } from "react-native-paper";
 import axios from "axios";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import appliancesTesting from "./testing/appliancesTesting";
+import AppliancesScreen from "./HomeScreens/AppliancesScreen";
 import baseURL from "../assets/common/baseUrl";
 
 export default function Dashboard() {
@@ -235,6 +235,7 @@ export default function Dashboard() {
           </View>
         </View>
 
+        <AppliancesScreen/>
         {/* City Temperature & Appliance Status */}
 
         <View style={styles.mainRow}>
@@ -387,7 +388,8 @@ const styles = StyleSheet.create({
     flexDirection: "row", // Arrange items in a row
     justifyContent: "space-around",
     alignItems: "center", // Align items vertically in the center
-    marginBottom: 20,
+    marginTop: 50,
+    marginBottom: 1,
     width: "96%",
   },
   statusItem: {
