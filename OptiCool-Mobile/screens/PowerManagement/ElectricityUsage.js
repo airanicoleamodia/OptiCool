@@ -3,6 +3,7 @@ import { View, Dimensions, ScrollView, Text } from "react-native";
 import { LineChart, BarChart } from "react-native-chart-kit";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UsageTracking from "./UsageTracking";
+import DeviceInfo from "./DeviceInfo";
 import HumidityUsage from "./HumidityUsage";
 import TemperatureUsage from "./TemperatureUsage";
 // Generate dummy data
@@ -92,7 +93,7 @@ const ElectricityUsage = () => {
           </Text> */}
 
           <UsageTracking />
-          
+          <DeviceInfo />
           <LineChart
             data={{
               labels: Array.from(

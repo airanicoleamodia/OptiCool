@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "../screens/UserScreens/Profile";
 import Dashboard from "../screens/Dashboard";
-import ControlPage from "../screens/PowerManagement/ControlPage";
+import DeviceInfo from "../screens/PowerManagement/DeviceInfo";
 import ElectricityUsage from "../screens/PowerManagement/ElectricityUsage";
 import ProfileNavigation from "./ProfileNavigation";
 import { Avatar } from "react-native-paper";

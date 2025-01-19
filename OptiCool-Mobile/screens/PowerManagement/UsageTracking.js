@@ -42,6 +42,40 @@ const UsageTracking = () => {
       {/* Dropdown or Selector */}
       <TextInput style={styles.input} placeholder="Select" editable={false} />
 
+      {/* Summary */}
+      <View style={styles.summaryContainer}>
+        <View style={styles.summaryItem}>
+          <Text style={styles.summaryText}>💧 {totalUsage} kWh</Text>
+        </View>
+        <View style={styles.summaryItem}>
+          <Text style={styles.summaryText}>🔌 ${totalCost.toFixed(2)}</Text>
+        </View>
+      </View>
+      
+      {/* Chart */}
+      <BarChart
+        data={chartData}
+        width={Dimensions.get("window").width - 20}
+        height={220}
+        yAxisLabel="kW"
+        chartConfig={{
+          backgroundGradientFrom: "#1E2923",
+          backgroundGradientTo: "#08130D",
+          decimalPlaces: 2,
+          color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 16,
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726",
+          },
+        }}
+        style={styles.chart}
+      />
+
       {/* Date Range Picker */}
       <View style={styles.datePickerContainer}>
         <TouchableOpacity
@@ -90,39 +124,6 @@ const UsageTracking = () => {
         <Text style={styles.searchButtonText}>Search</Text>
       </TouchableOpacity>
 
-      {/* Chart */}
-      <BarChart
-        data={chartData}
-        width={Dimensions.get("window").width - 20}
-        height={220}
-        yAxisLabel="kW"
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientTo: "#08130D",
-          decimalPlaces: 2,
-          color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-          propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726",
-          },
-        }}
-        style={styles.chart}
-      />
-
-      {/* Summary */}
-      <View style={styles.summaryContainer}>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryText}>💧 {totalUsage} kWh</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryText}>🔌 ${totalCost.toFixed(2)}</Text>
-        </View>
-      </View>
     </ScrollView>
   );
 };
