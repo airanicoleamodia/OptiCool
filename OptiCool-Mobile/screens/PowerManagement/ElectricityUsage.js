@@ -1,21 +1,21 @@
 import React from "react";
-import { View, Dimensions, ScrollView, Text } from "react-native";
-import { LineChart, BarChart } from "react-native-chart-kit";
+import { View, Dimensions, FlatList, Text } from "react-native";
+import { LineChart } from "react-native-chart-kit";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UsageTracking from "./UsageTracking";
 import DeviceInfo from "./DeviceInfo";
 import HumidityUsage from "./HumidityUsage";
 import TemperatureUsage from "./TemperatureUsage";
-// Generate dummy data
+
 const generateDummyData = () => {
   const dummyData = [];
-  const totalDays = 60; // 60 days of reports
+  const totalDays = 60;
   const hoursPerDay = 12;
 
   for (let day = 1; day <= totalDays; day++) {
     const hourlyUsage = [];
     for (let hour = 1; hour <= hoursPerDay; hour++) {
-      hourlyUsage.push(parseFloat((Math.random() * 5 + 1).toFixed(2))); // Random usage between 1 to 6 kWh
+      hourlyUsage.push(parseFloat((Math.random() * 5 + 1).toFixed(2)));
     }
     dummyData.push({
       day: day,
@@ -26,7 +26,6 @@ const generateDummyData = () => {
   return dummyData;
 };
 
-// Aggregate data by week and month
 const aggregateData = (data) => {
   const weeklyData = [];
   const monthlyData = [];
@@ -59,152 +58,91 @@ const aggregateData = (data) => {
 const ElectricityUsage = () => {
   const data = generateDummyData();
   const { weeklyData, monthlyData } = aggregateData(data);
-
-  // Hourly data for the first day
   const hourlyData = data[0].hourlyUsage;
 
+  const renderItem = ({ item }) => {
+    switch (item.type) {
+      case "usageTracking":
+        return <UsageTracking />;
+      case "deviceInfo":
+        return <DeviceInfo />;
+      case "lineChart":
+        return (
+          <LineChart
+            data={{
+              labels: item.labels,
+              datasets: [{ data: item.data }],
+            }}
+            width={Dimensions.get("window").width - 16}
+            height={300}
+            yAxisSuffix=" kWh"
+            chartConfig={{
+              backgroundColor: item.colors.background,
+              backgroundGradientFrom: item.colors.gradientFrom,
+              backgroundGradientTo: item.colors.gradientTo,
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            }}
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+            }}
+          />
+        );
+      case "humidityUsage":
+        return <HumidityUsage data={data} />;
+      case "temperatureUsage":
+        return <TemperatureUsage data={data} />;
+      default:
+        return null;
+    }
+  };
+
+  const sections = [
+    { type: "usageTracking" },
+    { type: "deviceInfo" },
+    {
+      type: "lineChart",
+      labels: Array.from({ length: hourlyData.length }, (_, i) => `H${i + 1}`),
+      data: hourlyData,
+      colors: {
+        background: "#154003",
+        gradientFrom: "#5aa739",
+        gradientTo: "#e2e93e",
+      },
+    },
+    {
+      type: "lineChart",
+      labels: weeklyData.map((_, index) => `W${index + 1}`),
+      data: weeklyData,
+      colors: {
+        background: "#8b3204",
+        gradientFrom: "#cd591d",
+        gradientTo: "#e2e93e",
+      },
+    },
+    {
+      type: "lineChart",
+      labels: monthlyData.map((_, index) => `Month ${index + 1}`),
+      data: monthlyData,
+      colors: {
+        background: "#36048b",
+        gradientFrom: "#834be0",
+        gradientTo: "#e93e91",
+      },
+    },
+    { type: "humidityUsage" },
+    { type: "temperatureUsage" },
+  ];
+
   return (
-    <SafeAreaView>
-      <ScrollView>
-        {/* <Text
-          style={{
-            fontSize: 24,
-            marginVertical: 8,
-            fontWeight: "bold",
-            textAlign: "center",
-            marginBottom: 20,
-            marginTop: 20,
-            marginLeft: 5,
-          }}
-        >
-          POWER CONSUMPTION REPORT
-        </Text> */}
-
-        <View>
-          {/* <Text
-            style={{
-              fontSize: 18,
-              marginVertical: 8,
-              fontWeight: "bold",
-              marginLeft: 10,
-            }}
-          >
-            Daily
-          </Text> */}
-
-          <UsageTracking />
-          <DeviceInfo />
-          <LineChart
-            data={{
-              labels: Array.from(
-                { length: hourlyData.length },
-                (_, i) => `H${i + 1}`
-              ),
-              datasets: [
-                {
-                  data: hourlyData,
-                },
-              ],
-            }}
-            width={Dimensions.get("window").width - 16}
-            height={300}
-            yAxisSuffix=" kWh"
-            chartConfig={{
-              backgroundColor: "#154003",
-              backgroundGradientFrom: "#5aa739",
-              backgroundGradientTo: "#e2e93e",
-              decimalPlaces: 2,
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            }}
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        </View>
-
-        <Text
-          style={{
-            fontSize: 18,
-            marginVertical: 8,
-            fontWeight: "bold",
-            marginLeft: 10,
-          }}
-        >
-          Weekly
-        </Text>
-
-        <View>
-          <LineChart
-            data={{
-              labels: weeklyData.map((_, index) => `W${index + 1}`),
-              datasets: [
-                {
-                  data: weeklyData,
-                },
-              ],
-            }}
-            width={Dimensions.get("window").width - 16}
-            height={300}
-            yAxisSuffix=" kWh"
-            chartConfig={{
-              backgroundColor: "#8b3204",
-              backgroundGradientFrom: "#cd591d",
-              backgroundGradientTo: "#e2e93e",
-              decimalPlaces: 2,
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            }}
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        </View>
-
-        <Text
-          style={{
-            fontSize: 18,
-            marginVertical: 8,
-            fontWeight: "bold",
-            marginLeft: 10,
-          }}
-        >
-          Monthly
-        </Text>
-
-        <View>
-          <LineChart
-            data={{
-              labels: monthlyData.map((_, index) => `Month ${index + 1}`),
-              datasets: [
-                {
-                  data: monthlyData,
-                },
-              ],
-            }}
-            width={Dimensions.get("window").width - 16}
-            height={300}
-            yAxisSuffix=" kWh"
-            chartConfig={{
-              backgroundColor: "#36048b",
-              backgroundGradientFrom: "#834be0",
-              backgroundGradientTo: "#e93e91",
-              decimalPlaces: 2,
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            }}
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        </View>
-
-        <HumidityUsage data={data} />
-        <TemperatureUsage data={data} />
-      </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <FlatList
+        data={sections}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </SafeAreaView>
   );
 };
