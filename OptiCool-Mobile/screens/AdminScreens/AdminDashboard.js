@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
 const AdminDashboard = () => {
+  const navigation = useNavigation(); // Get access to navigation object
   const [viewMode, setViewMode] = useState('icons'); // Default view mode
 
   const handleViewChange = (mode) => {
@@ -9,11 +11,17 @@ const AdminDashboard = () => {
   };
 
   const menuItems = [
-    { id: 1, name: 'Dashboard', icon: '📊' },
-    { id: 2, name: 'Reports', icon: '📑' },
-    { id: 3, name: 'Settings', icon: '⚙️' },
-    { id: 4, name: 'Profile', icon: '👤' },
-    { id: 5, name: 'Logout', icon: '🚪' },
+    { id: 1, name: 'Dashboard', icon: '📊', color: '#000000' },
+    { id: 2, name: 'Reports', icon: '📑', color: '#000000' },
+    { id: 3, name: 'Settings', icon: '⚙️', color: '#000000' },
+    { 
+      id: 4, 
+      name: 'Users', 
+      icon: '👤', 
+      color: '#000000', 
+      onPress: () => navigation.navigate('UsersAll') // Navigate to UsersAll screen
+    },
+    { id: 5, name: 'Logout', icon: '🚪', color: '#000000' },
   ];
 
   return (
@@ -29,26 +37,29 @@ const AdminDashboard = () => {
       </View>
 
       {/* Menu */}
-      <View style={[styles.menu, viewMode === 'icons' ? styles.icons : styles.list]}>
+      <View style={styles.menu}>
         {menuItems.map((item) => (
-          <View key={item.id} style={styles.menuItem}>
-            {viewMode === 'icons' ? (
-              <Text style={styles.icon}>{item.icon}</Text>
-            ) : (
-              <Text style={styles.listItem}>{item.name}</Text>
-            )}
-          </View>
+          <TouchableOpacity 
+            key={item.id} 
+            style={[styles.menuBox, { backgroundColor: item.color }]} 
+            onPress={item.onPress} // Add onPress handler for navigation
+          >
+            <Text style={styles.icon}>{item.icon}</Text>
+            <Text style={styles.menuText}>{item.name}</Text>
+          </TouchableOpacity>
         ))}
       </View>
     </View>
   );
 };
 
+const { width } = Dimensions.get('window'); // Get screen width
 const styles = StyleSheet.create({
   dashboard: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    marginTop: 26,
+    backgroundColor: '#f8f9fa',
   },
   header: {
     flexDirection: 'row',
@@ -69,24 +80,30 @@ const styles = StyleSheet.create({
   menu: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
-  menuItem: {
+  menuBox: {
+    width: (width - 60) / 2, // Two items per row with padding
+    height: 120,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,
-  },
-  icons: {
-    alignItems: 'center',
-  },
-  list: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    marginBottom: 20,
+    elevation: 5, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   icon: {
-    fontSize: 30,
+    fontSize: 40,
+    marginBottom: 10,
+    color: '#fff',
   },
-  listItem: {
-    fontSize: 18,
+  menuText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
 

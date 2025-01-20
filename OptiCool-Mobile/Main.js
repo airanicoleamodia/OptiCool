@@ -9,6 +9,7 @@ import MenuNavigation from './navigators/MenuNavigations';
 import NotifScreen from './screens/MenuScreens/NotifScreen';
 import UpdateProfile from './screens/UserScreens/UpdateProfile';
 import AdminDashboard from './screens/AdminScreens/AdminDashboard';
+import UsersAll from './screens/AdminScreens/UsersAll';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,7 @@ export default function Main() {
                         <Stack.Screen name='NotifScreen' component={NotifScreen} />
                         <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
                         <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+                        <Stack.Screen name="UsersAll" component={UsersAll} />
 
                     </Stack.Navigator>
                 </>
