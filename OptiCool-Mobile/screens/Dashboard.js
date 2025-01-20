@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     alignItems: "center", // Align items vertically in the center
     marginTop: 50,
     marginBottom: 1,
-    width: "96%",
+    width: "88%",
   },
   statusItem: {
     alignItems: "center", // Center align text inside each item

@@ -11,9 +11,9 @@ const AdminDashboard = () => {
   };
 
   const menuItems = [
-    { id: 1, name: 'Dashboard', icon: '📊', color: '#000000' },
-    { id: 2, name: 'Reports', icon: '📑', color: '#000000' },
-    { id: 3, name: 'Settings', icon: '⚙️', color: '#000000' },
+    { id: 1, name: 'Activity Logs', icon: '📊', color: '#000000', onPress: () => navigation.navigate('ActivityLog') },
+    { id: 2, name: 'Reports', icon: '📑', color: '#000000', onPress: () => navigation.navigate('ActivityUsers') },
+    { id: 3, name: 'FAQs', icon: '⚙️', color: '#000000', onPress: () => navigation.navigate('HelpCenter') },
     { 
       id: 4, 
       name: 'Users', 
@@ -21,7 +21,7 @@ const AdminDashboard = () => {
       color: '#000000', 
       onPress: () => navigation.navigate('UsersAll') // Navigate to UsersAll screen
     },
-    { id: 5, name: 'Logout', icon: '🚪', color: '#000000' },
+    { id: 5, name: 'Active Users', icon: '🚪', color: '#000000', onPress: () => navigation.navigate('ActiveUsers') },
   ];
 
   return (
