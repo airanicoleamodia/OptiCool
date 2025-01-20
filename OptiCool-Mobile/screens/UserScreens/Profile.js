@@ -19,6 +19,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import mime from "mime";
 import axios from "axios";
+import AdminDashboard from '../AdminScreens/AdminDashboard'; // Go one level up, then into AdminScreens
 import baseURL from "../../assets/common/baseUrl";
 
 export default function Profile() {
@@ -204,7 +205,7 @@ export default function Profile() {
 
           <Button
             mode="contained"
-            onPress={() => navigation.navigate("Dashboard")} // Navigates to Dashboard screen
+            onPress={() => navigation.navigate("AdminDashboard")} // Navigates to Dashboard screen
             style={{
               backgroundColor: "#FFFFFF",
               width: "48%", // Adjust width to fit both buttons in a row

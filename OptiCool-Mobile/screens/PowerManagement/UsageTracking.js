@@ -26,8 +26,8 @@ const UsageTracking = () => {
     ],
   });
 
-  const [totalUsage, setTotalUsage] = useState(305); // Dummy total usage in kWh
-  const [totalCost, setTotalCost] = useState(50.0); // Dummy total cost in $
+  const [todayUsage, setTodayUsage] = useState(93); // Example data for today's usage in kWh
+  const [monthlyUsage, setMonthlyUsage] = useState(970.422); // Example data for monthly usage in kWh
 
   const handleSearch = () => {
     // Simulate fetching data for the selected date range
@@ -44,14 +44,24 @@ const UsageTracking = () => {
 
       {/* Summary */}
       <View style={styles.summaryContainer}>
+        {/* Today's Usage */}
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryText}>💧 {totalUsage} kWh</Text>
+          <Text style={styles.icon}>🔌</Text>
+          <Text style={styles.label}>Today</Text>
+          <Text style={styles.value}>{todayUsage} kWh</Text>
         </View>
+
+        {/* Divider */}
+        <View style={styles.divider} />
+
+        {/* This Month's Usage */}
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryText}>🔌 ${totalCost.toFixed(2)}</Text>
+          <Text style={styles.icon}>⚡</Text>
+          <Text style={styles.label}>This Month</Text>
+          <Text style={styles.value}>{monthlyUsage.toFixed(2)} kWh</Text>
         </View>
       </View>
-      
+
       {/* Chart */}
       <BarChart
         data={chartData}
@@ -123,7 +133,6 @@ const UsageTracking = () => {
       <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
         <Text style={styles.searchButtonText}>Search</Text>
       </TouchableOpacity>
-
     </ScrollView>
   );
 };
@@ -182,19 +191,39 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   summaryContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10, // Reduced padding
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8, // Smaller corners
+    borderWidth: 1,
+    borderColor: '#ddd',
+    width: '90%', // Optional: Adjust width for a smaller container
+    alignSelf: 'center', // Center the container horizontally
   },
   summaryItem: {
-    alignItems: "center",
-    padding: 10,
-    backgroundColor: "#e0f7fa",
-    borderRadius: 8,
+    flex: 1,
+    alignItems: 'center',
   },
-  summaryText: {
-    fontSize: 16,
-    fontWeight: "bold",
+  divider: {
+    width: 0.5, // Thinner vertical line
+    backgroundColor: '#ccc',
+    height: '60%', // Smaller height to match the reduced size
+    marginHorizontal: 5, // Reduced spacing
+  },
+  icon: {
+    fontSize: 18, // Smaller icon
+    marginBottom: 3, // Reduced margin
+  },
+  label: {
+    fontSize: 12, // Smaller label text
+    color: '#888',
+    marginBottom: 2,
+  },
+  value: {
+    fontSize: 14, // Smaller value text
+    fontWeight: 'bold',
   },
 });
 

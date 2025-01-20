@@ -137,11 +137,12 @@ const ElectricityUsage = () => {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} >
       <FlatList
         data={sections}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
   );

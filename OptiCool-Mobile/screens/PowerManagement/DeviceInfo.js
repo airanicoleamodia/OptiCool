@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, ScrollView } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -28,13 +28,16 @@ export default function DeviceInfo() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Device Info</Text>
-      <FlatList
-        data={devices}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>Device Info</Text>
+        <FlatList
+          data={devices}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          nestedScrollEnabled={true} // Enables proper scrolling inside ScrollView
+          contentContainerStyle={styles.list}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -44,6 +47,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  scrollContent: {
+    padding: 16,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   list: {
-    padding: 16,
+    paddingBottom: 16,
   },
   card: {
     marginBottom: 12,
