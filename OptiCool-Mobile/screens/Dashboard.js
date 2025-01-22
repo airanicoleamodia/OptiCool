@@ -142,6 +142,16 @@ export default function Dashboard() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* <ImageBackground
+          source={require("../assets/opticool.png")}
+          style={styles.background}
+          resizeMode="cover"
+        > */}
+
         <Text style={styles.intro}>Manage Room</Text>
         <View style={styles.header}>
           <View style={styles.nameContainer}>
@@ -150,13 +160,7 @@ export default function Dashboard() {
             </Text>
           </View>
           {/* Alert Icon (beside avatar) */}
-          <MaterialCommunityIcons
-            name="bell"
-            size={24}
-            color="#6ea4dd"
-            onPress={() => alert("Alert clicked!")}
-            style={styles.alertIconContainer}
-          />
+
           <TouchableOpacity
             onPress={toggleDropdown}
             style={styles.avatarContainer}
@@ -171,7 +175,13 @@ export default function Dashboard() {
             />
           </TouchableOpacity>
         </View>
-
+        <MaterialCommunityIcons
+          name="bell"
+          size={24}
+          color="#6ea4dd"
+          onPress={() => alert("Alert clicked!")}
+          style={styles.alertIconContainer}
+        />
         {/* Dropdown Menu */}
         {isDropdownVisible && (
           <Modal
@@ -209,16 +219,6 @@ export default function Dashboard() {
             </View>
           </Modal>
         )}
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* <ImageBackground
-          source={require("../assets/opticool.png")}
-          style={styles.background}
-          resizeMode="cover"
-        > */}
-        
 
         <View style={styles.singleStatusCard}>
           <View style={styles.statusItem}>
@@ -235,7 +235,7 @@ export default function Dashboard() {
           </View>
         </View>
 
-        <AppliancesScreen/>
+        <AppliancesScreen />
         {/* City Temperature & Appliance Status */}
 
         <View style={styles.mainRow}>
@@ -314,18 +314,14 @@ const styles = StyleSheet.create({
     justifyContent: "center", // Center vertically
     alignItems: "center", // Center horizontally
   },
-//   background: {
-//     flex: 1, 
-//     justifyContent: "flex-start", 
-//     padding: 16, 
-//   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 0,
+    marginBottom: 10,
     marginTop: 20,
-    marginLeft: 8,
+    width: "100%", // Ensure it spans the entire width
+    paddingHorizontal: 16, // Add some horizontal padding
   },
   intro: {
     fontSize: 11,
@@ -333,12 +329,14 @@ const styles = StyleSheet.create({
     color: "grey",
     marginTop: 20,
     marginBottom: -25,
-    marginLeft: 9,
+    marginRight: 240,
   },
   greeting: {
     fontSize: 24,
     fontWeight: "normal",
     color: "#050a20",
+    alignSelf: "flex-start", // Align to the left
+    marginLeft: 7,
   },
   name: {
     fontSize: 24,
@@ -346,8 +344,8 @@ const styles = StyleSheet.create({
     color: "#4f5e70",
   },
   alertIconContainer: {
-    marginRight: -150,
-    marginTop: -8, // Space between alert icon and avatar
+    marginLeft: 170,
+    marginTop: -40, // Space between alert icon and avatar
   },
   avatar: {
     marginTop: -10,
@@ -382,7 +380,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   singleStatusCard: {
-    backgroundColor: "#ffffff", 
+    backgroundColor: "#ffffff",
     borderRadius: 25,
     padding: 15,
     flexDirection: "row", // Arrange items in a row
@@ -401,21 +399,21 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#9eaab8",
     textAlign: "center",
-    width: "100%", 
-  },  
+    width: "100%",
+  },
   statusValue: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#4f5e70",
     textAlign: "center",
-    width: "100%", 
+    width: "100%",
   },
   WeatherText: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#4f5e70",
     textAlign: "center",
-    width: "100%", 
+    width: "100%",
   },
   mainRow: {
     flexDirection: "row",
@@ -424,7 +422,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 0,
   },
-  
+
   weatherCard: {
     backgroundColor: "#b3e5fc",
     borderRadius: 20,

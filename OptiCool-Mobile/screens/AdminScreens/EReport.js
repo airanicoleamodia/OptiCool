@@ -6,7 +6,7 @@ import axios from 'axios';
 import baseURL from '../../assets/common/baseUrl';
 import { useFocusEffect } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit'; // Import BarChart
-import UsersAll from './UsersAll';
+// import UsersAll from './UsersAll';
 
 export default function EReport() {
     const [reports, setReports] = useState([]);
@@ -139,7 +139,6 @@ export default function EReport() {
                     </Card>
                 </View>
 
-                <UsersAll />
             </ScrollView>
         </SafeAreaView>
     );
