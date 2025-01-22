@@ -3,22 +3,20 @@ import { View, Text, Switch, StyleSheet, Image } from "react-native";
 
 const AppliancesScreen = () => {
   const [isLightOn, setLightOn] = React.useState(false);
-  const [isAC1On, setAC1On] = React.useState(false);
-  const [isTVOn, setTVOn] = React.useState(false);
-  const [isAC2On, setAC2On] = React.useState(false);
+  const [isFanOn, setFanOn] = React.useState(false);
+  const [isExhaustInwardsOn, setExhaustInwardsOn] = React.useState(false);
+  const [isExhaustOutwardsOn, setExhaustOutwardsOn] = React.useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <View style={[styles.card, isLightOn && styles.activeCard]}>
+        <View style={styles.card}>
           <Image
             source={require("../../assets/air-conditioner.png")} // Add your image path here
             style={styles.cardImage}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={[styles.cardText, isLightOn && styles.activeText]}>
-              Smart{"\n"}Light
-            </Text>
+            <Text style={styles.cardText}>Aircon</Text>
             <Switch
               value={isLightOn}
               onValueChange={() => setLightOn((prev) => !prev)}
@@ -26,52 +24,50 @@ const AppliancesScreen = () => {
           </View>
         </View>
 
-        <View style={[styles.card, isLightOn && styles.activeCard]}>
+        <View style={styles.card}>
           <Image
             source={require("../../assets/fan.png")} // Add your image path here
             style={styles.cardImage}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={[styles.cardText, isLightOn && styles.activeText]}>
-              Fan
-            </Text>
+            <Text style={styles.cardText}>Fan</Text>
             <Switch
-              value={isLightOn}
-              onValueChange={() => setLightOn((prev) => !prev)}
+              value={isFanOn}
+              onValueChange={() => setFanOn((prev) => !prev)}
             />
           </View>
         </View>
       </View>
 
       <View style={styles.row}>
-        <View style={[styles.card, isLightOn && styles.activeCard]}>
+        <View style={styles.card}>
           <Image
             source={require("../../assets/light-bulb.png")} // Add your image path here
             style={styles.cardImage}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={[styles.cardText, isLightOn && styles.activeText]}>
-              Light{"\n"}Bulb
+            <Text style={styles.cardText}>
+              Exhaust{"\n"}(Inwards)
             </Text>
             <Switch
-              value={isLightOn}
-              onValueChange={() => setLightOn((prev) => !prev)}
+              value={isExhaustInwardsOn}
+              onValueChange={() => setExhaustInwardsOn((prev) => !prev)}
             />
           </View>
         </View>
 
-        <View style={[styles.card, isLightOn && styles.activeCard]}>
+        <View style={styles.card}>
           <Image
             source={require("../../assets/light-bulb.png")} // Add your image path here
             style={styles.cardImage}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={[styles.cardText, isLightOn && styles.activeText]}>
-              Smart{"\n"}TV
+            <Text style={styles.cardText}>
+              Exhaust{"\n"}(Outwards)
             </Text>
             <Switch
-              value={isLightOn}
-              onValueChange={() => setLightOn((prev) => !prev)}
+              value={isExhaustOutwardsOn}
+              onValueChange={() => setExhaustOutwardsOn((prev) => !prev)}
             />
           </View>
         </View>
@@ -116,18 +112,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     alignSelf: "flex-start",
   },
-  activeCard: {
-    backgroundColor: "#000",
-  },
   cardText: {
     fontSize: 16,
     color: "#000",
-    marginTop: 20,
+    marginTop: 5,
     marginBottom: 5,
     marginRight: 15,
-  },
-  activeText: {
-    color: "#fff",
   },
 });
 

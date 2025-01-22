@@ -4,10 +4,10 @@ import { Text, Card } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const devices = [
-  { id: '1', name: 'Google Home Voice Controller', time: '1h 45m', power: '0.002kWh' },
-  { id: '2', name: 'Alexa', time: '1h 50m', power: '0.023kWh' },
-  { id: '3', name: 'iRobot Roomba E5', time: '1h 55m', power: '0.012kWh' },
-  { id: '4', name: 'Ring', time: '2h 02m', power: '0.005kWh' },
+  { id: '1', name: 'Aircon', time: '1h 45m', power: '0.002kWh' },
+  { id: '2', name: 'Fan', time: '1h 50m', power: '0.023kWh' },
+  { id: '3', name: 'Exhaust (Inwards)', time: '1h 55m', power: '0.012kWh' },
+  { id: '4', name: 'Exhaust (Outwards)', time: '2h 02m', power: '0.005kWh' },
 ];
 
 export default function DeviceInfo() {
