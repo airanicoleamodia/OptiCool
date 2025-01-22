@@ -8,9 +8,12 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import Icon from "react-native-vector-icons/FontAwesome"; // Use FontAwesome for icons or any other icon set
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+import UsageTracking from "./UsageTracking";
 
 const ElectricityUsage = () => {
   const [activeTab, setActiveTab] = useState("weekly");
+  const navigation = useNavigation();
 
   // Dummy data
   const weeklyData = Array.from({ length: 4 }, () => Math.random() * 50 + 20);
@@ -121,7 +124,10 @@ const ElectricityUsage = () => {
               style={styles.icon}
             />
             <Text style={styles.menuText}>Usage Tracker</Text>
-            <TouchableOpacity style={styles.detailButton}>
+            <TouchableOpacity
+              style={styles.detailButton}
+              onPress={() => navigation.navigate('UsageTracking')} // Correct navigation call
+            >
               <Text style={styles.detailText}>Details</Text>
             </TouchableOpacity>
           </View>
@@ -192,26 +198,26 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   menuContainer: {
-    flexDirection: 'column', // Stack items vertically
+    flexDirection: "column", // Stack items vertically
   },
   rectangle: {
-    backgroundColor: '#ffffff', // Light gray background for the rectangle
+    backgroundColor: "#ffffff", // Light gray background for the rectangle
     height: 80,
     padding: 10, // Padding inside the rectangle
     borderRadius: 8, // Rounded corners
     marginBottom: 10, // Space between menu items
     elevation: 0, // Add a slight shadow for elevation (Android)
-    shadowColor: '#000', // Shadow for iOS
+    shadowColor: "#000", // Shadow for iOS
     shadowOpacity: 0.2, // Shadow opacity for iOS
     shadowRadius: 4, // Shadow radius for iOS
     shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
-    justifyContent: 'center', // Vertically center content
-    alignItems: 'center', // Horizontally center content
+    justifyContent: "center", // Vertically center content
+    alignItems: "center", // Horizontally center content
   },
   menuItem: {
-    flexDirection: 'row', // Align icon, text, and button horizontally
-    alignItems: 'center', // Vertically align items
-    justifyContent: 'space-between', // Space between icon/text and button
+    flexDirection: "row", // Align icon, text, and button horizontally
+    alignItems: "center", // Vertically align items
+    justifyContent: "space-between", // Space between icon/text and button
   },
   icon: {
     marginRight: 10, // Space between icon and text
@@ -220,14 +226,14 @@ const styles = StyleSheet.create({
     flex: 1, // Take up remaining space
   },
   detailButton: {
-    backgroundColor: '#000000', // Button background color
+    backgroundColor: "#000000", // Button background color
     paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 5,
   },
   detailText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
 });
 

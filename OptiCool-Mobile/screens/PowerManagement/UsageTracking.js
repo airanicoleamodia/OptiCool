@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import DatePicker from "react-native-date-picker";
+// import DatePicker from "react-native-date-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
