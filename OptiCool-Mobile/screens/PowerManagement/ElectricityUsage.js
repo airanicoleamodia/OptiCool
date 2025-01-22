@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import Icon from "react-native-vector-icons/FontAwesome"; // Use FontAwesome for icons or any other icon set
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 import UsageTracking from "./UsageTracking";
+import DeviceInfo from "./DeviceInfo";
 
 const ElectricityUsage = () => {
   const [activeTab, setActiveTab] = useState("weekly");
@@ -73,7 +75,8 @@ const ElectricityUsage = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}
+    showsVerticalScrollIndicator={false}>
       {/* Tab Navigation */}
       <View style={styles.tabBox}>
         <TouchableOpacity
@@ -157,8 +160,9 @@ const ElectricityUsage = () => {
             </TouchableOpacity>
           </View>
         </View>
+        <DeviceInfo/>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

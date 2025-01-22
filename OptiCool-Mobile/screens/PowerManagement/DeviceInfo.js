@@ -29,7 +29,7 @@ export default function DeviceInfo() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>Device Info</Text>
+        <Text style={styles.title}>Appliances Status</Text>
         <FlatList
           data={devices}
           renderItem={renderItem}
@@ -45,10 +45,10 @@ export default function DeviceInfo() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#ebedf0',
   },
   scrollContent: {
-    padding: 16,
+    padding: 1,
   },
   title: {
     fontSize: 24,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 12,
     borderRadius: 8,
-    elevation: 2,
+    elevation: 0,
   },
   cardContent: {
     flexDirection: 'row',

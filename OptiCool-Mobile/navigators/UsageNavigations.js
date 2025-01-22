@@ -8,9 +8,17 @@ const Stack = createStackNavigator();
 
 const UsageNavigations = () => {
   return (
-    <Stack.Navigator initialRouteName="ElectricityUsage">
-      <Stack.Screen name="ElectricityUsage" component={ElectricityUsage} />
-      <Stack.Screen name="UsageTracking" component={UsageTracking} />
+    <Stack.Navigator 
+      initialRouteName="ElectricityUsage"
+    >
+
+      <Stack.Screen name="ElectricityUsage" component={ElectricityUsage} 
+       options={{ headerShown: true }}
+      />
+       
+      <Stack.Screen name="UsageTracking" component={UsageTracking} 
+       options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 };

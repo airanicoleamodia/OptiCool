@@ -14,6 +14,7 @@ import ActiveUsers from './screens/AdminScreens/ActiveUsers';
 import ActivityLog from './screens/AdminScreens/ActivityLog';
 import HelpCenter from './screens/AdminScreens/HelpCenter';
 import UsersAll from './screens/AdminScreens/UsersAll';
+import UsageTracking from './screens/PowerManagement/UsageTracking';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ export default function Main() {
                     {/* Main screens */}
                     <Stack.Screen name="BottomTabs" component={BottomTabs} />
                     <Stack.Screen name="UsageNavigations" component={UsageNavigations} />
+                    <Stack.Screen name="UsageTracking" component={UsageTracking} />
                     <Stack.Screen name="NotifScreen" component={NotifScreen} />
                     <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
                     <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
