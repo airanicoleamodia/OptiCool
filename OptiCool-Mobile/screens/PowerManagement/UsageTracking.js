@@ -40,7 +40,7 @@ const UsageTracking = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Dropdown or Selector */}
-      <TextInput style={styles.input} placeholder="Select" editable={false} />
+      <TextInput style={styles.input} placeholder="Select" editable={true} />
 
       {/* Summary */}
       <View style={styles.summaryContainer}>
