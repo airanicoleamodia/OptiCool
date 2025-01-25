@@ -4,32 +4,32 @@ import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
 
 const HelpCenter = ({ navigation }) => {
-  const [helpTopics, setHelpTopics] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchHelpTopics();
+    fetchPosts();
   }, []);
 
-  const fetchHelpTopics = async () => {
+  const fetchPosts = async () => {
     try {
-      const response = await axios.get(`${baseURL}/help/getAllTopics`);
-      setHelpTopics(response.data.topics);
+      const response = await axios.get(`${baseURL}/posts/getAllPosts`);
+      setPosts(response.data.posts); // Ensure this matches your backend's key for posts.
     } catch (error) {
       console.error(error);
-      Alert.alert("Error", "Failed to fetch help topics.");
+      Alert.alert("Error", "Failed to fetch posts.");
     } finally {
       setLoading(false);
     }
   };
 
-  const renderHelpTopic = ({ item }) => (
+  const renderPost = ({ item }) => (
     <TouchableOpacity
-      style={styles.topicCard}
-      onPress={() => navigation.navigate("HelpDetails", { topic: item })}
+      style={styles.postCard}
+      onPress={() => navigation.navigate("HelpDetails", { post: item })}
     >
-      <Text style={styles.topicTitle}>{item.title}</Text>
-      <Text style={styles.topicDescription}>{item.description.substring(0, 50)}...</Text>
+      <Text style={styles.postTitle}>{item.title}</Text>
+      <Text style={styles.postContent}>{item.content.substring(0, 50)}...</Text>
     </TouchableOpacity>
   );
 
@@ -44,9 +44,9 @@ const HelpCenter = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={helpTopics}
+        data={posts}
         keyExtractor={(item) => item._id}
-        renderItem={renderHelpTopic}
+        renderItem={renderPost}
         contentContainerStyle={styles.list}
       />
     </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   list: {
     padding: 10,
   },
-  topicCard: {
+  postCard: {
     backgroundColor: "#f8f9fa",
     padding: 15,
     marginBottom: 10,
@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
   },
-  topicTitle: {
+  postTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
   },
-  topicDescription: {
+  postContent: {
     fontSize: 14,
     color: "#555",
   },
