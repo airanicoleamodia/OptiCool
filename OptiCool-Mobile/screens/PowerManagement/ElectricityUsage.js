@@ -66,6 +66,7 @@ const ElectricityUsage = () => {
     <FlatList
       data={menuItems}
       keyExtractor={(item, index) => index.toString()}
+      showsVerticalScrollIndicator={false}
       ListHeaderComponent={
         <>
           <View style={styles.tabBox}>

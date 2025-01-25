@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Modal } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const AdminDashboard = () => {
-  const navigation = useNavigation(); // Get access to navigation object
-  const [viewMode, setViewMode] = useState('icons'); // Default view mode
+  const navigation = useNavigation();
+  const [viewMode, setViewMode] = useState('icons');
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handleViewChange = (mode) => {
     setViewMode(mode);
   };
 
+  const handleFaqsPress = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   const menuItems = [
     { id: 1, name: 'Activity Logs', icon: '📊', color: '#000000', onPress: () => navigation.navigate('ActivityLog') },
     { id: 2, name: 'Reports', icon: '📑', color: '#000000', onPress: () => navigation.navigate('ActivityUsers') },
-    { id: 3, name: 'FAQs', icon: '⚙️', color: '#000000', onPress: () => navigation.navigate('HelpCenter') },
-    { 
-      id: 4, 
-      name: 'Users', 
-      icon: '👤', 
-      color: '#000000', 
-      onPress: () => navigation.navigate('UsersAll') // Navigate to UsersAll screen
-    },
+    { id: 3, name: 'FAQs', icon: '⚙️', color: '#000000', onPress: handleFaqsPress },
+    { id: 4, name: 'Users', icon: '👤', color: '#000000', onPress: () => navigation.navigate('UsersAll') },
     { id: 5, name: 'Active Users', icon: '🚪', color: '#000000', onPress: () => navigation.navigate('ActiveUsers') },
   ];
 
@@ -42,18 +45,56 @@ const AdminDashboard = () => {
           <TouchableOpacity 
             key={item.id} 
             style={[styles.menuBox, { backgroundColor: item.color }]} 
-            onPress={item.onPress} // Add onPress handler for navigation
+            onPress={item.onPress}
           >
             <Text style={styles.icon}>{item.icon}</Text>
             <Text style={styles.menuText}>{item.name}</Text>
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* Modal */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>FAQs</Text>
+            <View style={styles.choiceContainer}>
+              <TouchableOpacity 
+                style={styles.choiceBox} 
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('HelpCenter');
+                }}
+              >
+                <Text style={styles.choiceText}>View Posts</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.choiceBox} 
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('CreatePost');
+                }}
+              >
+                <Text style={styles.choiceText}>Create Post</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
-const { width } = Dimensions.get('window'); // Get screen width
+const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   dashboard: {
     flex: 1,
@@ -83,14 +124,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   menuBox: {
-    width: (width - 60) / 2, // Two items per row with padding
+    width: (width - 60) / 2,
     height: 120,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
-    elevation: 5, // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
+    elevation: 5,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -104,6 +145,53 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  choiceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  choiceBox: {
+    flex: 1,
+    backgroundColor: '#007bff',
+    borderRadius: 10,
+    margin: 5,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  choiceText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#dc3545',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 
