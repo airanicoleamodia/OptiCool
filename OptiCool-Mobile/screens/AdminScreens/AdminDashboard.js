@@ -77,7 +77,7 @@ const AdminDashboard = () => {
                 style={styles.choiceBox} 
                 onPress={() => {
                   setModalVisible(false);
-                  navigation.navigate('CreatePost');
+                  navigation.navigate('CreatePosts');
                 }}
               >
                 <Text style={styles.choiceText}>Create Post</Text>

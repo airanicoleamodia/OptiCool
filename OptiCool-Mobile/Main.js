@@ -15,6 +15,8 @@ import ActivityLog from './screens/AdminScreens/ActivityLog';
 import HelpCenter from './screens/AdminScreens/HelpCenter';
 import UsersAll from './screens/AdminScreens/UsersAll';
 import UsageTracking from './screens/PowerManagement/UsageTracking';
+import CreatePosts from './screens/AdminScreens/CreatePosts';
+import HelpDetails from './screens/AdminScreens/HelpDetails';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +47,8 @@ export default function Main() {
                     <Stack.Screen name="ActivityLog" component={ActivityLog} />
                     <Stack.Screen name="UsersAll" component={UsersAll} />
                     <Stack.Screen name="HelpCenter" component={HelpCenter} />
+                    <Stack.Screen name="CreatePosts" component={CreatePosts} />
+                    <Stack.Screen name="HelpDetails" component={HelpDetails} options={{ title: "Help Details" }} />
                     
                     {/* UsageNavigations as a stack navigator */}
                     
