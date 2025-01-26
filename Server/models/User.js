@@ -42,6 +42,12 @@ const userSchema = new mongoose.Schema({
     resetPasswordCodeExpire: Date,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+
+    // Add the 'isActive' field here
+    isActive: {
+        type: Boolean,
+        default: false, // Defaults to false for new users
+    },
 }, { timestamps: true })
 
 userSchema.pre('save', async function (next) {
@@ -49,17 +55,14 @@ userSchema.pre('save', async function (next) {
         next();
     }
     this.password = await bcrypt.hash(this.password, 10);
-})
+});
 
 userSchema.pre(["updateOne", "findByIdAndUpdate", "findOneAndUpdate"], async function (next) {
-
     const data = this.getUpdate();
-
     if (data.password) {
         data.password = await bcrypt.hash(data.password, 10);
     }
-    next()
-
+    next();
 });
 
 userSchema.methods.getJwtToken = function () {
@@ -104,12 +107,49 @@ userSchema.methods.verifyCode = async function (inputtedCode) {
         return 'wrong'
     }
 
-    this.resetPasswordCode = null
-    this.resetPasswordCodeExpire = null
+    this.resetPasswordCode = null;
+    this.resetPasswordCodeExpire = null;
+    this.save();
+
+    return 'success';
+}
+
+// Method to set user as active when they log in
+userSchema.methods.setActive = async function () {
+    this.isActive = true;
+    await this.save();
+}
+
+// Method to set user as inactive when they log out
+userSchema.methods.setInactive = async function () {
+    this.isActive = false;
+    await this.save();
+}
+
+userSchema.methods.sendResetPasswordCode = async function () {
+    await sendEmail({
+        email: this.email,
+        subject: 'OptiCool - Reset password code',
+        message: `This is your verification code ${this.resetPasswordCode}. This will be valid in 5 minutes`
+    })
+}
+
+userSchema.methods.verifyCode = async function (inputtedCode) {
+
+    if (this.resetPasswordCodeExpire < Date.now()) {
+        return 'expired'
+    }
+
+    if (this.resetPasswordCode !== inputtedCode) {
+        return 'wrong'
+    }
+
+    this.resetPasswordCode = null;
+    this.resetPasswordCodeExpire = null;
     this.save();
 
     return 'success'
 
 }
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);

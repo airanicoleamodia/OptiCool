@@ -178,7 +178,7 @@ export default function Dashboard() {
         <MaterialCommunityIcons
           name="bell"
           size={24}
-          color="#6ea4dd"
+          color="#000000"
           onPress={() => alert("Alert clicked!")}
           style={styles.alertIconContainer}
         />

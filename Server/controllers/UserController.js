@@ -32,9 +32,7 @@ exports.register = async (req, res, next) => {
 }
 
 exports.login = async (req, res, next) => {
-
     try {
-
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -42,7 +40,6 @@ exports.login = async (req, res, next) => {
         }
 
         let user = await User.findOne({ email }).select('+password');
-
 
         if (!user) {
             return res.status(400).json({ message: 'Invalid Email or Password' });
@@ -55,17 +52,16 @@ exports.login = async (req, res, next) => {
         }
 
         user = await User.findOne(user._id);
-
-        sendToken(user, 200, res, 'Successfully Login')
-
+        await user.setActive(); // Set user as active
+        sendToken(user, 200, res, 'Successfully Login');
     } catch (err) {
         return res.status(400).json({
             message: 'Please try again later',
             success: false,
         })
     }
+};
 
-}
 
 exports.getSingleUser = async (req, res, next) => {
 
@@ -244,3 +240,14 @@ exports.updateRole = async (req, res, next) => {
         })
     }
 }
+
+
+exports.getActiveUsers = async (req, res) => {
+    try {
+      const activeUsers = await User.find({ isActive: true }).select('username email');
+      res.status(200).json({ success: true, users: activeUsers });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Failed to fetch active users.' });
+    }
+  };
