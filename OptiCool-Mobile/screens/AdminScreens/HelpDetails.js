@@ -2,13 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 const HelpDetails = ({ route }) => {
-  const { topic } = route.params;
+  const { post } = route.params;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{topic.title}</Text>
-      <Text style={styles.content}>{topic.content}</Text>
-      <Text style={styles.date}>Last Updated: {new Date(topic.updatedAt).toLocaleString()}</Text>
+      <Text style={styles.title}>{post.title}</Text>
+      <Text style={styles.content}>{post.content}</Text>
+      <Text style={styles.date}>Last Updated: {new Date(post.updatedAt).toLocaleString()}</Text>
     </View>
   );
 };
