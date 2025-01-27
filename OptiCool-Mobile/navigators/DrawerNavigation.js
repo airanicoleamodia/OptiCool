@@ -1,18 +1,22 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import BottomTabs from './BottomTabs';
 
 const Drawer = createDrawerNavigator();
 
-
-export default function TestNavigator() {
+export default function DrawerNavigation() {
   return (
     <NavigationContainer>
       <Drawer.Navigator>
-        {/* Nest the Bottom Tabs into the Drawer */}
-        <Drawer.Screen name="Tabs" component={BottomTabs} />
+        {/* Hide the label for this drawer screen */}
+        <Drawer.Screen
+          name="Tabs"
+          component={BottomTabs}
+          options={{
+            headerShown: false, // Hide the header
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
