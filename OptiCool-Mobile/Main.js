@@ -37,7 +37,7 @@ export default function Main() {
                     }}
                 >
                     {/* Main screens */}
-                    <Stack.Screen name="BottomTabs" component={BottomTabs} />
+                    {/* <Stack.Screen name="BottomTabs" component={BottomTabs} /> */}
                     <Stack.Screen name="UsageNavigations" component={UsageNavigations} />
                     <Stack.Screen name="UsageTracking" component={UsageTracking} />
                     <Stack.Screen name="NotifScreen" component={NotifScreen} />

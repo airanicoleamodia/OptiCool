@@ -1,30 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import { StatusBar } from 'react-native';
 import BottomTabs from './BottomTabs';
 import ProfileNavigation from './ProfileNavigation';
-import AdminDashboard from '../screens/AdminScreens/AdminDashboard';
-import WelcomePage from '../screens/UserScreens/WelcomePage';
 import AuthNavigation from './AuthNavigation';
+import NotifScreen from '../screens/MenuScreens/NotifScreen';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+// Stack navigator for NotifScreen
+function NotifStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="NotifScreen" component={NotifScreen} />
+    </Stack.Navigator>
+  );
+}
 
 export default function DrawerNavigation() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is initialized
   useEffect(() => {
     if (user !== null) {
-      setIsLoading(false); // Set loading to false once user data is available
+      setIsLoading(false);
     }
   }, [user]);
 
   if (isLoading) {
-    // Show loading state (e.g., spinner) while the authentication state is being checked
-    return null; // Or you can replace this with a loading spinner or placeholder
+    return null; // Placeholder for loading state
   }
 
   return (
@@ -39,10 +47,9 @@ export default function DrawerNavigation() {
         >
           <Drawer.Screen name="Home" component={BottomTabs} />
           <Drawer.Screen name="Profile" component={ProfileNavigation} />
-          <Drawer.Screen name="AdminDashboard" component={AdminDashboard} />
+          <Drawer.Screen name="NotifScreen" component={NotifStack} options={{ drawerLabel: 'Notifications' }} />
         </Drawer.Navigator>
       ) : (
-        // Render WelcomePage if not logged in
         <AuthNavigation />
       )}
     </NavigationContainer>
