@@ -14,9 +14,9 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          {/* <Main /> */}
+          <Main />
           {/* <TestNavigator/> */}
-          <DrawerNavigation/>
+          {/* <DrawerNavigation/> */}
         </PersistGate>
       </Provider>
     </GestureHandlerRootView>

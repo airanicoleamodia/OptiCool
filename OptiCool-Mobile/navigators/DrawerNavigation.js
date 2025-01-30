@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
-import { StatusBar } from 'react-native';
-import BottomTabs from './BottomTabs';
-import ProfileNavigation from './ProfileNavigation';
-import AuthNavigation from './AuthNavigation';
-import NotifScreen from '../screens/MenuScreens/NotifScreen';
+import React, { useEffect, useState } from "react";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { useSelector } from "react-redux";
+import { StatusBar } from "react-native";
+import Dashboard from "../screens/Dashboard";
+import Environment from "../screens/EStatusScreens/EnvironmentStatus";
+import ElectricityUsage from "../screens/PowerManagement/ElectricityUsage";
+import Report from "../screens/AdminScreens/EReport";
+import Profile from "../screens/UserScreens/Profile";
+import AuthNavigation from "./AuthNavigation"; // Assuming this exists
+import BottomTabs from "./BottomTabs";
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
-
-// Stack navigator for NotifScreen
-function NotifStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="NotifScreen" component={NotifScreen} />
-    </Stack.Navigator>
-  );
-}
 
 export default function DrawerNavigation() {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -36,22 +27,27 @@ export default function DrawerNavigation() {
   }
 
   return (
-    <NavigationContainer>
+    <>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       {isLogin ? (
         <Drawer.Navigator
-          initialRouteName="Home"
+          initialRouteName="Dashboard"
           screenOptions={{
             headerShown: false,
           }}
         >
           <Drawer.Screen name="Home" component={BottomTabs} />
-          <Drawer.Screen name="Profile" component={ProfileNavigation} />
-          <Drawer.Screen name="NotifScreen" component={NotifStack} options={{ drawerLabel: 'Notifications' }} />
+          <Drawer.Screen name="Status" component={Environment} />
+          <Drawer.Screen name="Usage" component={ElectricityUsage} />
+
+          {/* Only show Reports tab if the user is an admin */}
+          {user.role === "admin" && <Drawer.Screen name="Reports" component={Report} />}
+
+          <Drawer.Screen name="Profile" component={Profile} />
         </Drawer.Navigator>
       ) : (
         <AuthNavigation />
       )}
-    </NavigationContainer>
+    </>
   );
 }
