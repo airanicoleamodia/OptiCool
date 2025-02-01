@@ -1,137 +1,107 @@
-// import React, { useContext, useState, useEffect } from 'react';
-// import { View, Text, Image, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-// import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-// // import AuthGlobal from '../Context/Store/AuthGlobal';
-// import axios from 'axios';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import baseURL from '../assets/common/baseUrl';
-// import { useNavigation } from '@react-navigation/native';
-// // import { logoutUser } from '../Context/Actions/Auth.actions';
+import React, { useCallback, useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Avatar, IconButton } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { removeAuth } from "../states/authSlice";  // Going up one level first
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import baseUrl from "../../assets/common/baseUrl";
 
-// const CustomDrawerContent = (props) => {
-//   const context = useContext(AuthGlobal);
-//   const [userDetails, setUserDetails] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const navigation = useNavigation();
+const CustomDrawerContent = (props) => {
+  const dispatch = useDispatch();
+  const { user, token } = useSelector((state) => state.auth);
+  const navigation = useNavigation();
 
-//   useEffect(() => {
-//     const fetchUserDetails = async () => {
-//       setLoading(true);
-//       try {
-//         const token = await AsyncStorage.getItem('jwt');
-//         const userId = context.stateUser?.user?.userId;
-//         if (userId && token) {
-//           const response = await axios.get(`${baseURL}users/${userId}`, {
-//             headers: { Authorization: `Bearer ${token}` },
-//           });
-//           setUserDetails(response.data.user || {});
-//         } else {
-//           console.error('User ID or token is missing');
-//         }
-//       } catch (error) {
-//         console.error('Error fetching user details:', error.response ? error.response.data : error.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
+  const [userData, setUserData] = useState({
+    avatar: "",
+    username: "",
+    email: "",
+  });
 
-//     if (context.stateUser.isAuthenticated) {
-//       fetchUserDetails();
-//     }
-//   }, [context.stateUser.isAuthenticated]);
+  const setUserOriginalInfo = async () => {
+    const { data } = await axios.get(`${baseURL}/users/getsingle/${user._id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-//   const handleLogout = async () => {
-//     try {
-//       const token = await AsyncStorage.getItem('jwt');
-//       const userId = context.stateUser?.user?.userId;
+    setUserData({
+      avatar: data.user.avatar,
+      username: data.user.username,
+      email: data.user.email,
+    });
+  };
 
-//       await axios.post(`${baseURL}users/logout`, { userId }, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
+  useEffect(() => {
+    setUserOriginalInfo();
+  }, [user]);
 
-//       await AsyncStorage.removeItem('jwt');
-//       logoutUser(context.dispatch);
-//       navigation.navigate('Login');
-//     } catch (error) {
-//       console.error('Logout error:', error.response ? error.response.data : error.message);
-//     }
-//   };
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Drawer Header */}
+      <View style={styles.header}>
+        <Avatar.Image source={{ uri: userData.avatar?.url }} size={80} />
+        <View style={styles.userInfo}>
+          <Text style={styles.username}>{userData.username}</Text>
+          <Text style={styles.email}>{userData.email}</Text>
+        </View>
+      </View>
 
-//   if (loading) {
-//     return (
-//       <View style={styles.loadingContainer}>
-//         <ActivityIndicator size="large" color="#007BFF" />
-//       </View>
-//     );
-//   }
+      {/* Drawer Options */}
+      <View style={styles.drawerOptions}>
+        {[ 
+          { label: "Dashboard", icon: "view-dashboard", route: "AdminDashboard" },
+          { label: "Settings", icon: "cog", route: "Settings" },
+          { label: "Log out", icon: "logout", action: () => dispatch(removeAuth()) },
+        ].map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.option}
+            onPress={item.action ? item.action : () => navigation.navigate(item.route)}
+          >
+            <IconButton icon={item.icon} size={20} color="#000" />
+            <Text style={styles.optionText}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
+};
 
-//   return (
-//     <DrawerContentScrollView {...props}>
-//        <TouchableOpacity 
-//         onPress={() => navigation.navigate('Home', { screen: 'Home' })}
-//       >
-//         <View style={styles.headerContainer}>
-//           <Text style={styles.headerText}>OptiCool</Text>
-//         </View>
-//       </TouchableOpacity>
-//       <View style={styles.userInfoContainer}>
-//         <Image source={{ uri: userDetails?.image || 'https://via.placeholder.com/50' }} style={styles.userImage} />
-//         <Text style={styles.userName}>{userDetails?.name || 'Guest'}</Text>
-//       </View>
-//       <DrawerItemList {...props} />
-//       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-//         <Text style={styles.logoutButtonText}>Logout</Text>
-//       </TouchableOpacity>
-//     </DrawerContentScrollView>
-//   );
-// };
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#f5f5f5",
+  },
+  userInfo: {
+    marginLeft: 15,
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  email: {
+    fontSize: 14,
+    color: "#555",
+  },
+  drawerOptions: {
+    flex: 1,
+    paddingTop: 20,
+  },
+  option: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    marginVertical: 5,
+  },
+  optionText: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: "#000",
+  },
+});
 
-// const styles = StyleSheet.create({
-//   headerContainer: {
-//     padding: 10,
-//     backgroundColor: '#4DA674',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   headerText: {
-//     color: 'white',
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//   },
-//   userInfoContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     padding: 20,
-//   },
-//   userImage: {
-//     width: 50,
-//     height: 50,
-//     borderRadius: 25,
-//     marginRight: 10,
-//   },
-//   userName: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//   },
-//   loadingContainer: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   logoutButton: {
-//     marginTop: 20,
-//     padding: 10,
-//     backgroundColor: '#FF3B30',
-//     borderRadius: 5,
-//     alignItems: 'center',
-//     marginHorizontal: 20,
-//   },
-//   logoutButtonText: {
-//     color: '#fff',
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//   },
-// });
-
-// export default CustomDrawerContent;
-
+export default CustomDrawerContent;

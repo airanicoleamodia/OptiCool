@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useSelector } from "react-redux";
 import { StatusBar } from "react-native";
-import Dashboard from "../screens/Dashboard";
+import BottomTabs from "./BottomTabs";
 import Environment from "../screens/EStatusScreens/EnvironmentStatus";
 import ElectricityUsage from "../screens/PowerManagement/ElectricityUsage";
 import Report from "../screens/AdminScreens/EReport";
 import Profile from "../screens/UserScreens/Profile";
-import AuthNavigation from "./AuthNavigation"; // Assuming this exists
-import BottomTabs from "./BottomTabs";
+import AuthNavigation from "./AuthNavigation";
+import CustomDrawerContent from "./CustomDrawerContent";
 
 const Drawer = createDrawerNavigator();
 
@@ -23,7 +23,7 @@ export default function DrawerNavigation() {
   }, [user]);
 
   if (isLoading) {
-    return null; // Placeholder for loading state
+    return null;
   }
 
   return (
@@ -31,18 +31,17 @@ export default function DrawerNavigation() {
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       {isLogin ? (
         <Drawer.Navigator
-          initialRouteName="Dashboard"
+          initialRouteName="Home"
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
           screenOptions={{
             headerShown: false,
+            drawerStyle: { width: 280 },
           }}
         >
           <Drawer.Screen name="Home" component={BottomTabs} />
           <Drawer.Screen name="Status" component={Environment} />
           <Drawer.Screen name="Usage" component={ElectricityUsage} />
-
-          {/* Only show Reports tab if the user is an admin */}
           {user.role === "admin" && <Drawer.Screen name="Reports" component={Report} />}
-
           <Drawer.Screen name="Profile" component={Profile} />
         </Drawer.Navigator>
       ) : (
