@@ -22,14 +22,19 @@ export default function BottomTabs() {
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#fff",
-          borderTopWidth: 0,
-          height: 55, // Adjust height of the tab bar
-          marginBottom: 0, // Optional: Add some space at the bottom
-          shadowColor: "#000", // Optional: Add shadow effect
-          shadowOffset: { width: 0, height: 10 }, // Shadow offset
-          shadowOpacity: 0.25, // Shadow opacity
-          shadowRadius: 3.5, // Shadow radius
+          position: "absolute",
+          bottom: 25,
+          left: 20,
+          right: 20,
+          elevation: 0,
+          backgroundColor: "#ffffff",
+          borderRadius: 15,
+          height: 60,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 10 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.5,
+          elevation: 5,
         },
         tabBarActiveTintColor: "#000000", // Black color for active state
         tabBarInactiveTintColor: "#7a7a7a", // Optional: Gray color for inactive state

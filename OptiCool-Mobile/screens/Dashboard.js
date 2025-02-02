@@ -447,6 +447,7 @@ const styles = StyleSheet.create({
   temperatureContainer: {
     marginTop: 20,
     alignItems: "center",
+    marginBottom: 60,
   },
   tempCard: {
     flexDirection: "row",
