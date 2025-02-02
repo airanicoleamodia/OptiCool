@@ -23,6 +23,7 @@ import { Avatar, Button, TextInput, FAB } from "react-native-paper";
 import axios from "axios";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import AppliancesScreen from "./HomeScreens/AppliancesScreen";
+import RoomCarousel from "./RoomCarousel";
 import baseURL from "../assets/common/baseUrl";
 
 export default function Dashboard() {
@@ -219,7 +220,7 @@ export default function Dashboard() {
             </View>
           </Modal>
         )}
-
+        
         <View style={styles.singleStatusCard}>
           <View style={styles.statusItem}>
             <Text style={styles.statusText}>humidity</Text>
@@ -234,6 +235,8 @@ export default function Dashboard() {
             <Text style={styles.statusValue}>31°C</Text>
           </View>
         </View>
+
+        <RoomCarousel />
 
         <AppliancesScreen />
         {/* City Temperature & Appliance Status */}
