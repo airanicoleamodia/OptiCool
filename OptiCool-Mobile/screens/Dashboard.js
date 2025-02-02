@@ -25,6 +25,7 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import AppliancesScreen from "./HomeScreens/AppliancesScreen";
 import RoomCarousel from "./RoomCarousel";
 import baseURL from "../assets/common/baseUrl";
+import StatusCard from "./StatusCard";
 
 export default function Dashboard() {
   const { user, token } = useSelector((state) => state.auth);
@@ -221,20 +222,7 @@ export default function Dashboard() {
           </Modal>
         )}
         
-        <View style={styles.singleStatusCard}>
-          <View style={styles.statusItem}>
-            <Text style={styles.statusText}>humidity</Text>
-            <Text style={styles.statusValue}>80%</Text>
-          </View>
-          <View style={styles.statusItem}>
-            <Text style={styles.statusText}>energy</Text>
-            <Text style={styles.statusValue}>60 kWh</Text>
-          </View>
-          <View style={styles.statusItem}>
-            <Text style={styles.statusText}>temperature</Text>
-            <Text style={styles.statusValue}>31°C</Text>
-          </View>
-        </View>
+        <StatusCard />
 
         <RoomCarousel />
 
