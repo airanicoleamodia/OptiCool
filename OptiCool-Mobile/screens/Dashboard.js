@@ -23,9 +23,9 @@ import { Avatar, Button, TextInput, FAB } from "react-native-paper";
 import axios from "axios";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import AppliancesScreen from "./HomeScreens/AppliancesScreen";
-import RoomCarousel from "./RoomCarousel";
+import RoomCarousel from "./HomeScreens/RoomCarousel";
 import baseURL from "../assets/common/baseUrl";
-import StatusCard from "./StatusCard";
+import StatusCard from "./HomeScreens/StatusCard";
 
 export default function Dashboard() {
   const { user, token } = useSelector((state) => state.auth);

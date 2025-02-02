@@ -7,67 +7,91 @@ const AppliancesScreen = () => {
   const [isExhaustInwardsOn, setExhaustInwardsOn] = React.useState(false);
   const [isExhaustOutwardsOn, setExhaustOutwardsOn] = React.useState(false);
 
+  const getCardStyle = (isOn) => ({
+    ...styles.card,
+    backgroundColor: isOn ? "#000" : "#fff",
+  });
+
+  const getTextStyle = (isOn) => ({
+    ...styles.cardText,
+    color: isOn ? "#fff" : "#000",
+  });
+
+  const getSmallTextStyle = (isOn) => ({
+    ...styles.smallCardText,
+    color: isOn ? "#fff" : "#000",
+  });
+
+  const getImageStyle = (isOn) => ({
+    ...styles.cardImage,
+    tintColor: isOn ? "#fff" : "#000",
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <View style={styles.card}>
+        <View style={getCardStyle(isLightOn)}>
           <Image
             source={require("../../assets/air-conditioner.png")} // Add your image path here
-            style={styles.cardImage}
+            style={getImageStyle(isLightOn)}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.cardText}>Aircon</Text>
+            <Text style={getTextStyle(isLightOn)}>Aircon</Text>
             <Switch
               value={isLightOn}
               onValueChange={() => setLightOn((prev) => !prev)}
+              style={styles.switch}
             />
           </View>
         </View>
 
-        <View style={styles.card}>
+        <View style={getCardStyle(isFanOn)}>
           <Image
             source={require("../../assets/fan.png")} // Add your image path here
-            style={styles.cardImage}
+            style={getImageStyle(isFanOn)}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.cardText}>Fan</Text>
+            <Text style={getTextStyle(isFanOn)}>Fan</Text>
             <Switch
               value={isFanOn}
               onValueChange={() => setFanOn((prev) => !prev)}
+              style={styles.switch}
             />
           </View>
         </View>
       </View>
 
       <View style={styles.row}>
-        <View style={styles.card}>
+        <View style={getCardStyle(isExhaustInwardsOn)}>
           <Image
             source={require("../../assets/light-bulb.png")} // Add your image path here
-            style={styles.cardImage}
+            style={getImageStyle(isExhaustInwardsOn)}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.cardText}>
+            <Text style={[getSmallTextStyle(isExhaustInwardsOn), { marginLeft: 10 }]}>
               Exhaust{"\n"}(Inwards)
             </Text>
             <Switch
               value={isExhaustInwardsOn}
               onValueChange={() => setExhaustInwardsOn((prev) => !prev)}
+              style={styles.switch}
             />
           </View>
         </View>
 
-        <View style={styles.card}>
+        <View style={getCardStyle(isExhaustOutwardsOn)}>
           <Image
             source={require("../../assets/light-bulb.png")} // Add your image path here
-            style={styles.cardImage}
+            style={getImageStyle(isExhaustOutwardsOn)}
           />
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.cardText}>
+            <Text style={[getSmallTextStyle(isExhaustOutwardsOn), { marginLeft: 10 }]}>
               Exhaust{"\n"}(Outwards)
             </Text>
             <Switch
               value={isExhaustOutwardsOn}
               onValueChange={() => setExhaustOutwardsOn((prev) => !prev)}
+              style={styles.switch}
             />
           </View>
         </View>
@@ -118,6 +142,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginRight: 15,
+  },
+  smallCardText: {
+    fontSize: 14,
+    color: "#000",
+    marginTop: 5,
+    marginBottom: 5,
+    marginRight: 15,
+  },
+  switch: {
+    transform: [{ rotate: "90deg" }],
+    marginLeft: 8,
   },
 });
 

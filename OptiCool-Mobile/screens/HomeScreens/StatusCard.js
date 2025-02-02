@@ -7,6 +7,7 @@ const StatusCard = () => {
     const currentDate = moment().format('MMM Do YYYY'); 
 
   return (
+    
     <View style={styles.cardContainer}>
       {/* Date and Location */}
       <View style={styles.dateLocationContainer}>
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "88%",
     alignSelf: "center",
-    marginTop: 40,
+    marginTop: 45,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 5,
