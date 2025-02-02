@@ -1,67 +1,55 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // For icons
+import moment from 'moment';
 
 const StatusCard = () => {
+    const currentDate = moment().format('MMM Do YYYY'); 
+
   return (
-    <View style={styles.wrapper}>
-      {/* Today Label */}
-      <Text style={styles.todayText}>Today</Text>
-
-      <View style={styles.cardContainer}>
-        {/* Date and Location */}
-        <View style={styles.dateLocationContainer}>
-          <Text style={styles.dateText}>4th Jan 2022</Text>
-          <View style={styles.locationContainer}>
-            <Ionicons name="location-outline" size={16} color="#4f5e70" />
-            <Text style={styles.locationText}>Philippines, 34°C</Text>
-          </View>
+    <View style={styles.cardContainer}>
+      {/* Date and Location */}
+      <View style={styles.dateLocationContainer}>
+        <Text style={styles.dateText}>{currentDate}</Text>
+        <View style={styles.locationContainer}>
+          <Ionicons name="location-outline" size={16} color="#4f5e70" />
+          <Text style={styles.locationText}>Philippines, 34°C</Text>
         </View>
+      </View>
 
-        {/* Weather Description */}
-        <View style={styles.weatherContainer}>
-          <Text style={styles.weatherText}>
-            It’s sunny today, make the most out of daylight.
-          </Text>
-          <Ionicons name="sunny-outline" size={24} color="#FFA500" />
-        </View>
+      {/* Weather Description */}
+      <View style={styles.weatherContainer}>
+        <Text style={styles.weatherText}>
+          It’s sunny today, make the most out of daylight.
+        </Text>
+        <Ionicons name="sunny-outline" size={24} color="#FFA500" />
+      </View>
 
-        {/* Divider */}
-        <View style={styles.divider} />
+      {/* Divider */}
+      <View style={styles.divider} />
 
-        {/* Energy Stats */}
-        <View style={styles.energyContainer}>
-          <Text style={styles.energySaved}>
-            ⚡ 90 watt saved
-          </Text>
-          <Text style={styles.energyUsed}>
-            ⚡ 110 watt used
-          </Text>
-        </View>
+      {/* Energy Stats */}
+      <View style={styles.energyContainer}>
+        <Text style={styles.energySaved}>
+          ⚡ 90 watt saved
+        </Text>
+        <Text style={styles.energyUsed}>
+          ⚡ 110 watt used
+        </Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
-    alignItems: "center",
-    marginTop: 40,
-  },
-  todayText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#4f5e70",
-    alignSelf: "flex-start",
-    marginBottom: 10,
-    marginLeft: "6%",
-  },
   cardContainer: {
     backgroundColor: "#ffffff",
     borderRadius: 20,
     padding: 15,
     alignItems: "center",
     width: "88%",
+    alignSelf: "center",
+    marginTop: 40,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 5,
