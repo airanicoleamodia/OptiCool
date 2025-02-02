@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Avatar, IconButton } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { IconButton } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { removeAuth } from "../states/authSlice";  // Going up one level first
+import { removeAuth } from "../states/authSlice";  
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import baseUrl from "../../assets/common/baseUrl";
+import baseURL from "../assets/common/baseUrl";
+import { DrawerContentScrollView, DrawerItemList, DrawerItem } from "@react-navigation/drawer";
 
 const CustomDrawerContent = (props) => {
   const dispatch = useDispatch();
@@ -39,42 +40,62 @@ const CustomDrawerContent = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
+      {/* App Name */}
+      <View style={styles.appNameContainer}>
+        <Text style={styles.appName}>OptiCool</Text>
+      </View>
+
       {/* Drawer Header */}
       <View style={styles.header}>
-        <Avatar.Image source={{ uri: userData.avatar?.url }} size={80} />
+        <Image source={{ uri: userData.avatar?.url }} style={styles.avatar} />
         <View style={styles.userInfo}>
           <Text style={styles.username}>{userData.username}</Text>
           <Text style={styles.email}>{userData.email}</Text>
         </View>
       </View>
 
-      {/* Drawer Options */}
+      {/* Drawer Items List */}
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+
+      {/* Divider */}
+      <View style={styles.divider} />
+
+      {/* Additional Custom Options */}
       <View style={styles.drawerOptions}>
-        {[ 
-          { label: "Dashboard", icon: "view-dashboard", route: "AdminDashboard" },
-          { label: "Settings", icon: "cog", route: "Settings" },
-          { label: "Log out", icon: "logout", action: () => dispatch(removeAuth()) },
-        ].map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.option}
-            onPress={item.action ? item.action : () => navigation.navigate(item.route)}
-          >
-            <IconButton icon={item.icon} size={20} color="#000" />
-            <Text style={styles.optionText}>{item.label}</Text>
-          </TouchableOpacity>
-        ))}
+        <DrawerItem
+          label="Log out"
+          icon={({ color, size }) => <IconButton icon="logout" size={size} color={color} />}
+          onPress={() => dispatch(removeAuth())}
+        />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  appNameContainer: {
+    paddingVertical: 15,
+    backgroundColor: "#000000",
+    alignItems: "left",
+  },
+  appName: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#ffffff",
+    marginLeft: 20,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#ffffff",
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 10, // Square with slightly rounded corners
   },
   userInfo: {
     marginLeft: 15,
@@ -82,25 +103,20 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#000000",
   },
   email: {
     fontSize: 14,
-    color: "#555",
+    color: "#cccccc",
   },
   drawerOptions: {
-    flex: 1,
-    paddingTop: 20,
+    paddingVertical: 10,
   },
-  option: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 15,
-    marginVertical: 5,
-  },
-  optionText: {
-    fontSize: 16,
-    marginLeft: 10,
-    color: "#000",
+  divider: {
+    height: 1,
+    backgroundColor: "#dddddd",
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
 });
 
