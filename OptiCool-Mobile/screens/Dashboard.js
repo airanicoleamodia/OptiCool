@@ -21,11 +21,12 @@ import { useSelector } from "react-redux";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Avatar, Button, TextInput, FAB } from "react-native-paper";
 import axios from "axios";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { MaterialCommunityIcons, Ionicons } from "react-native-vector-icons";
 import AppliancesScreen from "./HomeScreens/AppliancesScreen";
 import RoomCarousel from "./HomeScreens/RoomCarousel";
 import baseURL from "../assets/common/baseUrl";
 import StatusCard from "./HomeScreens/StatusCard";
+import MainRow from "./HomeScreens/MainRow";
 
 export default function Dashboard() {
   const { user, token } = useSelector((state) => state.auth);
@@ -227,46 +228,8 @@ export default function Dashboard() {
         <RoomCarousel />
 
         <AppliancesScreen />
-        {/* City Temperature & Appliance Status */}
-
-        <View style={styles.mainRow}>
-          <View style={styles.weatherCard}>
-            <Text style={styles.cityTemp}>27.60°</Text>
-
-            <Text style={styles.cityName}>Taguig City</Text>
-          </View>
-
-          <View style={styles.applianceCard}>
-            <Text style={styles.applianceText}>Air Condition</Text>
-
-            <Text style={styles.applianceStatus}>Status: Active</Text>
-          </View>
-        </View>
-
-        <View style={styles.mainRow}>
-          <View style={styles.applianceCard}>
-            <Text style={styles.applianceText}>Fans</Text>
-
-            <Text style={styles.applianceStatusInactive}>Status: Inactive</Text>
-          </View>
-
-          <View style={styles.emptyCard} />
-        </View>
-
-        {/* Temperature Details */}
-
-        <View style={styles.mainRow}>
-          <View style={styles.weatherCard}>
-            <Text style={styles.cityTemp}>
-              {weatherData?.Temperature?.Metric?.Value || "--"}°C
-            </Text>
-            <Text style={styles.cityName}>Taguig City</Text>
-          </View>
-          <View style={styles.applianceCard}>
-            <Text style={styles.applianceText}>Air Condition</Text>
-            <Text style={styles.applianceStatus}>Status: Active</Text>
-          </View>
-        </View>
+        
+        <MainRow weatherData={weatherData} />
 
         <View style={styles.singleStatusCard}>
           <View style={styles.statusItem}>
@@ -288,6 +251,28 @@ export default function Dashboard() {
             </Text>
           </View>
         </View>
+
+        {/* Temperature Cards */}
+        <View style={styles.temperatureContainer}>
+          {/* Room Temperature */}
+          <View style={[styles.tempCard, styles.roomTemperature]}>
+            <Ionicons name="home-outline" size={24} color="white" />
+            <Text style={styles.tempLabel}>Room Temperature</Text>
+            <Text style={styles.tempValue}>
+              {weatherData?.IndoorTemperature?.Metric?.Value || "--"}°C
+            </Text>
+          </View>
+
+          {/* Outside Temperature */}
+          <View style={[styles.tempCard, styles.outsideTemperature]}>
+            <Ionicons name="sunny-outline" size={24} color="white" />
+            <Text style={styles.tempLabel}>Outside Temperature</Text>
+            <Text style={styles.tempValue}>
+              {weatherData?.Temperature?.Metric?.Value || "--"}°C
+            </Text>
+          </View>
+        </View>
+        
         {/* </ImageBackground> */}
       </ScrollView>
     </SafeAreaView>
@@ -377,7 +362,7 @@ const styles = StyleSheet.create({
     flexDirection: "row", // Arrange items in a row
     justifyContent: "space-around",
     alignItems: "center", // Align items vertically in the center
-    marginTop: 50,
+    marginTop: 10,
     marginBottom: 1,
     width: "88%",
   },
@@ -459,20 +444,35 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  tempCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 10,
-    padding: 16,
-    flex: 1,
-    marginHorizontal: 5,
+  temperatureContainer: {
+    marginTop: 20,
     alignItems: "center",
   },
+  tempCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "88%",
+    padding: 15,
+    borderRadius: 25,
+    marginVertical: 5,
+  },
+  roomTemperature: {
+    backgroundColor: "#9BA9F3",
+  },
+  outsideTemperature: {
+    backgroundColor: "#FBC6A4",
+  },
   tempLabel: {
-    fontSize: 16,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 14,
+    flex: 1,
+    marginLeft: 10,
   },
   tempValue: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-    marginLeft: -10,
+    color: "white",
   },
 });
