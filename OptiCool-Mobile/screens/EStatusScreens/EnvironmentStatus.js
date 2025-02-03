@@ -98,6 +98,16 @@ export default function EnvironmentStatus() {
                 <View style={styles.circleContainer}>
                     {/* Outer Circle */}
                     <View style={styles.outerCircle}>
+                        {/* Timer Lines */}
+                        {[...Array(60)].map((_, index) => (
+                            <View
+                                key={index}
+                                style={[
+                                    styles.timerLine,
+                                    { transform: [{ rotate: `${index * 6}deg` }] },
+                                ]}
+                            />
+                        ))}
                         {/* Inner Circle */}
                         <View style={styles.innerCircle}>
                             <Text style={styles.coolingText}>COOLING</Text>
@@ -392,6 +402,14 @@ const styles = StyleSheet.create({
         borderColor: '#96a8fa',
         alignItems: 'center',
         justifyContent: 'center',
+        position: 'relative',
+    },
+    timerLine: {
+        position: 'absolute',
+        width: 2,
+        height: 20,
+        backgroundColor: '#96a8fa',
+        top: 0,
     },
     innerCircle: {
         width: 140,

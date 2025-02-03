@@ -1,10 +1,27 @@
-import React from 'react';
-import { View, StyleSheet, ImageBackground, Image } from 'react-native';
+import React, { useRef } from 'react';
+import { View, StyleSheet, ImageBackground, Image, Animated, TouchableWithoutFeedback } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native'; // Use this hook
 
 export default function WelcomePage() {
   const navigation = useNavigation(); // Initialize navigation
+  const scaleAnim = useRef(new Animated.Value(1)).current; // Initial value for scale: 1
+
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = (route) => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start(() => {
+      navigation.navigate(route);
+    });
+  };
 
   return (
     <ImageBackground
@@ -27,22 +44,34 @@ export default function WelcomePage() {
 
       {/* Buttons for navigation */}
       <View style={styles.buttonContainer}>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('Login')} // Use the hook here
-          style={[styles.button, { backgroundColor: 'white' }]}
-          labelStyle={styles.buttonText}
+        <TouchableWithoutFeedback
+          onPressIn={handlePressIn}
+          onPressOut={() => handlePressOut('Login')}
         >
-          Login
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('Register')} // Use the hook here
-          style={[styles.button, { backgroundColor: 'white' }]}
-          labelStyle={styles.buttonText}
+          <Animated.View style={[styles.button, { transform: [{ scale: scaleAnim }] }]}>
+            <Button
+              mode="contained"
+              style={{ backgroundColor: 'white' }}
+              labelStyle={styles.buttonText}
+            >
+              Login
+            </Button>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPressIn={handlePressIn}
+          onPressOut={() => handlePressOut('Register')}
         >
-          Sign Up
-        </Button>
+          <Animated.View style={[styles.button, { transform: [{ scale: scaleAnim }] }]}>
+            <Button
+              mode="contained"
+              style={{ backgroundColor: 'white' }}
+              labelStyle={styles.buttonText}
+            >
+              Sign Up
+            </Button>
+          </Animated.View>
+        </TouchableWithoutFeedback>
       </View>
     </ImageBackground>
   );
@@ -72,7 +101,7 @@ const styles = StyleSheet.create({
     width: 700,
     height: 330,
     resizeMode: 'contain',
-    borderRadius: 55,
+    borderRadius: 75, // Increased borderRadius for more rounded corners
     overflow: 'hidden',
   },
   headerText: {

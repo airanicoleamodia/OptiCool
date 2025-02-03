@@ -128,7 +128,7 @@ const ElectricityUsage = () => {
             {item.navigateTo && (
               <TouchableOpacity
                 style={styles.detailButton}
-                onPress={() => navigation.navigate(item.navigateTo)}
+                onPress={() => navigation.navigate("UsageNavigations", { screen: "UsageTracking" })}
               >
                 <Text style={styles.detailText}>Details</Text>
               </TouchableOpacity>

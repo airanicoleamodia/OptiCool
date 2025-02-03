@@ -27,6 +27,7 @@ import RoomCarousel from "./HomeScreens/RoomCarousel";
 import baseURL from "../assets/common/baseUrl";
 import StatusCard from "./HomeScreens/StatusCard";
 import MainRow from "./HomeScreens/MainRow";
+// import UpButton from "../assets/common/UpButton";
 
 export default function Dashboard() {
   const { user, token } = useSelector((state) => state.auth);
@@ -121,6 +122,10 @@ export default function Dashboard() {
     navigation.navigate(option);
   };
 
+  const handleUpButtonPress = () => {
+    // Handle the button press
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (user && user._id) {
@@ -145,6 +150,7 @@ export default function Dashboard() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* <UpButton onPress={handleUpButtonPress} style={styles.upButton} /> */}
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
@@ -222,13 +228,13 @@ export default function Dashboard() {
             </View>
           </Modal>
         )}
-        
+
         <StatusCard />
 
         <RoomCarousel />
 
         <AppliancesScreen />
-        
+
         <MainRow weatherData={weatherData} />
 
         <View style={styles.singleStatusCard}>
@@ -272,7 +278,7 @@ export default function Dashboard() {
             </Text>
           </View>
         </View>
-        
+
         {/* </ImageBackground> */}
       </ScrollView>
     </SafeAreaView>
@@ -289,6 +295,12 @@ const styles = StyleSheet.create({
     paddingBottom: 30, // Add padding at the bottom for better spacing
     justifyContent: "center", // Center vertically
     alignItems: "center", // Center horizontally
+  },
+  upButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    zIndex: 1,
   },
   header: {
     flexDirection: "row",
