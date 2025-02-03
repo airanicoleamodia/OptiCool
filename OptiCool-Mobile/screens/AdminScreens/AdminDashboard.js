@@ -28,15 +28,19 @@ const AdminDashboard = () => {
   ];
 
   return (
+    
     <View style={styles.dashboard}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => handleViewChange('icons')} style={styles.button}>
-          <Text style={styles.buttonText}>Icons</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleViewChange('list')} style={styles.button}>
-          <Text style={styles.buttonText}>List</Text>
-        </TouchableOpacity>
+        <Text style={styles.dashboardText}>Dashboard</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => handleViewChange('icons')} style={styles.button}>
+            <Text style={styles.buttonText}>Icons</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleViewChange('list')} style={styles.button}>
+            <Text style={styles.buttonText}>List</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Menu */}
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between', // Adjust to space between for alignment
     marginBottom: 20,
   },
   button: {
@@ -140,6 +144,16 @@ const styles = StyleSheet.create({
     fontSize: 40,
     marginBottom: 10,
     color: '#fff',
+  },
+  dashboardText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'left', // Align text to the left
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end', // Align buttons to the right
   },
   menuText: {
     fontSize: 16,
