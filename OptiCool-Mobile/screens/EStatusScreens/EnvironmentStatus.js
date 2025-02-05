@@ -3,9 +3,10 @@ import { View, TouchableOpacity, Alert, StyleSheet, ScrollView, Animated, PanRes
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import baseURL from '../../assets/common/baseUrl';
+import Menu from './Menu';
 import CircleContainer from './CircleContainer';
 
 export default function EnvironmentStatus() {
@@ -97,17 +98,14 @@ export default function EnvironmentStatus() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.headerContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Dashboard')}>
-            <MaterialCommunityIcons name="arrow-left" size={30} color="#9eaab8" />
-          </TouchableOpacity>
-
           <Text style={styles.headerText}>DMT Room 3</Text>
-
           <TouchableOpacity style={styles.menuButton} onPress={() => console.log('Menu pressed')}>
             <MaterialCommunityIcons name="dots-vertical" size={30} color="#9eaab8" />
           </TouchableOpacity>
         </View>
 
+        <Menu/>
+        
         {/* Circular Display */}
         <CircleContainer />
 
@@ -271,7 +269,7 @@ export default function EnvironmentStatus() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eaf2fd',
+    backgroundColor: '#ebedf0',
   },
   scrollContainer: {
     flexGrow: 1, // Ensures the content stretches to fill the screen height
@@ -279,22 +277,23 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center', // Center the title
     paddingHorizontal: 20,
-    marginTop: 10,
+    marginTop: 20,
   },
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#9eaab8',
-    flex: 1,
   },
   backButton: {
     padding: 10,
   },
   menuButton: {
     padding: 10,
+    position: 'absolute',
+    right: 20,
   },
   background: {
     backgroundColor: '#eaf2fd',

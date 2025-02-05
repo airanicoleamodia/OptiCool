@@ -251,3 +251,18 @@ exports.getActiveUsers = async (req, res) => {
       res.status(500).json({ success: false, message: 'Failed to fetch active users.' });
     }
   };
+
+exports.getNumberOfUsers = async (req, res) => {
+    try {
+        const userCount = await User.countDocuments();
+        return res.json({
+            success: true,
+            count: userCount,
+        });
+    } catch (err) {
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        });
+    }
+};
