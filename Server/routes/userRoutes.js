@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../utils/multer')
+const upload = require('../utils/multer');
 
 const userController = require('../controllers/UserController');
 const { isAuthenticated } = require('../middlewares/auth');
@@ -25,4 +25,7 @@ router.put('/update/role/:id', userController.updateRole);
 
 router.get('/active', userController.getActiveUsers);
 
-module.exports = router;    
+// Add the new route for fetching the number of users
+// router.get('/users/number', userController.getNumberOfUsers);
+
+module.exports = router;

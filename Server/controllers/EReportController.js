@@ -48,3 +48,18 @@ exports.getAllReports = async (req, res, next) => {
         });
     }
 };
+
+exports.getNumberOfReports = async (req, res) => {
+    try {
+        const reportCount = await Report.countDocuments();
+        return res.json({
+            success: true,
+            count: reportCount,
+        });
+    } catch (err) {
+        return res.status(400).json({
+            message: 'Please try again later',
+            success: false,
+        });
+    }
+};

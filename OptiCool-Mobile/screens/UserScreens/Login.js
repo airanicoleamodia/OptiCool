@@ -1,5 +1,6 @@
-import React from "react";
-import { View, StyleSheet, Alert, Image,  } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Image } from "react-native";
+import Spinner from 'react-native-loading-spinner-overlay';
 import { Button, Text, HelperText, TextInput } from "react-native-paper";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -10,6 +11,7 @@ import { useDispatch } from "react-redux";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -21,6 +23,7 @@ export default function Login({ navigation }) {
   });
 
   const handleSubmit = async (values, setSubmitting) => {
+    setLoading(true);
     try {
       const { data } = await axios.post(`${baseURL}/users/login`, values);
 
@@ -31,10 +34,11 @@ export default function Login({ navigation }) {
         })
       );
 
-      Alert.alert("Account logged in!");
-
+      setLoading(false);
       setSubmitting(false);
+      navigation.navigate("Home"); // Navigate to Home screen after login
     } catch (err) {
+      setLoading(false);
       setSubmitting(false);
       console.info(err);
     }
@@ -131,6 +135,10 @@ export default function Login({ navigation }) {
           </>
         )}
       </Formik>
+      <Spinner
+        visible={loading}
+        textStyle={styles.spinnerTextStyle}
+      />
     </View>
   );
 }
@@ -154,14 +162,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000', // Black background
     borderRadius: 9, // Remove rounding for squarish look
     paddingVertical: 8, // Adjust padding for better size
-},
-submitButtonText: {
+  },
+  submitButtonText: {
     color: '#FFFFFF', // White font color
     fontWeight: 'bold', // Bold for emphasis
     textTransform: 'uppercase', // Optional for all caps
-},
+  },
   errorText: {
     color: "red",
     fontSize: 12,
+  },
+  spinnerTextStyle: {
+    color: '#aed6f2',
   },
 });

@@ -15,6 +15,7 @@ import DeviceInfo from "./DeviceInfo";
 const ElectricityUsage = () => {
   const [activeTab, setActiveTab] = useState("weekly");
   const navigation = useNavigation();
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const weeklyData = Array.from({ length: 4 }, () => Math.random() * 50 + 20);
   const monthlyData = Array.from({ length: 2 }, () => Math.random() * 200 + 100);
@@ -61,6 +62,10 @@ const ElectricityUsage = () => {
       title: "Temperature Report",
     },
   ];
+
+  const handleCardPress = (item) => {
+    setSelectedItem(item);
+  };
 
   return (
     <FlatList
@@ -121,22 +126,37 @@ const ElectricityUsage = () => {
         </>
       }
       renderItem={({ item }) => (
-        <View style={styles.rectangle}>
-          <View style={styles.menuItem}>
-            <Icon name={item.icon} size={24} color="black" style={styles.icon} />
-            <Text style={styles.menuText}>{item.title}</Text>
-            {item.navigateTo && (
-              <TouchableOpacity
-                style={styles.detailButton}
-                onPress={() => navigation.navigate("UsageNavigations", { screen: "UsageTracking" })}
-              >
-                <Text style={styles.detailText}>Details</Text>
-              </TouchableOpacity>
-            )}
+        <TouchableOpacity onPress={() => handleCardPress(item)}>
+          <View style={styles.rectangle}>
+            <View style={styles.menuItem}>
+              <Icon name={item.icon} size={24} color="black" style={styles.icon} />
+              <Text style={styles.menuText}>{item.title}</Text>
+              {item.navigateTo && (
+                <TouchableOpacity
+                  style={styles.detailButton}
+                  onPress={() => navigation.navigate("UsageNavigations", { screen: "UsageTracking" })}
+                >
+                  <Text style={styles.detailText}>Details</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
-      ListFooterComponent={<DeviceInfo />}
+      ListFooterComponent={
+        selectedItem && (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>{selectedItem.title}</Text>
+            <Text style={styles.cardContent}>Additional details about {selectedItem.title}...</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setSelectedItem(null)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        )
+      }
     />
   );
 };
@@ -157,7 +177,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     width: 300,
     alignSelf: "center", // Center horizontally within the parent container
-},
+  },
   tabButton: {
     flex: 1,
     alignItems: "center",
@@ -213,6 +233,37 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   detailText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    borderRadius: 10,
+    margin: 20,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  cardContent: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  closeButton: {
+    backgroundColor: "#dc3545",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignSelf: "center",
+  },
+  closeButtonText: {
     color: "white",
     fontWeight: "bold",
   },

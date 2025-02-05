@@ -1,102 +1,81 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient from expo-linear-gradient
 
-const MainRow = ({ weatherData }) => {
+const WeatherCard = ({ weatherData, onPress }) => {
+  const temperature = weatherData?.Temperature?.Metric?.Value || "--";
+  const weatherText = weatherData?.WeatherText || "Light Rain Shower";
+  const weatherIcon = weatherData?.WeatherIcon || "rainy";
+
   return (
-    <View style={styles.wrapper}>
-      <View style={styles.mainRow}>
-        <View style={styles.weatherCard}>
-          <Text style={styles.cityTemp}>27.60°</Text>
-          <Text style={styles.cityName}>Taguig City</Text>
+    <TouchableOpacity style={styles.card} onPress={onPress}>
+      <LinearGradient
+        colors={['#4facfe', '#00f2fe']} // Gradient colors for lifelike background
+        style={styles.gradient}
+      >
+        <View style={styles.row}>
+          <Image source={getWeatherIcon(weatherIcon)} style={styles.icon} />
+          <View style={styles.column}>
+            <Text style={styles.temperature}>{temperature}°C</Text>
+            <Text style={styles.description}>{weatherText}</Text>
+          </View>
         </View>
-        <View style={styles.applianceCard}>
-          <Text style={styles.applianceText}>Air Condition</Text>
-          <Text style={styles.applianceStatus}>Status: Active</Text>
-        </View>
-      </View>
-
-      <View style={styles.mainRow}>
-        <View style={styles.applianceCard}>
-          <Text style={styles.applianceText}>Fans</Text>
-          <Text style={styles.applianceStatusInactive}>Status: Inactive</Text>
-        </View>
-        <View style={styles.emptyCard} />
-      </View>
-
-      {/* Temperature Details */}
-      <View style={styles.mainRow}>
-        <View style={styles.weatherCard}>
-          <Text style={styles.cityTemp}>
-            {weatherData?.Temperature?.Metric?.Value || "--"}°C
-          </Text>
-          <Text style={styles.cityName}>Taguig City</Text>
-        </View>
-        <View style={styles.applianceCard}>
-          <Text style={styles.applianceText}>Air Condition</Text>
-          <Text style={styles.applianceStatus}>Status: Active</Text>
-        </View>
-      </View>
-    </View>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 };
 
+const getWeatherIcon = (weatherType) => {
+  switch (String(weatherType).toLowerCase()) {
+    case "sunny":
+      return require("../../assets/sunny.png");
+    case "cloudy":
+      return require("../../assets/cloudy.png");
+    case "rainy":
+      return require("../../assets/rainy.png");
+    default:
+      return require("../../assets/cloudy.png");
+  }
+};
+
 const styles = StyleSheet.create({
-  wrapper: {
-    paddingHorizontal: 16,
-    alignItems: "center",
-  },
-  mainRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
-    marginTop: 0,
-    width: "100%",
-  },
-  weatherCard: {
-    backgroundColor: "#b3e5fc",
+  card: {
+    width: 310,
+    height: 130,
     borderRadius: 20,
-    padding: 16,
+    overflow: 'hidden', // Ensure the gradient doesn't overflow the card
+    marginVertical: 10,
+  },
+  gradient: {
     flex: 1,
-    marginRight: 10,
+    padding: 20,
     alignItems: "center",
-    minWidth: "45%", // Ensure minimum width
+    justifyContent: "center",
   },
-  cityTemp: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  cityName: {
-    fontSize: 16,
-    color: "#000",
-  },
-  applianceCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 10,
-    padding: 16,
-    flex: 1,
+  row: {
+    flexDirection: "row",
     alignItems: "center",
-    minWidth: "45%", // Ensure minimum width
   },
-  applianceText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  applianceStatus: {
-    color: "green",
-  },
-  applianceStatusInactive: {
-    color: "red",
-  },
-  emptyCard: {
-    backgroundColor: "#e0e0e0",
-    borderRadius: 10,
-    padding: 16,
+  column: {
+    flexDirection: "column",
+    justifyContent: "center",
     flex: 1,
-    marginLeft: 10,
-    minWidth: "45%", // Ensure minimum width
+  },
+  icon: {
+    width: 100,
+    height: 100,
+    marginRight: 20,
+  },
+  temperature: {
+    fontSize: 40, // Increase font size
+    fontWeight: "bold",
+    color: "#fff",
+    fontFamily: "monospace", // Use monospace font for digital clock effect
+  },
+  description: {
+    fontSize: 14,
+    color: "#fff",
   },
 });
 
-export default MainRow;
+export default WeatherCard;
