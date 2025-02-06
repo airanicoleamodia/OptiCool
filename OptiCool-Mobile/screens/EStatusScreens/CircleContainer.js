@@ -111,6 +111,7 @@ const CircleContainer = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   },
   innerCircle: {
     position: "absolute",
-    top: 40,
+    top: 27, // Adjusted to move up
     width: 160,
     height: 160,
     borderRadius: 80,
@@ -157,7 +158,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 20,
-    marginTop: 20,
+    marginTop: 5,
+    marginBottom: 20,
   },
   statusCard: {
     flexDirection: "row",

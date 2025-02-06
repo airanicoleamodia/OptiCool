@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Alert, StyleSheet, ScrollView, Animated, PanResponder } from 'react-native';
+import { View, TouchableOpacity, Alert, StyleSheet, Animated, PanResponder } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -13,20 +13,18 @@ export default function EnvironmentStatus() {
   const navigation = useNavigation();
   const [submitting, setSubmitting] = useState(false);
  
-
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>DMT Room 3</Text>
-          {/* <TouchableOpacity style={styles.menuButton} onPress={() => console.log('Menu pressed')}>
-            <MaterialCommunityIcons name="dots-vertical" size={30} color="#9eaab8" />
-          </TouchableOpacity> */}
-        </View>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>DMT Room 3</Text>
+        {/* <TouchableOpacity style={styles.menuButton} onPress={() => console.log('Menu pressed')}>
+          <MaterialCommunityIcons name="dots-vertical" size={30} color="#9eaab8" />
+        </TouchableOpacity> */}
+      </View>
 
+      <View style={styles.menuWrapper}>
         <Menu/>
-
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -35,9 +33,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ebedf0',
-  },
-  scrollContainer: {
-    flexGrow: 1, // Ensures the content stretches to fill the screen height
   },
   headerContainer: {
     flexDirection: 'row',
@@ -154,5 +149,9 @@ const styles = StyleSheet.create({
   reportButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  menuWrapper: {
+    flex: 1,
+    marginTop: 370, // Adjust the margin as needed
   },
 });
