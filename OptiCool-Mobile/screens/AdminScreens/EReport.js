@@ -56,14 +56,14 @@ export default function EReport() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Reports</Text>
-      </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Reports</Text>
+        </View>
         <Card style={styles.chartCard}>
-          <Card.Title 
-            title="Reports Overview" 
-            titleStyle={[styles.cardTitle, { fontSize: 16, color: "#2F80ED" }]} 
+          <Card.Title
+            title="Reports Overview"
+            titleStyle={[styles.cardTitle, { fontSize: 16, color: "#2F80ED" }]}
           />
           <Card.Content>
             {chartData ? (
@@ -116,12 +116,13 @@ export default function EReport() {
         <Card style={styles.listCard}>
           <Card.Title
             title="Top Reported Appliances"
-            titleStyle={styles.cardTitle}
+            titleStyle={[styles.cardTitle, { fontSize: 16, color: "#2F80ED" }]}
           />
           <Card.Content>
-            {reports.slice(0, 4).map((report, index) => (
+            {Object.entries(chartData?.datasets[0].data || {}).map(([appliance, count], index) => (
               <View key={index} style={styles.listItem}>
-                <Text style={styles.listText}>{report.appliance}</Text>
+                <Text style={styles.listText}>{chartData.labels[index]}</Text>
+                <Text style={styles.listNumber}>{count}</Text>
               </View>
             ))}
           </Card.Content>
@@ -147,7 +148,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center", // Center the title
     paddingHorizontal: 20,
-    marginTop: 20,
+    marginTop: -2,
+    marginBottom: 30,
   },
   headerText: {
     fontSize: 20,
@@ -189,23 +191,29 @@ const styles = StyleSheet.create({
   metricValue: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#000000",
+    color: "#2F80ED",
   },
   listCard: {
-    backgroundColor: "#ebedf0",
-    padding: 15,
+    backgroundColor: "#ffffff",
+    padding: 5, // Further reduced padding
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 100,
+    width: '100%', // Keep the same width
   },
   listItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 3, // Further reduced padding
   },
   listText: {
     flex: 1,
     marginLeft: 10,
-    fontSize: 16,
+    fontSize: 14, // Smaller font size
     color: "#000000",
+  },
+  listNumber: {
+    fontSize: 14, // Smaller font size
+    color: "#000000",
+    marginRight: 10,
   },
 });
