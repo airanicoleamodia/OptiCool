@@ -111,7 +111,6 @@ const CircleContainer = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     alignItems: "center",
     justifyContent: "center",
   },

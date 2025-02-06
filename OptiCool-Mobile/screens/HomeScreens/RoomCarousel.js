@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, FlatList, TouchableOpacity, Image, StyleSheet, Text } from 'react-native';
-import DMTRoom from '../RoomDetails/DMTRoom';
-import { useNavigation } from '@react-navigation/native';  // For navigation
+import { useNavigation } from '@react-navigation/native';
 
 const RoomCarousel = () => {
-    const navigation = useNavigation(); // To navigate to different screens
+    const navigation = useNavigation();
+    const isOnline = true; // Always set to Online
 
-    // Image data
     const rooms = [
         { id: '1', image: require('../../assets/classroom.jpg'), screen: 'DMTRoom' },
         { id: '2', image: require('../../assets/classroom1.jpg'), screen: 'Classroom1Screen' },
@@ -14,10 +13,13 @@ const RoomCarousel = () => {
         { id: '4', image: require('../../assets/classroom1.jpg'), screen: 'Classroom1Screen' }
     ];
 
-    // Render each item (image) in the carousel
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate(item.screen)}>
+        <TouchableOpacity onPress={() => navigation.navigate(item.screen)} style={styles.itemContainer}>
             <Image source={item.image} style={styles.image} />
+            <View style={[styles.statusContainer, styles.online]}>
+                <View style={[styles.circle, styles.green]} />
+                <Text style={styles.statusText}>Online</Text>
+            </View>
         </TouchableOpacity>
     );
 
@@ -29,9 +31,9 @@ const RoomCarousel = () => {
                     data={rooms}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}
-                    horizontal={true} // Enable horizontal scrolling
-                    showsHorizontalScrollIndicator={false} // Hide scroll indicator
-                    contentContainerStyle={styles.flatListContainer} // Style for the content inside FlatList
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.flatListContainer}
                 />
             </View>
         </View>
@@ -58,11 +60,43 @@ const styles = StyleSheet.create({
     flatListContainer: {
         paddingHorizontal: 10,
     },
+    itemContainer: {
+        marginHorizontal: 10,
+        alignItems: 'center',
+    },
     image: {
-        width: 250, // Adjust for image width
-        height: 190, // Adjust for image height
+        width: 250,
+        height: 190,
         borderRadius: 10,
-        marginHorizontal: 10, // Space between images
+    },
+    statusContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 8,
+        borderRadius: 20,
+        alignSelf: 'center',
+        marginTop: 0,
+        paddingHorizontal: 15,
+        position: 'absolute',
+        top: 10, // Move to top
+        left: 10, // Move to left
+        backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
+    },
+    online: {
+        backgroundColor: 'white',
+    },
+    circle: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        marginRight: 5,
+    },
+    green: {
+        backgroundColor: 'limegreen',
+    },
+    statusText: {
+        fontWeight: 'bold',
+        color: 'black',
     },
 });
 
