@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput } from "react-native";
+import React, { useCallback, useState } from "react";
+import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, Alert } from "react-native";
 import Svg, { Circle, Path } from "react-native-svg";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import dmt3API from "../../services/dmt3API";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CircleContainer = () => {
   const [temperature, setTemperature] = useState(20);
@@ -13,10 +15,61 @@ const CircleContainer = () => {
   const percentage = (temperature - 16) / (30 - 16);
   const strokeDashoffset = circumference * (1 - percentage);
 
-  const handleSave = () => {
+  const [fanStatus, setFanStatus] = useState(false)
+  const [exhaustStatus, setExhaustStatus] = useState(false)
+
+  const handleSave = async () => {
     setTemperature(newTemperature);
     setModalVisible(false);
+
+    try {
+      const data = await dmt3API.adjustACTempAPI(newTemperature);
+      console.log(data);
+      getTempAC()
+    } catch (err) {
+      console.log(err);
+      Alert.alert("No running system", "Not connected to the system")
+    }
   };
+
+  const resetAll = () => {
+    setFanStatus(false)
+    setExhaustStatus(false)
+  }
+
+  const getComponentsStatus = async () => {
+    try {
+
+      const data = await dmt3API.getComponentsStatusAPI();
+      setExhaustStatus(data.exhaust);
+      setFanStatus(data.efan);
+
+    } catch (err) {
+      console.log(err);
+      resetAll()
+    }
+  }
+
+
+  const getTempAC = async () => {
+    try {
+      const data = await dmt3API.getCurrentACTempAPI();
+      setTemperature(data)
+      console.log("Asdsad");
+      console.log(data)
+      
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getTempAC()
+      getComponentsStatus()
+    }, [])
+  )
+
 
   return (
     <View style={styles.container}>
@@ -66,7 +119,7 @@ const CircleContainer = () => {
           <MaterialCommunityIcons name="fan" size={30} color="#6C9AB2" style={styles.iconStyle} />
           <View>
             <Text style={styles.statusCardText}>Ceiling Fan</Text>
-            <Text style={styles.statusCardStatus}>Active</Text>
+            <Text style={[styles.statusCardStatus, !fanStatus && { color: 'red' }]}>{fanStatus ? "Active" : "Inactive"}</Text>
           </View>
         </View>
 
@@ -74,7 +127,7 @@ const CircleContainer = () => {
           <MaterialCommunityIcons name="fan" size={30} color="#6C9AB2" style={styles.iconStyle} />
           <View>
             <Text style={styles.statusCardText}>Exhaust</Text>
-            <Text style={styles.statusCardStatus}>Active</Text>
+            <Text style={[styles.statusCardStatus, !exhaustStatus && { color: 'red' }]}>{exhaustStatus ? "Active" : "Inactive"}</Text>
           </View>
         </View>
       </View>

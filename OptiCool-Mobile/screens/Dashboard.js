@@ -15,6 +15,7 @@ import {
   ImageBackground,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -27,12 +28,15 @@ import RoomCarousel from "./HomeScreens/RoomCarousel";
 import baseURL from "../assets/common/baseUrl";
 import StatusCard from "./HomeScreens/StatusCard";
 import MainRow from "./HomeScreens/MainRow";
+import DMT3ROOM from "../services/dmt3API"
+import dmt3API from "../services/dmt3API";
 // import UpButton from "../assets/common/UpButton";
 
 export default function Dashboard() {
   const { user, token } = useSelector((state) => state.auth);
   const [userData, setUserData] = useState({ avatar: "" });
   const [weatherData, setWeatherData] = useState(null);
+  const [roomTemp, setRoomTemp] = useState(null);
   const [lastRequestTime, setLastRequestTime] = useState(null);
   const [isRequesting, setIsRequesting] = useState(false);
   const navigation = useNavigation();
@@ -126,11 +130,22 @@ export default function Dashboard() {
     // Handle the button press
   };
 
+  const getRoomTemp = async () => {
+    try {
+      const data = await dmt3API.getDevicesDataAPI();
+      console.log(data);
+      setRoomTemp(data.inside.temperature);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       if (user && user._id) {
         setUserOriginalInfo();
         fetchWeatherData();
+        getRoomTemp()
       } else {
         console.error("Invalid user ID.");
       }
@@ -265,7 +280,7 @@ export default function Dashboard() {
             <Ionicons name="home-outline" size={24} color="white" />
             <Text style={styles.tempLabel}>Room Temperature</Text>
             <Text style={styles.tempValue}>
-              {weatherData?.IndoorTemperature?.Metric?.Value || "--"}°C
+              {roomTemp || "--"}°C
             </Text>
           </View>
 

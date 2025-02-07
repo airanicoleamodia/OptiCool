@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, TouchableOpacity, Alert, StyleSheet, Animated, PanResponder } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import baseURL from '../../assets/common/baseUrl';
 import Menu from './Menu';
 import CircleContainer from './CircleContainer';
+import dmt3API from '../../services/dmt3API';
 
 export default function EnvironmentStatus() {
   const navigation = useNavigation();
