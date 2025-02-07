@@ -244,13 +244,13 @@ exports.updateRole = async (req, res, next) => {
 
 exports.getActiveUsers = async (req, res) => {
     try {
-      const activeUsers = await User.find({ isActive: true }).select('username email');
-      res.status(200).json({ success: true, users: activeUsers });
+        const activeUsers = await User.find({ isActive: true }).select('username email');
+        res.status(200).json({ success: true, users: activeUsers });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Failed to fetch active users.' });
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to fetch active users.' });
     }
-  };
+};
 
 exports.getNumberOfUsers = async (req, res) => {
     try {

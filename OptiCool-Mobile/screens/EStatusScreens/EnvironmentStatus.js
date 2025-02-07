@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, TouchableOpacity, Alert, StyleSheet, ScrollView, Animated, PanResponder } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import baseURL from '../../assets/common/baseUrl';
 import Menu from './Menu';
 import CircleContainer from './CircleContainer';
+import dmt3API from '../../services/dmt3API';
 
 export default function EnvironmentStatus() {
   const navigation = useNavigation();
@@ -94,6 +95,38 @@ export default function EnvironmentStatus() {
     }
   };
 
+  const resetAll = () => {
+    setIsOn(false)
+    setFan1On(false)
+    setFan2On(false)
+    setFan3On(false)
+    setACOn(false)
+    setAC2On(false)
+    setSubmitting(false)
+  }
+
+  const getComponentsStatus = async () => {
+    try {
+
+      const data = await dmt3API.getComponentsStatusAPI();
+      setACOn(data.ac1)
+      setAC2On(data.ac2)
+      setFan1On(data.efan)
+      setFan2On(data.efan)
+      setFan3On(data.efan)
+    } catch (err) {
+      console.log(err);
+      resetAll()
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getComponentsStatus()
+    }, [])
+  )
+
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
@@ -104,8 +137,8 @@ export default function EnvironmentStatus() {
           </TouchableOpacity>
         </View>
 
-        <Menu/>
-        
+        <Menu />
+
         {/* Circular Display */}
         <CircleContainer />
 
@@ -213,11 +246,11 @@ export default function EnvironmentStatus() {
               </View>
               <View style={styles.cardbuttonContainer}>
                 <TouchableOpacity
-                  style={[styles.powerButton, { backgroundColor: fan3On ? '#4CAF50' : '#FF5252' }]}
+                  style={[styles.powerButton, { backgroundColor: ACOn ? '#4CAF50' : '#FF5252' }]}
                   onPress={() => toggleFanPower(4)}
                 >
                   <MaterialCommunityIcons
-                    name={fan3On ? 'power' : 'power-on'}
+                    name={ACOn ? 'power' : 'power-on'}
                     size={30}
                     color="#fff"
                   />
