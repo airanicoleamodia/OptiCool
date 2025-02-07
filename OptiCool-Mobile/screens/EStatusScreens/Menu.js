@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Animated, PanResponder, Alert, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CircleContainer from './CircleContainer';
 import axios from 'axios';
 import baseURL from '../../assets/common/baseUrl';
+import dmt3API from '../../services/dmt3API';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Menu = () => {
   const [selected, setSelected] = useState('AC');
@@ -18,31 +20,31 @@ const Menu = () => {
 
   const pan = useState(new Animated.ValueXY({ x: 0, y: 0 }))[0];
 
-const panResponder = PanResponder.create({
-  onMoveShouldSetPanResponder: () => true,
-  onPanResponderMove: (event, gestureState) => {
-    if (gestureState.dy < 0) { // Only allow upward movement
-      Animated.event([null, { dy: pan.y }], { useNativeDriver: false })(
-        event,
-        { dy: Math.max(-300, gestureState.dy) } 
-      );
-      Animated.timing(circleSize, {
-        toValue: 1 + gestureState.dy / 600,
-        duration: 0,
-        useNativeDriver: false,
-      }).start();
-    }
-  },
-  onPanResponderRelease: (event, gestureState) => {
-    if (gestureState.dy < -150) {
-      Animated.spring(pan, { toValue: { x: 0, y: -300 }, useNativeDriver: false }).start(); // Expand upwards
-      Animated.spring(circleSize, { toValue: 0.5, useNativeDriver: false }).start();
-    } else {
-      Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start(); // Return to normal position
-      Animated.spring(circleSize, { toValue: 1, useNativeDriver: false }).start();
-    }
-  },
-});
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: (event, gestureState) => {
+      if (gestureState.dy < 0) { // Only allow upward movement
+        Animated.event([null, { dy: pan.y }], { useNativeDriver: false })(
+          event,
+          { dy: Math.max(-300, gestureState.dy) }
+        );
+        Animated.timing(circleSize, {
+          toValue: 1 + gestureState.dy / 600,
+          duration: 0,
+          useNativeDriver: false,
+        }).start();
+      }
+    },
+    onPanResponderRelease: (event, gestureState) => {
+      if (gestureState.dy < -150) {
+        Animated.spring(pan, { toValue: { x: 0, y: -300 }, useNativeDriver: false }).start(); // Expand upwards
+        Animated.spring(circleSize, { toValue: 0.5, useNativeDriver: false }).start();
+      } else {
+        Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start(); // Return to normal position
+        Animated.spring(circleSize, { toValue: 1, useNativeDriver: false }).start();
+      }
+    },
+  });
 
   const menuItems = [
     { name: 'AC', icon: 'air-conditioner' },
@@ -72,6 +74,7 @@ const panResponder = PanResponder.create({
   };
 
   const toggleAppliance = (category, appliance) => {
+    setStatusToDevice(appliance, applianceStatus)
     setApplianceStatus(prevStatus => ({
       ...prevStatus,
       [category]: {
@@ -80,6 +83,15 @@ const panResponder = PanResponder.create({
       }
     }));
   };
+
+  const setStatusToDevice = async (device, applianceStatus) => {
+    try {
+      await dmt3API.turnOffDevice(device, applianceStatus);
+    } catch (err) {
+      console.log(err);
+      Alert.alert("No running system", "Not connected to the system")
+    }
+  }
 
   const handleReport = async (appliance, status, setSubmitting) => {
     setSubmitting(true);
@@ -114,8 +126,45 @@ const panResponder = PanResponder.create({
     }
   };
 
+  const getComponentsStatus = async () => {
+    try {
+
+      const data = await dmt3API.getComponentsStatusAPI();
+
+      if (Boolean(data.ac1) !== applianceStatus.AC.AC) {
+        toggleAppliance("AC", "AC");
+      }
+
+      if (Boolean(data.ac2) !== applianceStatus.AC['AC 2']) {
+        toggleAppliance("AC", "AC 2");
+      }
+
+      if (Boolean(data.blower) !== applianceStatus.Blower['Blower 1']) {
+        toggleAppliance("Blower", "Blower 1");
+      }
+
+      if (Boolean(data.efan) !== applianceStatus.Fan['Fan 1']) {
+        toggleAppliance("Fan", "Fan 1");
+      }
+
+      if (Boolean(data.exhaust) !== applianceStatus.Exhaust['Exhaust 1']) {
+        toggleAppliance("Exhaust", "Exhaust 1");
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getComponentsStatus();
+    }, [])
+  )
+
   return (
     <View style={styles.container}>
+
       <View style={styles.menuContainer}>
         {menuItems.map((item) => (
           <TouchableOpacity
@@ -134,6 +183,7 @@ const panResponder = PanResponder.create({
           </TouchableOpacity>
         ))}
       </View>
+
       <Animated.View style={[styles.circleContainer, { transform: [{ scale: circleSize }] }]}>
         <CircleContainer />
       </Animated.View>
@@ -141,8 +191,8 @@ const panResponder = PanResponder.create({
         style={[styles.appliancesContainer, { transform: [{ translateY: pan.y }], shadowOpacity: pan.y.interpolate({ inputRange: [0, 600], outputRange: [0, 0.5] }) }]}
         {...panResponder.panHandlers}
       >
-        <View style={styles.pullBar} />
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <View style={styles.pullBar} />
           {appliances[selected].map((appliance, index) => (
             <View key={index}>
               <View style={styles.applianceRow}>

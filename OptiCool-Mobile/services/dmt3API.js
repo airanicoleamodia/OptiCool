@@ -129,6 +129,63 @@ const getComponentsStatusAPI = async () => {
     return data;
 }
 
+const turnOffDevice = async (device = "none", applianceStatus) => {
+    if (device === "AC") {
+        if (!applianceStatus.AC.AC) {
+            turnOnAllAC()
+        } else {
+            turnOffAllAC();
+        }
+        return;
+    }
+
+    if (device === "AC 2") {
+        if (!applianceStatus.AC["AC 2"]) {
+            turnOnAllAC()
+        } else {
+            turnOffAllAC();
+        }
+        return;
+    }
+
+    if (device === "Fan 1") {
+        if (!applianceStatus.Fan["Fan 1"]) {
+            turnOnEFans()
+        } else {
+            turnOffAllAC();
+        }
+        return;
+    }
+
+    if (device === "Exhaust 1") {
+        if (!applianceStatus.Exhaust["Exhaust 1"]) {
+            turnOnExhaust()
+        } else {
+            turnOffExhaust();
+        }
+        return;
+    }
+
+    if (device === "Blower 1") {
+        console.log("Blower 1")
+        console.log(!applianceStatus.Blower["Blower 1"]);
+        if (!applianceStatus.Blower["Blower 1"]) {
+            turnOnBlower()
+        } else {
+            turnOffBlower();
+        }
+        return;
+    }
+
+    return "no selected device"
+}
+
+
+const getPowerConsumptionAPI = async (startDate, endDate) => {
+    const { data } = await axios.get(`${dmtUrl}/power_consumption_data?start_date=${startDate}&end_date=${endDate}`);
+    console.log(data)
+    return data;
+}
 
 export default {
     getComponentsStatusAPI,
@@ -148,4 +205,8 @@ export default {
 
     turnOffExhaust,
     turnOnExhaust,
+
+    turnOffDevice,
+
+    getPowerConsumptionAPI
 }

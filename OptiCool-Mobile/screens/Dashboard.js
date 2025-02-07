@@ -163,6 +163,16 @@ export default function Dashboard() {
     },
   });
 
+  const getPowerConsumption = async () => {
+    dmt3API.getPowerConsumptionAPI("2024-10-01", "2024-10-20");
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getPowerConsumption()
+    }, [])
+  )
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <UpButton onPress={handleUpButtonPress} style={styles.upButton} /> */}
