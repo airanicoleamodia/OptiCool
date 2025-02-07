@@ -1,11 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import ReportDetails from './ReportDetails';
+import axios from 'axios';
+import baseURL from '../../assets/common/baseUrl';
 
 const AdminDashboard = () => {
   const navigation = useNavigation();
   const [viewMode, setViewMode] = useState('icons');
   const [isModalVisible, setModalVisible] = useState(false);
+  const [reports, setReports] = useState([]);
+
+  useEffect(() => {
+    fetchReports();
+  }, []);
+
+  const fetchReports = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/ereports/getreport`);
+      if (response.status === 200) {
+        setReports(response.data.reports);
+      }
+    } catch (error) {
+      console.error("Error fetching reports:", error);
+    }
+  };
 
   const handleViewChange = (mode) => {
     setViewMode(mode);
@@ -21,7 +40,7 @@ const AdminDashboard = () => {
 
   const menuItems = [
     { id: 1, name: 'Activity Logs', icon: '📊', color: '#000000', onPress: () => navigation.navigate('ActivityLog') },
-    { id: 2, name: 'Reports', icon: '📑', color: '#000000', onPress: () => navigation.navigate('ActivityUsers') },
+    { id: 2, name: 'Reports', icon: '📑', color: '#000000', onPress: () => navigation.navigate('ReportDetails', { reports }) },
     { id: 3, name: 'FAQs', icon: '⚙️', color: '#000000', onPress: handleFaqsPress },
     { id: 4, name: 'Users', icon: '👤', color: '#000000', onPress: () => navigation.navigate('UsersAll') },
     { id: 5, name: 'Active Users', icon: '🚪', color: '#000000', onPress: () => navigation.navigate('ActiveUsers') },
