@@ -7,6 +7,8 @@ import UsersAll from '../screens/AdminScreens/UsersAll';
 import HelpCenter from '../screens/AdminScreens/HelpCenter';
 import CreatePosts from '../screens/AdminScreens/CreatePosts';
 import HelpDetails from '../screens/AdminScreens/HelpDetails';
+import EReport from '../screens/AdminScreens/EReport';
+import ReportDetails from '../screens/AdminScreens/ReportDetails';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +21,8 @@ const AdminStack = () => (
     <Stack.Screen name="HelpCenter" component={HelpCenter} />
     <Stack.Screen name="CreatePosts" component={CreatePosts} />
     <Stack.Screen name="HelpDetails" component={HelpDetails} options={{ title: "Help Details" }} />
+    <Stack.Screen name="EReport" component={EReport} />
+    <Stack.Screen name="ReportDetails" component={ReportDetails} options={{ title: "Report Details" }} />
   </Stack.Navigator>
 );
 

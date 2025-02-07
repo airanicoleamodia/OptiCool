@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, Alert, Dimensions } from "react-native";
+import { View, ScrollView, StyleSheet, Alert, Dimensions, TouchableOpacity } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BarChart } from "react-native-chart-kit";
 
 export default function EReport() {
   const [reports, setReports] = useState([]);
   const [chartData, setChartData] = useState(null);
   const [latestReport, setLatestReport] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchReports();
@@ -44,7 +45,7 @@ export default function EReport() {
             "Recent Report",
             `${sortedReports[0].appliance} reported on ${new Date(
               sortedReports[0].reportDate
-            ).toDateString()}`,
+            ).toDateString()} by ${sortedReports[0].user?.name || 'Unknown'}`,
             [{ text: "OK" }]
           );
         }
@@ -101,10 +102,12 @@ export default function EReport() {
         </Card>
 
         <View style={styles.metricsContainer}>
-          <Card style={[styles.metricCard, { backgroundColor: "#ffffff" }]}>
-            <Text style={styles.metricText}>Reports</Text>
-            <Text style={styles.metricValue}>{reports.length}</Text>
-          </Card>
+          <TouchableOpacity onPress={() => navigation.navigate('ReportDetails', { reports })}>
+            <Card style={[styles.metricCard, { backgroundColor: "#ffffff" }]}>
+              <Text style={styles.metricText}>Reports</Text>
+              <Text style={styles.metricValue}>{reports.length}</Text>
+            </Card>
+          </TouchableOpacity>
           <Card style={[styles.metricCard, { backgroundColor: "#ffffff" }]}>
             <Text style={styles.metricText}>Appliances</Text>
             <Text style={styles.metricValue}>

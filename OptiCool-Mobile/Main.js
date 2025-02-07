@@ -20,6 +20,7 @@ import UsersAll from "./screens/AdminScreens/UsersAll";
 import UsageTracking from "./screens/PowerManagement/UsageTracking";
 import CreatePosts from "./screens/AdminScreens/CreatePosts";
 import HelpDetails from "./screens/AdminScreens/HelpDetails";
+import ReportDetails from "./screens/AdminScreens/ReportDetails"; // Ensure correct import
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,11 @@ export default function Main() {
           <Stack.Screen name="UsersAll" component={UsersAll} />
           <Stack.Screen name="HelpCenter" component={HelpCenter} />
           <Stack.Screen name="CreatePosts" component={CreatePosts} />
+          <Stack.Screen
+            name="ReportDetails"
+            component={ReportDetails}
+            options={{ title: "Report Details", headerShown: true }}
+          />
           <Stack.Screen
             name="HelpDetails"
             component={HelpDetails}

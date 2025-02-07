@@ -12,11 +12,11 @@ const UsageNavigations = () => {
       initialRouteName="ElectricityUsage"
     >
 
-      <Stack.Screen name="ElectricityUsage" component={ElectricityUsage} 
+      {/* <Stack.Screen name="ElectricityUsage" component={ElectricityUsage} 
        options={{ headerShown: true }}
-      />
+      /> */}
        
-      <Stack.Screen name="UsageTracking" component={UsageTracking} 
+      <Stack.Screen name="Usage Tracking" component={UsageTracking} 
        options={{ headerShown: true }}
       />
     </Stack.Navigator>
