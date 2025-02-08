@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, Alert, Dimensions, TouchableOpacity } from "react-native";
+import { View, ScrollView, StyleSheet, Alert, Dimensions, TouchableOpacity, RefreshControl } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BarChart } from "react-native-chart-kit";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function EReport() {
   const [reports, setReports] = useState([]);
   const [chartData, setChartData] = useState(null);
   const [latestReport, setLatestReport] = useState(null);
+  const [refreshing, setRefreshing] = useState(false); // State for refreshing
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -52,14 +54,32 @@ export default function EReport() {
       }
     } catch (error) {
       console.error("Error fetching reports:", error);
+    } finally {
+      setRefreshing(false); // Stop refreshing
     }
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchReports();
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>Reports</Text>
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.headerText}>Reports</Text>
+          </View>
+          <TouchableOpacity onPress={onRefresh} style={styles.refreshButton}>
+            <MaterialCommunityIcons name="refresh" size={24} color="#2F80ED" />
+          </TouchableOpacity>
         </View>
         <Card style={styles.chartCard}>
           <Card.Title
@@ -149,16 +169,24 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center", // Center the title
+    justifyContent: "space-between", // Adjusted to space between
     paddingHorizontal: 20,
     marginTop: -2,
     marginBottom: 30,
+  },
+  headerTextContainer: {
+    flex: 1,
+    alignItems: "center",
   },
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
     color: "#9eaab8",
+    marginLeft: 40,
+  },
+  refreshButton: {
+    padding: 10,
   },
   cardTitle: {
     fontSize: 18,

@@ -4,7 +4,7 @@ exports.sendReport = async (req, res, next) => {
     try {
         console.log(req.body); // Check the request body to ensure data is being passed
 
-        const { appliance, status} = req.body;  // Destructure appliance, status, user, description, and priority from the request body
+        const { appliance, status, user } = req.body;  // Destructure appliance, status, user from the request body
 
         if (!appliance || !status || !user) {
             return res.status(400).json({ message: 'Appliance, status, and user are required.' });
@@ -15,8 +15,6 @@ exports.sendReport = async (req, res, next) => {
             appliance,
             status,
             user,
-            description,
-            priority,
             reportDate: new Date(),  // Optional: you can store the report's timestamp
         });
 

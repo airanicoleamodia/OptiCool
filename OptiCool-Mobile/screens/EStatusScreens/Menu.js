@@ -78,37 +78,72 @@ const Menu = () => {
     }
   };
 
-  const handleReport = async (appliance, status) => {
-    console.log("handleReport called for:", appliance, status); // Debug log
-    setSubmitting(true);
+  // const handleReport = async (appliance, status) => {
+  //   console.log("handleReport called for:", appliance, status); // Debug log
+  //   setSubmitting(true);
 
-    try {
-      const { data } = await axios.post(`${baseURL}/ereports/ereport`, {
-        appliance,
-        status,
-      });
+  //   try {
+  //     const user = "user_id"; // Replace with actual user ID
+  //     const { data } = await axios.post(`${baseURL}/ereports/ereport`, {
+  //       appliance,
+  //       status,
+  //       user,
+  //     });
 
-      console.log("API Response:", data); // Debug log
+  //     console.log("API Response:", data); // Debug log
 
-      if (data.success) {
-        setReportedAppliance(appliance);
-        setModalVisible(true); // Ensure modal is triggered
-        console.log("Modal set to visible"); // Debug log
-      } else {
-        console.log("Error response:", data.message);
-        Alert.alert("Error", data.message, [{ text: "OK" }]);
-      }
-    } catch (error) {
-      console.log("Network error:", error);
-      Alert.alert(
-        "Network Error",
-        "Could not send the report. Please try again later.",
-        [{ text: "OK" }]
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  //     if (data.success) {
+  //       setReportedAppliance(appliance);
+  //       setModalVisible(true); // Ensure modal is triggered
+  //       console.log("Modal set to visible"); // Debug log
+  //     } else {
+  //       console.log("Error response:", data.message);
+  //       Alert.alert("Error", data.message, [{ text: "OK" }]);
+  //     }
+  //   } catch (error) {
+  //     console.log("Network error:", error);
+  //     Alert.alert(
+  //       "Network Error",
+  //       "Could not send the report. Please try again later.",
+  //       [{ text: "OK" }]
+  //     );
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // };
+
+   const handleReport = async (appliance, status, setSubmitting) => {
+        setSubmitting(true);
+
+        try {
+            const { data } = await axios.post(`${baseURL}/ereports/ereport`, { appliance, status });
+
+            if (data.success) {
+                Alert.alert(
+                    'Report',
+                    data.message,
+                    [{ text: 'OK', onPress: () => console.log(`${appliance} report acknowledged`) }],
+                    { cancelable: false }
+                );
+            } else {
+                Alert.alert(
+                    'Error',
+                    data.message,
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+            }
+        } catch (error) {
+            Alert.alert(
+                'Network Error',
+                'Could not send the report. Please try again later.',
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
   const confirmReport = (appliance, status) => {
     console.log("confirmReport called"); // Debug log
