@@ -74,9 +74,7 @@ export default function Dashboard() {
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
-          console.error(
-            "Weather data not found. Please check the location key."
-          );
+          console.error("Weather data not found. Please check the location key.");
         } else if (error.response.status === 503) {
           console.error("Service is temporarily unavailable.");
         } else {
@@ -136,9 +134,9 @@ export default function Dashboard() {
       console.log(data);
       setRoomTemp(data.inside.temperature);
     } catch (err) {
-      console.log(err);
+      console.error("Error fetching room temperature:", err.message);
     }
-  }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -303,8 +301,6 @@ export default function Dashboard() {
             </Text>
           </View>
         </View>
-
-        {/* </ImageBackground> */}
       </ScrollView>
     </SafeAreaView>
   );

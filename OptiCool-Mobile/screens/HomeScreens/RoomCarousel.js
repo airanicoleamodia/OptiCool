@@ -18,7 +18,7 @@ const RoomCarousel = () => {
             <Image source={item.image} style={styles.image} />
             <View style={[styles.statusContainer, styles.online]}>
                 <View style={[styles.circle, styles.green]} />
-                <Text style={styles.statusText}>Online</Text>
+                <Text style={styles.statusText}>Offline</Text>
             </View>
         </TouchableOpacity>
     );
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     green: {
-        backgroundColor: 'limegreen',
+        backgroundColor: 'red',
     },
     statusText: {
         fontWeight: 'bold',

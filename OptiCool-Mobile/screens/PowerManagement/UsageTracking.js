@@ -1,138 +1,149 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
-// import DatePicker from "react-native-date-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import dmt3API from "../../services/dmt3API"; // Import the API
 
 const UsageTracking = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [openStartPicker, setOpenStartPicker] = useState(false);
   const [openEndPicker, setOpenEndPicker] = useState(false);
-  const [chartData, setChartData] = useState({
-    labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    datasets: [
-      {
-        data: [20, 35, 15, 40, 75, 90, 30], // Dummy data for kWh
-      },
-    ],
-  });
+  const [chartData, setChartData] = useState(null);
+  const [todayUsage, setTodayUsage] = useState(null);
+  const [monthlyUsage, setMonthlyUsage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [todayUsage, setTodayUsage] = useState(93); // Example data for today's usage in kWh
-  const [monthlyUsage, setMonthlyUsage] = useState(970.422); // Example data for monthly usage in kWh
+  useEffect(() => {
+    console.log("Component mounted, fetching initial data...");
+    fetchUsageData();
+  }, []);
+
+  const fetchUsageData = async () => {
+    setLoading(true);
+    console.log("Fetching usage data from API...");
+    try {
+      const data = await dmt3API.getPowerConsumptionAPI(startDate, endDate);
+      console.log("Data fetched successfully:", data);
+      setChartData({
+        labels: data.labels.length ? data.labels : ["No Data"],
+        datasets: [{ data: data.values.length ? data.values : [0] }],
+      });
+      setTodayUsage(data.todayUsage);
+      setMonthlyUsage(data.monthlyUsage);
+    } catch (error) {
+      Alert.alert("Error", "Failed to fetch usage data");
+      console.error("Error fetching usage data:", error);
+    } finally {
+      setLoading(false);
+      console.log("Finished fetching usage data.");
+    }
+  };
 
   const handleSearch = () => {
-    // Simulate fetching data for the selected date range
-    // Update the chartData, totalUsage, and totalCost here if using real API
-    alert(
-      `Fetching data from ${startDate.toDateString()} to ${endDate.toDateString()}`
-    );
+    console.log("Search button pressed, fetching data for new date range...");
+    fetchUsageData();
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Dropdown or Selector */}
-      <TextInput style={styles.input} placeholder="Select" editable={true} />
+      {loading ? (
+        <ActivityIndicator size="large" color="#000000" />
+      ) : (
+        <>
+          <View style={styles.summaryContainer}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.icon}>🔌</Text>
+              <Text style={styles.label}>Today</Text>
+              <Text style={styles.value}>{todayUsage ? `${todayUsage} kWh` : "N/A"}</Text>
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.summaryItem}>
+              <Text style={styles.icon}>⚡</Text>
+              <Text style={styles.label}>This Month</Text>
+              <Text style={styles.value}>{monthlyUsage ? `${monthlyUsage.toFixed(2)} kWh` : "N/A"}</Text>
+            </View>
+          </View>
 
-      {/* Summary */}
-      <View style={styles.summaryContainer}>
-        {/* Today's Usage */}
-        <View style={styles.summaryItem}>
-          <Text style={styles.icon}>🔌</Text>
-          <Text style={styles.label}>Today</Text>
-          <Text style={styles.value}>{todayUsage} kWh</Text>
-        </View>
+          <BarChart
+            data={chartData || { labels: ["No Data"], datasets: [{ data: [0] }] }}
+            width={Dimensions.get("window").width - 20}
+            height={220}
+            yAxisLabel="kW"
+            chartConfig={{
+              backgroundGradientFrom: "#1E2923",
+              backgroundGradientTo: "#08130D",
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726",
+              },
+            }}
+            style={styles.chart}
+          />
 
-        {/* Divider */}
-        <View style={styles.divider} />
+          <View style={styles.datePickerContainer}>
+            <TouchableOpacity
+              onPress={() => setOpenStartPicker(true)}
+              style={styles.dateBox}
+            >
+              <Text style={styles.dateText}>{startDate.toDateString()}</Text>
+            </TouchableOpacity>
+            <Text style={styles.dateRangeDivider}>To</Text>
+            <TouchableOpacity
+              onPress={() => setOpenEndPicker(true)}
+              style={styles.dateBox}
+            >
+              <Text style={styles.dateText}>{endDate.toDateString()}</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* This Month's Usage */}
-        <View style={styles.summaryItem}>
-          <Text style={styles.icon}>⚡</Text>
-          <Text style={styles.label}>This Month</Text>
-          <Text style={styles.value}>{monthlyUsage.toFixed(2)} kWh</Text>
-        </View>
-      </View>
+          {openStartPicker && (
+            <DateTimePicker
+              value={startDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setOpenStartPicker(false);
+                if (selectedDate) setStartDate(selectedDate);
+                console.log("Start date selected:", selectedDate);
+              }}
+            />
+          )}
 
-      {/* Chart */}
-      <BarChart
-        data={chartData}
-        width={Dimensions.get("window").width - 20}
-        height={220}
-        yAxisLabel="kW"
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientTo: "#08130D",
-          decimalPlaces: 2,
-          color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-          propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726",
-          },
-        }}
-        style={styles.chart}
-      />
+          {openEndPicker && (
+            <DateTimePicker
+              value={endDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setOpenEndPicker(false);
+                if (selectedDate) setEndDate(selectedDate);
+                console.log("End date selected:", selectedDate);
+              }}
+            />
+          )}
 
-      {/* Date Range Picker */}
-      <View style={styles.datePickerContainer}>
-        <TouchableOpacity
-          onPress={() => setOpenStartPicker(true)}
-          style={styles.dateBox}
-        >
-          <Text style={styles.dateText}>{startDate.toDateString()}</Text>
-        </TouchableOpacity>
-        <Text style={styles.dateRangeDivider}>To</Text>
-        <TouchableOpacity
-          onPress={() => setOpenEndPicker(true)}
-          style={styles.dateBox}
-        >
-          <Text style={styles.dateText}>{endDate.toDateString()}</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Start Date Picker */}
-      {openStartPicker && (
-        <DateTimePicker
-          value={startDate}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) => {
-            setOpenStartPicker(false);
-            if (selectedDate) setStartDate(selectedDate);
-          }}
-        />
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+            <Text style={styles.searchButtonText}>Search</Text>
+          </TouchableOpacity>
+        </>
       )}
-
-      {/* End Date Picker */}
-      {openEndPicker && (
-        <DateTimePicker
-          value={endDate}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) => {
-            setOpenEndPicker(false);
-            if (selectedDate) setEndDate(selectedDate);
-          }}
-        />
-      )}
-
-      {/* Search Button */}
-      <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-        <Text style={styles.searchButtonText}>Search</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -142,13 +153,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#f5f5f5",
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-  },
   dateBox: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -157,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
-    width: "45%", // Adjust as needed for spacing
+    width: "45%",
   },
   datePickerContainer: {
     flexDirection: "row",
@@ -189,41 +193,47 @@ const styles = StyleSheet.create({
   chart: {
     marginVertical: 10,
     borderRadius: 16,
+    marginTop: 30,
   },
   summaryContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10, // Reduced padding
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8, // Smaller corners
+    padding: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#ddd',
-    width: '90%', // Optional: Adjust width for a smaller container
-    alignSelf: 'center', // Center the container horizontally
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: 10, 
   },
   summaryItem: {
     flex: 1,
     alignItems: 'center',
   },
   divider: {
-    width: 0.5, // Thinner vertical line
+    width: 0.5,
     backgroundColor: '#ccc',
-    height: '60%', // Smaller height to match the reduced size
-    marginHorizontal: 5, // Reduced spacing
+    height: '60%',
+    marginHorizontal: 5,
   },
   icon: {
-    fontSize: 18, // Smaller icon
-    marginBottom: 3, // Reduced margin
+    fontSize: 18,
+    marginBottom: 3,
   },
   label: {
-    fontSize: 12, // Smaller label text
+    fontSize: 12,
     color: '#888',
     marginBottom: 2,
   },
   value: {
-    fontSize: 14, // Smaller value text
+    fontSize: 14,
     fontWeight: 'bold',
+  },
+  loadingText: {
+    textAlign: "center",
+    color: "#000000",
   },
 });
 
