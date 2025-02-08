@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, TouchableOpacity, Alert, StyleSheet, Animated, PanResponder } from 'react-native';
+import { View, TouchableOpacity, Alert, StyleSheet, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -13,19 +13,25 @@ import dmt3API from '../../services/dmt3API';
 export default function EnvironmentStatus() {
   const navigation = useNavigation();
   const [submitting, setSubmitting] = useState(false);
- 
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>DMT Room 3</Text>
-        {/* <TouchableOpacity style={styles.menuButton} onPress={() => console.log('Menu pressed')}>
-          <MaterialCommunityIcons name="dots-vertical" size={30} color="#9eaab8" />
-        </TouchableOpacity> */}
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>DMT Room 3</Text>
+          {/* <TouchableOpacity style={styles.menuButton} onPress={() => console.log('Menu pressed')}>
+            <MaterialCommunityIcons name="dots-vertical" size={30} color="#9eaab8" />
+          </TouchableOpacity> */}
+        </View>
 
-      <View style={styles.menuWrapper}>
-        <Menu/>
-      </View>
+        <View style={styles.circleContainer}>
+          <CircleContainer />
+        </View>
+
+        <View style={styles.menuWrapper}>
+          <Menu />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -126,33 +132,18 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginLeft: 10,
   },
-  cardbuttonContainer: {
-    flexDirection: 'row', // Align buttons horizontally
-    justifyContent: 'flex-end', // Push buttons to the far right
-    alignItems: 'center', // Center buttons vertically
-    marginLeft: 'auto', // Ensures alignment to the right
-  },
-  powerButton: {
-    borderRadius: 6,
-    padding: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 6,
-  },
-  reportButton: {
-    backgroundColor: 'red',
-    borderRadius: 6,
-    padding: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 6,
-  },
-  reportButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
   menuWrapper: {
     flex: 1,
-    marginTop: 370, // Adjust the margin as needed
+    marginTop: 0, // Removed the margin to eliminate space
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingBottom: 20,
+  },
+  circleContainer: {
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%", // Ensure the container takes the full width
   },
 });

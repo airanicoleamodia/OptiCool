@@ -24,7 +24,16 @@ const ereportSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',  // Assuming you have a User model
         required: true,
-    }
+    },
+    // description: {
+    //     type: String,
+    //     required: false,
+    // },
+    // priority: {
+    //     type: String,
+    //     enum: ['Low', 'Medium', 'High'],
+    //     default: 'Low',
+    // }
 });
 
 module.exports = mongoose.model('EReport', ereportSchema);

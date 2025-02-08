@@ -79,13 +79,13 @@ const CircleContainer = () => {
         </View>
       </TouchableOpacity>
 
-      <Svg width="240" height="240" viewBox="0 0 240 240">
+      <Svg width="300" height="300" viewBox="0 0 300 300">
         {[...Array(60)].map((_, index) => {
           const angle = (index * 6 * Math.PI) / 180;
-          const x1 = 120 + Math.cos(angle) * 110;
-          const y1 = 120 + Math.sin(angle) * 110;
-          const x2 = 120 + Math.cos(angle) * 105;
-          const y2 = 120 + Math.sin(angle) * 105;
+          const x1 = 150 + Math.cos(angle) * 150;
+          const y1 = 150 + Math.sin(angle) * 150;
+          const x2 = 150 + Math.cos(angle) * 145;
+          const y2 = 150 + Math.sin(angle) * 145;
           return (
             <Path
               key={index}
@@ -97,8 +97,8 @@ const CircleContainer = () => {
         })}
 
         <Circle
-          cx="120"
-          cy="120"
+          cx="150"
+          cy="150"
           r={circleRadius}
           stroke="#4A90E2"
           strokeWidth="10"
@@ -184,10 +184,10 @@ const styles = StyleSheet.create({
   },
   innerCircle: {
     position: "absolute",
-    top: 27, // Adjusted to move up
-    width: 160,
-    height: 160,
-    borderRadius: 80,
+    top: 50, // Adjusted to move up
+    width: 200,
+    height: 200,
+    borderRadius: 100,
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
@@ -211,8 +211,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 20,
-    marginTop: 5,
+    marginTop: 30,
     marginBottom: 20,
+
   },
   statusCard: {
     flexDirection: "row",

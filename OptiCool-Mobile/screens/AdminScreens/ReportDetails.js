@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const mockReports = [
-  { user: { name: 'John Doe', email: 'john@example.com' }, appliance: 'AC' },
-  { user: { name: 'Jane Smith', email: 'jane@example.com' }, appliance: 'Fan' },
-  { user: { name: 'Alice Johnson', email: 'alice@example.com' }, appliance: 'Exhaust' },
-  { user: { name: 'Bob Brown', email: 'bob@example.com' }, appliance: 'Blower' },
-];
+import axios from 'axios';  // Import axios for API calls
+import baseURL from '../../assets/common/baseUrl';
 
 const ReportDetails = () => {
+  const [reports, setReports] = useState([]);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await axios.get(`${baseURL}/reports/getAllReports`);  // Corrected API URL
+        setReports(response.data.reports);
+      } catch (error) {
+        console.error('Error fetching reports:', error);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -20,13 +30,15 @@ const ReportDetails = () => {
             <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Name</Text>
             <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Email</Text>
             <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Appliance</Text>
+            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Date Reported</Text>
           </View>
           {/* Data Rows */}
-          {mockReports.map((report, index) => (
+          {reports.map((report, index) => (
             <View key={index} style={styles.listItem}>
               <Text style={[styles.listText, { flex: 1 }]}>{report.user.name}</Text>
               <Text style={[styles.listText, { flex: 1 }]}>{report.user.email}</Text>
               <Text style={[styles.listText, { flex: 1 }]}>{report.appliance}</Text>
+              <Text style={[styles.listText, { flex: 1 }]}>{new Date(report.reportDate).toLocaleDateString()}</Text>
             </View>
           ))}
         </View>
