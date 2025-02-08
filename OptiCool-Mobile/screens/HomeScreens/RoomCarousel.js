@@ -7,10 +7,10 @@ const RoomCarousel = () => {
     const isOnline = true; // Always set to Online
 
     const rooms = [
-        { id: '1', image: require('../../assets/classroom.jpg'), screen: 'DMTRoom' },
-        { id: '2', image: require('../../assets/classroom1.jpg'), screen: 'Classroom1Screen' },
-        { id: '3', image: require('../../assets/classroom2.jpg'), screen: 'Classroom2Screen' },
-        { id: '4', image: require('../../assets/classroom1.jpg'), screen: 'Classroom1Screen' }
+        { id: '1', image: require('../../assets/DMTRoom2.jpg'), screen: 'DMTRoom' },
+        { id: '2', image: require('../../assets/DMTRoom.jpg'), screen: 'Classroom1Screen' },
+        { id: '3', image: require('../../assets/DMTRoom1.jpg'), screen: 'Classroom2Screen' },
+        { id: '4', image: require('../../assets/DMTRoom.jpg'), screen: 'Classroom1Screen' }
     ];
 
     const renderItem = ({ item }) => (

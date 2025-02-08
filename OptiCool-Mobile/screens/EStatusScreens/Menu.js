@@ -12,9 +12,9 @@ const Menu = () => {
   const [submitting, setSubmitting] = useState(false);
   const [applianceStatus, setApplianceStatus] = useState({
     AC: { 'AC': true, 'AC 2': false },
-    Fan: { 'Fan 1': true, 'Fan 2': false, 'Fan 3': true },
-    Exhaust: { 'Exhaust 1': true, 'Exhaust 2': false },
-    Blower: { 'Blower 1': true, 'Blower 2': false }
+    Fan: { 'Fan 1': true },
+    Exhaust: { 'Exhaust 1': true },
+    Blower: { 'Blower 1': true }
   });
   const [circleSize, setCircleSize] = useState(new Animated.Value(1));
 
@@ -59,17 +59,13 @@ const Menu = () => {
       { name: 'AC 2', status: 'Inactive' }
     ],
     Fan: [
-      { name: 'Fan 1', status: 'Active' },
-      { name: 'Fan 2', status: 'Inactive' },
-      { name: 'Fan 3', status: 'Active' }
+      { name: 'Fan', status: 'Active' }
     ],
     Exhaust: [
-      { name: 'Exhaust 1', status: 'Active' },
-      { name: 'Exhaust 2', status: 'Inactive' }
+      { name: 'Exhaust', status: 'Active' }
     ],
     Blower: [
-      { name: 'Blower 1', status: 'Active' },
-      { name: 'Blower 2', status: 'Inactive' }
+      { name: 'Blower', status: 'Active' }
     ]
   };
 
@@ -210,7 +206,7 @@ const Menu = () => {
                   >
                     <MaterialCommunityIcons
                       name={applianceStatus[selected][appliance.name] ? 'power' : 'power-off'}
-                      size={30}
+                      size={25}
                       color="#fff"
                     />
                   </TouchableOpacity>
