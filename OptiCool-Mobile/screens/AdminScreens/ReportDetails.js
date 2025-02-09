@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';  // Import axios for API calls
@@ -7,19 +7,37 @@ import baseURL from '../../assets/common/baseUrl';
 
 const ReportDetails = () => {
   const [reports, setReports] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalReports, setTotalReports] = useState(0);
 
   useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const response = await axios.get(`${baseURL}/reports/getAllReports`);  // Corrected API URL
-        setReports(response.data.reports);
-      } catch (error) {
-        console.error('Error fetching reports:', error);
-      }
-    };
+    fetchReports(currentPage);
+  }, [currentPage]);
 
-    fetchReports();
-  }, []);
+  const fetchReports = async (page) => {
+    try {
+      const response = await axios.get(`${baseURL}/ereports/getreport?page=${page}`);  // Corrected API URL
+      const sortedReports = response.data.reports.sort((a, b) => new Date(b.reportDate) - new Date(a.reportDate));
+      setReports(sortedReports);
+      setTotalPages(response.data.totalPages);
+      setTotalReports(response.data.totalReports);
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,20 +45,28 @@ const ReportDetails = () => {
         <View style={styles.listContainer}>
           {/* Column Headers */}
           <View style={[styles.listItem, styles.headerRow]}>
-            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Name</Text>
-            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Email</Text>
             <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Appliance</Text>
+            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Status</Text>
             <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Date Reported</Text>
           </View>
           {/* Data Rows */}
           {reports.map((report, index) => (
             <View key={index} style={styles.listItem}>
-              <Text style={[styles.listText, { flex: 1 }]}>{report.user.name}</Text>
-              <Text style={[styles.listText, { flex: 1 }]}>{report.user.email}</Text>
               <Text style={[styles.listText, { flex: 1 }]}>{report.appliance}</Text>
+              <Text style={[styles.listText, { flex: 1 }]}>{report.status}</Text>
               <Text style={[styles.listText, { flex: 1 }]}>{new Date(report.reportDate).toLocaleDateString()}</Text>
             </View>
           ))}
+        </View>
+        {/* Pagination Controls */}
+        <View style={styles.paginationContainer}>
+          <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 1}>
+            <Text style={[styles.paginationButton, currentPage === 1 && styles.disabledButton]}>Previous</Text>
+          </TouchableOpacity>
+          <Text style={styles.paginationText}>Page {currentPage} of {totalPages} (Total Reports: {totalReports})</Text>
+          <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPages}>
+            <Text style={[styles.paginationButton, currentPage === totalPages && styles.disabledButton]}>Next</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -90,6 +116,23 @@ const styles = StyleSheet.create({
   headerColumn: {
     fontWeight: "bold",
     color: "#263238",
+  },
+  paginationContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  paginationButton: {
+    fontSize: 16,
+    color: "#2F80ED",
+  },
+  disabledButton: {
+    color: "#ccc",
+  },
+  paginationText: {
+    fontSize: 16,
+    color: "#000",
   },
 });
 

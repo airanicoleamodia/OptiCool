@@ -47,13 +47,14 @@ export default function EReport() {
             "Recent Report",
             `${sortedReports[0].appliance} reported on ${new Date(
               sortedReports[0].reportDate
-            ).toDateString()} by ${sortedReports[0].user?.name || 'Unknown'}`,
+            ).toDateString()}`,
             [{ text: "OK" }]
           );
         }
       }
     } catch (error) {
       console.error("Error fetching reports:", error);
+      Alert.alert("Error", "Failed to fetch reports. Please try again later.");
     } finally {
       setRefreshing(false); // Stop refreshing
     }
