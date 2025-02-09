@@ -1,9 +1,11 @@
 {
   "expo": {
     "name": "OptiCool",
-    "slug": "OptiCool",
+    "slug": "opticool",
     "version": "1.0.0",
-    "plugins": ["expo-notifications"],
+    "plugins": [
+      "expo-notifications"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -30,8 +32,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d397d35a-4423-417a-a1a0-c04489d5f6c7"
+        "projectId": "fb7cd162-519b-49f9-b114-d9b328acb22d"
       }
-    }
+    },
+    "owner": "tigeryakuza"
   }
 }
