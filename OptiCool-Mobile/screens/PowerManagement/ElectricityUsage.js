@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,14 +11,29 @@ import { LineChart } from "react-native-chart-kit";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import DeviceInfo from "./DeviceInfo";
+import dmt3API from "../../services/dmt3API"; // Import the API
 
 const ElectricityUsage = () => {
   const [activeTab, setActiveTab] = useState("weekly");
-  const navigation = useNavigation();
+  const [weeklyData, setWeeklyData] = useState({ labels: [], values: [] });
+  const [monthlyData, setMonthlyData] = useState({ labels: [], values: [] });
   const [selectedItem, setSelectedItem] = useState(null);
+  const navigation = useNavigation();
 
-  const weeklyData = Array.from({ length: 4 }, () => Math.random() * 50 + 20);
-  const monthlyData = Array.from({ length: 2 }, () => Math.random() * 200 + 100);
+  useEffect(() => {
+    fetchUsageData();
+  }, []);
+
+  const fetchUsageData = async () => {
+    try {
+      const weeklyUsage = await dmt3API.getWeeklyUsageAPI();
+      setWeeklyData(weeklyUsage);
+      const monthlyUsage = await dmt3API.getMonthlyUsageAPI();
+      setMonthlyData(monthlyUsage);
+    } catch (error) {
+      console.error("Error fetching usage data:", error);
+    }
+  };
 
   const renderChart = (
     labels,
@@ -29,8 +44,8 @@ const ElectricityUsage = () => {
   ) => (
     <LineChart
       data={{
-        labels,
-        datasets: [{ data }],
+        labels: labels.length ? labels : ["No Data"],
+        datasets: [{ data: data.length ? data : [0] }],
       }}
       width={Dimensions.get("window").width - 32}
       height={300}
@@ -110,15 +125,15 @@ const ElectricityUsage = () => {
           </View>
           {activeTab === "weekly"
             ? renderChart(
-                weeklyData.map((_, i) => `W${i + 1}`),
-                weeklyData,
+                weeklyData.labels,
+                weeklyData.values,
                 "#8b3204",
                 "#cd591d",
                 "#e2e93e"
               )
             : renderChart(
-                monthlyData.map((_, i) => `M${i + 1}`),
-                monthlyData,
+                monthlyData.labels,
+                monthlyData.values,
                 "#36048b",
                 "#834be0",
                 "#e93e91"

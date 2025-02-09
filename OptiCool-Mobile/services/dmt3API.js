@@ -187,6 +187,26 @@ const getPowerConsumptionAPI = async (startDate, endDate) => {
     return data;
 }
 
+const getWeeklyUsageAPI = async () => {
+    try {
+        const { data } = await axios.get(`${dmtUrl}/weekly_usage`);
+        return data;
+    } catch (error) {
+        console.error("Error fetching weekly usage data:", error);
+        return { labels: [], values: [] };
+    }
+};
+
+const getMonthlyUsageAPI = async () => {
+    try {
+        const { data } = await axios.get(`${dmtUrl}/monthly_usage`);
+        return data;
+    } catch (error) {
+        console.error("Error fetching monthly usage data:", error);
+        return { labels: [], values: [] };
+    }
+};
+
 export default {
     getComponentsStatusAPI,
     getSensorsStatusesAPI,
@@ -208,5 +228,8 @@ export default {
 
     turnOffDevice,
 
-    getPowerConsumptionAPI
+    getPowerConsumptionAPI,
+
+    getWeeklyUsageAPI,
+    getMonthlyUsageAPI,
 }
