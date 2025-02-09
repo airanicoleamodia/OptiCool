@@ -13,13 +13,8 @@ const RoomCarousel = () => {
         { id: '4', image: require('../../assets/DMTRoom.jpg'), screen: 'Classroom1Screen' }
     ];
 
-    const handleRoomPress = (room) => {
-        console.log(`Room ${room.id} clicked`);
-        // Do not navigate to any screen for now
-    };
-
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => handleRoomPress(item)} style={styles.itemContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate(item.screen)} style={styles.itemContainer}>
             <Image source={item.image} style={styles.image} />
             <View style={[styles.statusContainer, styles.online]}>
                 <View style={[styles.circle, styles.green]} />

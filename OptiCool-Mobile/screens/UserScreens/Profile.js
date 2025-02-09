@@ -255,7 +255,7 @@ export default function Profile() {
           {
             label: "Information",
             icon: "information-outline",
-            route: "Information",
+            route: "HelpCenter", // Navigate to HelpCenter
           },
           {
             label: "Log out",
