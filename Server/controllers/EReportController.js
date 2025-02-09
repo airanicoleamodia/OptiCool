@@ -4,18 +4,18 @@ exports.sendReport = async (req, res, next) => {
     try {
         console.log(req.body); // Check the request body to ensure data is being passed
 
-        const { appliance, status, user } = req.body;  // Destructure appliance, status, user from the request body
+        const { appliance, status } = req.body;  // Destructure appliance and status from the request body
 
-        if (!appliance || !status || !user) {
-            return res.status(400).json({ message: 'Appliance, status, and user are required.' });
+        if (!appliance || !status) {
+            return res.status(400).json({ message: 'Appliance and status are required.' });
         }
 
         // Create a new report
         const newReport = await Report.create({
             appliance,
             status,
-            user,
             reportDate: new Date(),  // Optional: you can store the report's timestamp
+            // user: user._id, // Include user ID in the new report
         });
 
         if (!newReport) {
@@ -34,7 +34,7 @@ exports.sendReport = async (req, res, next) => {
 
 exports.getAllReports = async (req, res, next) => {
     try {
-        const reports = await Report.find().populate('user', 'name email');  // Populate user details
+        const reports = await Report.find();  // Fetch all reports
 
         if (!reports || reports.length === 0) {
             return res.status(404).json({ message: 'No reports found.' });

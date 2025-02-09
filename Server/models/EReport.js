@@ -13,12 +13,11 @@ const ereportSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,  // Automatically set the report date
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',  // Assuming you have a User model
-        required: true,
-    },
+    // user: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',  // Assuming you have a User model
+    //     required: true,
+    // },
 });
 
 module.exports = mongoose.model('EReport', ereportSchema);
-
