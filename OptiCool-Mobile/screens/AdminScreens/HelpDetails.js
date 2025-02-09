@@ -23,15 +23,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 15,
+    marginTop: 40, // Add margin to push the title down
   },
   content: {
     fontSize: 16,
     lineHeight: 22,
     marginBottom: 15,
+    marginTop: 20, // Add margin to push the content down
   },
   date: {
     fontSize: 14,
     color: "#555",
+    marginTop: 15, // Add margin to push the date down
   },
 });
 

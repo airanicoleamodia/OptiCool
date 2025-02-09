@@ -1,14 +1,31 @@
 const Post = require('../models/Post');
+const multer = require('multer');
+const path = require('path');
+
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    },
+});
+
+const upload = multer({ storage });
+
+exports.uploadImage = upload.single('image');
 
 exports.createPost = async (req, res, next) => {
     try {
         const { title, content } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
 
         if (!title || !content) {
             return res.status(400).json({ message: 'Title and content are required', success: false });
         }
 
-        const post = await Post.create({ title, content });
+        const post = await Post.create({ title, content, image });
 
         return res.status(201).json({
             message: 'Post created successfully',
@@ -60,10 +77,16 @@ exports.updatePost = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { title, content } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+        const updateData = { title, content };
+        if (image) {
+            updateData.image = image;
+        }
 
         const post = await Post.findByIdAndUpdate(
             id,
-            { title, content },
+            updateData,
             { new: true, runValidators: true }
         );
 

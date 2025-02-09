@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
+import { Ionicons } from "@expo/vector-icons"; // Add this import
 
 const HelpCenter = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -28,8 +29,13 @@ const HelpCenter = ({ navigation }) => {
       style={styles.postCard}
       onPress={() => navigation.navigate("HelpDetails", { post: item })}
     >
-      <Text style={styles.postTitle}>{item.title}</Text>
-      <Text style={styles.postContent}>{item.content.substring(0, 50)}...</Text>
+      <View style={styles.postContentContainer}>
+        <View>
+          <Text style={styles.postTitle}>{item.title}</Text>
+          <Text style={styles.postContent}>{item.content.substring(0, 50)}...</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={24} color="#555" />
+      </View>
     </TouchableOpacity>
   );
 
@@ -43,6 +49,9 @@ const HelpCenter = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Support</Text>
+      </View>
       <FlatList
         data={posts}
         keyExtractor={(item) => item._id}
@@ -60,14 +69,20 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 10,
+    marginTop: 15, // Add margin on top of the list
   },
   postCard: {
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#ffffff",
     padding: 15,
     marginBottom: 10,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ccc",
+  },
+  postContentContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   postTitle: {
     fontSize: 18,
@@ -82,6 +97,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  header: {
+    backgroundColor: "#4A90E2",
+    paddingVertical: 15, // Revert to original padding
+    alignItems: "center",
+  },
+  headerText: {
+    color: "#fff",
+    fontSize: 20,
+    marginTop: 30, // Add margin to push the text down
   },
 });
 

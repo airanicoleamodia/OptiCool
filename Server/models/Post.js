@@ -11,6 +11,9 @@ const postSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Content is required'],
         },
+        image: {
+            type: String,  // URL of the uploaded image
+        },
         createdAt: {
             type: Date,
             default: Date.now,

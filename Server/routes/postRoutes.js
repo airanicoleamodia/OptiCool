@@ -6,10 +6,11 @@ const {
     getPostById,
     updatePost,
     deletePost,
+    uploadImage,
 } = require('../controllers/PostController');
 
 // Route to create a new post
-router.post('/createPosts', createPost);
+router.post('/createPosts', uploadImage, createPost);
 
 // Route to get all posts
 router.get('/getAllPosts', getAllPosts);
@@ -18,7 +19,7 @@ router.get('/getAllPosts', getAllPosts);
 router.get('/getPostById/:id', getPostById);
 
 // Route to update a post by ID
-router.put('/updatePost/:id', updatePost);
+router.put('/updatePost/:id', uploadImage, updatePost);
 
 // Route to delete a post by ID
 router.delete('/deletePost/:id', deletePost);

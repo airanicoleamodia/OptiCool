@@ -19,8 +19,10 @@ import HelpCenter from "./screens/AdminScreens/HelpCenter";
 import UsersAll from "./screens/AdminScreens/UsersAll";
 import UsageTracking from "./screens/PowerManagement/UsageTracking";
 import CreatePosts from "./screens/AdminScreens/CreatePosts";
+import EditPosts from "./screens/AdminScreens/EditPosts"; // Ensure correct import
 import HelpDetails from "./screens/AdminScreens/HelpDetails";
 import ReportDetails from "./screens/AdminScreens/ReportDetails"; // Ensure correct import
+import PostList from "./screens/AdminScreens/PostList"; // Ensure correct import
 
 const Stack = createStackNavigator();
 
@@ -53,6 +55,8 @@ export default function Main() {
           <Stack.Screen name="UsersAll" component={UsersAll} />
           <Stack.Screen name="HelpCenter" component={HelpCenter} />
           <Stack.Screen name="CreatePosts" component={CreatePosts} />
+          <Stack.Screen name="EditPosts" component={EditPosts} />
+          <Stack.Screen name="PostList" component={PostList} />
           <Stack.Screen
             name="ReportDetails"
             component={ReportDetails}

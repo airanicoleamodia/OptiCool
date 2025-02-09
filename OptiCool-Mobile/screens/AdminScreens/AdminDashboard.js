@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Modal, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ReportDetails from './ReportDetails';
 import axios from 'axios';
@@ -10,9 +10,12 @@ const AdminDashboard = () => {
   const [viewMode, setViewMode] = useState('icons');
   const [isModalVisible, setModalVisible] = useState(false);
   const [reports, setReports] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [selectedPostId, setSelectedPostId] = useState(null);
 
   useEffect(() => {
     fetchReports();
+    fetchPosts();
   }, []);
 
   const fetchReports = async () => {
@@ -23,6 +26,17 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching reports:", error);
+    }
+  };
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/posts/getAllPosts`);
+      if (response.status === 200) {
+        setPosts(response.data.posts);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
     }
   };
 
@@ -38,12 +52,18 @@ const AdminDashboard = () => {
     setModalVisible(false);
   };
 
+  const handleEditPostPress = () => {
+    setModalVisible(false);
+    navigation.navigate('PostList'); // Navigate to PostList screen
+  };
+
   const menuItems = [
     { id: 1, name: 'Activity Logs', icon: '📊', color: '#000000', onPress: () => navigation.navigate('ActivityLog') },
     { id: 2, name: 'Reports', icon: '📑', color: '#000000', onPress: () => navigation.navigate('ReportDetails', { reports }) },
     { id: 3, name: 'FAQs', icon: '⚙️', color: '#000000', onPress: handleFaqsPress },
     { id: 4, name: 'Users', icon: '👤', color: '#000000', onPress: () => navigation.navigate('UsersAll') },
     { id: 5, name: 'Active Users', icon: '🚪', color: '#000000', onPress: () => navigation.navigate('ActiveUsers') },
+    { id: 6, name: 'Edit Post', icon: '✏️', color: '#000000', onPress: handleEditPostPress },
   ];
 
   return (
@@ -53,12 +73,12 @@ const AdminDashboard = () => {
       <View style={styles.header}>
         <Text style={styles.dashboardText}>Dashboard</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => handleViewChange('icons')} style={styles.button}>
+          {/* <TouchableOpacity onPress={() => handleViewChange('icons')} style={styles.button}>
             <Text style={styles.buttonText}>Icons</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleViewChange('list')} style={styles.button}>
             <Text style={styles.buttonText}>List</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -105,7 +125,28 @@ const AdminDashboard = () => {
               >
                 <Text style={styles.choiceText}>Create Post</Text>
               </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.choiceBox} 
+                onPress={handleEditPostPress}
+              >
+                <Text style={styles.choiceText}>Edit Post</Text>
+              </TouchableOpacity>
             </View>
+            {/* <FlatList
+              data={posts}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[
+                    styles.postItem,
+                    item._id === selectedPostId && styles.selectedPostItem,
+                  ]}
+                  onPress={() => setSelectedPostId(item._id)}
+                >
+                  <Text style={styles.postTitle}>{item.title}</Text>
+                </TouchableOpacity>
+              )}
+            /> */}
             <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
@@ -186,41 +227,58 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    width: '80%',
+    width: '90%',
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#333',
   },
   choiceContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     width: '100%',
   },
   choiceBox: {
-    flex: 1,
     backgroundColor: '#007bff',
     borderRadius: 10,
-    margin: 5,
-    padding: 20,
+    marginVertical: 10,
+    padding: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
   choiceText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+  },
+  postItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  selectedPostItem: {
+    backgroundColor: '#e0e0e0',
+  },
+  postTitle: {
+    fontSize: 16,
+    color: '#333',
   },
   closeButton: {
     marginTop: 20,
     padding: 10,
     backgroundColor: '#dc3545',
     borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
   },
   closeButtonText: {
     color: '#fff',
