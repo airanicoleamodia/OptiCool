@@ -42,10 +42,10 @@ export default function Dashboard() {
   const navigation = useNavigation();
 
   const [isDropdownVisible, setDropdownVisible] = useState(false); // Dropdown state
-  const AccuweatherbaseURL = "http://dataservice.accuweather.com";
+  const AccuweatherbaseURL = "https://dataservice.accuweather.com";
   const apiKey = "I8m0OklfM6lIEJGIAl7Sa96aZSGY6Enm";
   const locationKey = "759349";
-
+  
   const fetchWeatherData = async () => {
     const currentTime = Date.now();
     if (lastRequestTime && currentTime - lastRequestTime < 2 * 60 * 60 * 1000) {
@@ -54,6 +54,7 @@ export default function Dashboard() {
     }
 
     try {
+      console.log("Fetching weather data...");
       setIsRequesting(true);
       const { data } = await axios.get(
         `${AccuweatherbaseURL}/currentconditions/v1/${locationKey}`,
@@ -65,6 +66,7 @@ export default function Dashboard() {
           },
         }
       );
+      console.log("Weather data fetched:", data);
       if (data && data.length > 0) {
         setWeatherData(data[0]);
         setLastRequestTime(currentTime);
