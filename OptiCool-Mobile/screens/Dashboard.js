@@ -75,6 +75,7 @@ export default function Dashboard() {
       }
     } catch (error) {
       if (error.response) {
+        console.error("Error response from Accuweather API:", error.response);
         if (error.response.status === 404) {
           console.error("Weather data not found. Please check the location key.");
         } else if (error.response.status === 503) {
@@ -82,8 +83,10 @@ export default function Dashboard() {
         } else {
           console.error("Error fetching weather data:", error.response.status);
         }
+      } else if (error.request) {
+        console.error("No response received from Accuweather API:", error.request);
       } else {
-        console.error("Network error or other issue:", error.message);
+        console.error("Error setting up request to Accuweather API:", error.message);
       }
     } finally {
       setIsRequesting(false);
