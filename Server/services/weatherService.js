@@ -6,6 +6,9 @@ const locationKey = process.env.LOCATION_KEY;
 
 const fetchWeatherData = async () => {
     try {
+        console.log("AccuWeather API Key:", apiKey);
+        console.log("Location Key:", locationKey);
+
         const { data } = await axios.get(
             `${AccuweatherbaseURL}/currentconditions/v1/${locationKey}`,
             {
@@ -16,6 +19,8 @@ const fetchWeatherData = async () => {
                 },
             }
         );
+
+        console.log("AccuWeather API Response:", data);
         return data;
     } catch (error) {
         console.error("Error fetching weather data:", error.message);

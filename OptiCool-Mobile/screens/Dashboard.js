@@ -57,14 +57,7 @@ export default function Dashboard() {
       console.log("Fetching weather data...");
       setIsRequesting(true);
       const { data } = await axios.get(
-        `${AccuweatherbaseURL}/currentconditions/v1/${locationKey}`,
-        {
-          params: {
-            apikey: apiKey,
-            language: "en-us",
-            details: true,
-          },
-        }
+        `https://your-backend-url.onrender.com/api/weather/current`
       );
       console.log("Weather data fetched:", data);
       if (data && data.length > 0) {
@@ -75,18 +68,18 @@ export default function Dashboard() {
       }
     } catch (error) {
       if (error.response) {
-        console.error("Error response from Accuweather API:", error.response);
+        console.error("Error response from backend API:", error.response);
         if (error.response.status === 404) {
-          console.error("Weather data not found. Please check the location key.");
+          console.error("Weather data not found.");
         } else if (error.response.status === 503) {
           console.error("Service is temporarily unavailable.");
         } else {
           console.error("Error fetching weather data:", error.response.status);
         }
       } else if (error.request) {
-        console.error("No response received from Accuweather API:", error.request);
+        console.error("No response received from backend API:", error.request);
       } else {
-        console.error("Error setting up request to Accuweather API:", error.message);
+        console.error("Error setting up request to backend API:", error.message);
       }
     } finally {
       setIsRequesting(false);
