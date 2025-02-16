@@ -1,26 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import axios from 'axios';  // Import axios for API calls
-import baseURL from '../../assets/common/baseUrl';
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Modal } from "react-native";
+import { Text } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios"; // Import axios for API calls
+import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons for the logo
+import baseURL from "../../assets/common/baseUrl";
 
 const ReportDetails = () => {
   const [reports, setReports] = useState([]);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await axios.get(`${baseURL}/ereports/getreport`);  // Corrected API URL
-        const sortedReports = response.data.reports.sort((a, b) => new Date(b.reportDate) - new Date(a.reportDate));
+        const response = await axios.get(`${baseURL}/ereports/getreport`); // Corrected API URL
+        const sortedReports = response.data.reports.sort(
+          (a, b) => new Date(b.reportDate) - new Date(a.reportDate)
+        );
+        console.log("Fetched Reports:", sortedReports); // Log the fetched reports
         setReports(sortedReports);
       } catch (error) {
-        console.error('Error fetching reports:', error);
+        console.error("Error fetching reports:", error);
       }
     };
 
     fetchReports();
   }, []);
+
+  const handleMoreDetails = (report) => {
+    console.log("Selected Report:", report); // Log the selected report
+    setSelectedReport(report);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedReport(null);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,20 +45,61 @@ const ReportDetails = () => {
         <View style={styles.listContainer}>
           {/* Column Headers */}
           <View style={[styles.listItem, styles.headerRow]}>
-            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Appliance</Text>
-            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Status</Text>
-            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>Date Reported</Text>
+            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>
+              Appliance
+            </Text>
+            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>
+              Status
+            </Text>
+            <Text style={[styles.listText, styles.headerColumn, { flex: 1 }]}>
+              Details
+            </Text>
           </View>
           {/* Data Rows */}
           {reports.map((report, index) => (
             <View key={index} style={styles.listItem}>
-              <Text style={[styles.listText, { flex: 1 }]}>{report.appliance}</Text>
-              <Text style={[styles.listText, { flex: 1 }]}>{report.status}</Text>
-              <Text style={[styles.listText, { flex: 1 }]}>{new Date(report.reportDate).toLocaleDateString()}</Text>
+              <Text style={[styles.listText, { flex: 1 }]}>
+                {report.appliance}
+              </Text>
+              <Text style={[styles.listText, { flex: 1 }]}>
+                {report.status}
+              </Text>
+              <TouchableOpacity
+                style={styles.moreDetailsButton}
+                onPress={() => handleMoreDetails(report)}
+              >
+                <MaterialIcons name="info" size={24} color="blue" />
+              </TouchableOpacity>
             </View>
           ))}
         </View>
       </ScrollView>
+
+      {selectedReport && (
+        <Modal
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Report Details</Text>
+              <Text style={styles.modalText}>
+                Date Reported: {new Date(selectedReport.reportDate).toLocaleDateString()}
+              </Text>
+              <Text style={styles.modalText}>
+                Time Reported: {selectedReport.timeReported}
+              </Text>
+              <Text style={styles.modalText}>
+                Reported By: {selectedReport.item.username} - {selectedReport.item.email}
+              </Text>
+              <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )}
     </SafeAreaView>
   );
 };
@@ -61,7 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     padding: 15,
     borderRadius: 8,
-    width: '100%',
+    width: "100%",
     minWidth: 300, // Set minimum width
     maxWidth: 1000, // Extended width
     elevation: 3,
@@ -89,6 +147,43 @@ const styles = StyleSheet.create({
   headerColumn: {
     fontWeight: "bold",
     color: "#263238",
+  },
+  moreDetailsButton: {
+    flex: 1,
+    alignItems: "center",
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContainer: {
+    width: 300,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 20,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  closeButton: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "blue",
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 16,
   },
 });
 
