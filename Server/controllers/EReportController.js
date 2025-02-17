@@ -3,12 +3,13 @@ const moment = require('moment-timezone');  // Import moment-timezone
 
 exports.sendReport = async (req, res, next) => {
     try {
-        console.log(req.body); // Check the request body to ensure data is being passed
+        console.log("Request Body:", req.body); // Log the request body to ensure data is being passed
 
-        const { appliance, status, user } = req.body;  // Destructure appliance, status, and user from the request body
+        const { appliance, status } = req.body;  // Destructure appliance and status from the request body
 
-        if (!appliance || !status || !user) {
-            return res.status(400).json({ message: 'Appliance, status, and user are required.' });
+        if (!appliance || !status) {
+            console.log("Missing required fields:", { appliance, status }); // Log missing fields
+            return res.status(400).json({ message: 'Appliance and status are required.' });
         }
 
         const timeReported = moment().tz("Asia/Manila").format("hh:mm:ss A");  // Set the timeReported field with Manila time in AM/PM format
@@ -21,7 +22,6 @@ exports.sendReport = async (req, res, next) => {
             status,
             reportDate: new Date(),  // Optional: you can store the report's timestamp
             timeReported,
-            user,
         });
 
         console.log("New Report Created:", newReport); // Log the new report
@@ -32,7 +32,7 @@ exports.sendReport = async (req, res, next) => {
 
         return res.status(201).json({ message: 'Report successfully submitted', success: true }); // Success response
     } catch (err) {
-        console.error(err);  // Log error for debugging purposes
+        console.error("Error submitting report:", err.message);  // Log error for debugging purposes
         return res.status(400).json({
             message: 'Something went wrong while submitting the report. Please try again later.',
             success: false,
@@ -42,7 +42,7 @@ exports.sendReport = async (req, res, next) => {
 
 exports.getAllReports = async (req, res, next) => {
     try {
-        const reports = await Report.find().populate('user', 'username email');  // Fetch all reports and populate user field
+        const reports = await Report.find();  // Fetch all reports
 
         if (!reports || reports.length === 0) {
             return res.status(404).json({ message: 'No reports found.' });

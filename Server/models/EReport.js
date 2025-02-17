@@ -17,11 +17,11 @@ const ereportSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',  // Assuming you have a User model
-        required: true,
-    },
+    // user: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',  // Store only user ID and populate dynamically
+    //     required: true,
+    // },
 });
 
 module.exports = mongoose.model('EReport', ereportSchema);

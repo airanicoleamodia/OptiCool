@@ -90,9 +90,9 @@ const ReportDetails = () => {
               <Text style={styles.modalText}>
                 Time Reported: {selectedReport.timeReported}
               </Text>
-              <Text style={styles.modalText}>
+              {/* <Text style={styles.modalText}>
                 Reported By: {selectedReport.item.username} - {selectedReport.item.email}
-              </Text>
+              </Text> */}
               <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                 <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>
