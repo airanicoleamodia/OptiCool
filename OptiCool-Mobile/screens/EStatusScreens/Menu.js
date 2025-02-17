@@ -16,8 +16,10 @@ import baseURL from "../../assets/common/baseUrl";
 import dmt3API from "../../services/dmt3API";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux"; // Import useSelector to get user information
 
 const Menu = () => {
+  const { user } = useSelector((state) => state.auth); // Get user information from Redux store
   const [selected, setSelected] = useState("AC");
   const [submitting, setSubmitting] = useState(false);
   const [applianceStatus, setApplianceStatus] = useState({
@@ -82,9 +84,8 @@ const Menu = () => {
     setSubmitting(true);
 
     try {
-      // const userId = user._id; // Use the current user's ID
-      console.log("Sending report:", { appliance, status }); // Debug log
-      const { data } = await axios.post(`${baseURL}/ereports/ereport`, { appliance, status });
+      console.log("Sending report:", { appliance, status, user: user._id }); // Debug log
+      const { data } = await axios.post(`${baseURL}/ereports/ereport`, { appliance, status, user: user._id });
 
       if (data.success) {
         Alert.alert(

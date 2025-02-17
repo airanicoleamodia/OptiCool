@@ -14,7 +14,11 @@ const ReportDetails = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await axios.get(`${baseURL}/ereports/getreport`); // Corrected API URL
+        const response = await axios.get(`${baseURL}/ereports/getreport`, {
+          params: {
+            populate: "user", // Populate the user field
+          },
+        });
         const sortedReports = response.data.reports.sort(
           (a, b) => new Date(b.reportDate) - new Date(a.reportDate)
         );
@@ -90,9 +94,9 @@ const ReportDetails = () => {
               <Text style={styles.modalText}>
                 Time Reported: {selectedReport.timeReported}
               </Text>
-              {/* <Text style={styles.modalText}>
-                Reported By: {selectedReport.item.username} - {selectedReport.item.email}
-              </Text> */}
+              <Text style={styles.modalText}>
+                Reported By: {selectedReport.user ? `${selectedReport.user.username} - ${selectedReport.user.email}` : "Unknown"}
+              </Text>
               <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                 <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>

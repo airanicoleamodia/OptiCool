@@ -1,15 +1,21 @@
 const Report = require('../models/EReport');  // Import your Report model
+const User = require('../models/User');  // Import your User model
 const moment = require('moment-timezone');  // Import moment-timezone
 
 exports.sendReport = async (req, res, next) => {
     try {
         console.log("Request Body:", req.body); // Log the request body to ensure data is being passed
 
-        const { appliance, status } = req.body;  // Destructure appliance and status from the request body
+        const { appliance, status, user } = req.body;  // Destructure appliance, status, and user from the request body
 
-        if (!appliance || !status) {
-            console.log("Missing required fields:", { appliance, status }); // Log missing fields
-            return res.status(400).json({ message: 'Appliance and status are required.' });
+        if (!appliance || !status || !user) {
+            console.log("Missing required fields:", { appliance, status, user }); // Log missing fields
+            return res.status(400).json({ message: 'Appliance, status, and user are required.' });
+        }
+
+        const userData = await User.findById(user);
+        if (!userData) {
+            return res.status(404).json({ message: 'User not found.' });
         }
 
         const timeReported = moment().tz("Asia/Manila").format("hh:mm:ss A");  // Set the timeReported field with Manila time in AM/PM format
@@ -22,6 +28,7 @@ exports.sendReport = async (req, res, next) => {
             status,
             reportDate: new Date(),  // Optional: you can store the report's timestamp
             timeReported,
+            user,  // Store only user ID
         });
 
         console.log("New Report Created:", newReport); // Log the new report
@@ -42,7 +49,7 @@ exports.sendReport = async (req, res, next) => {
 
 exports.getAllReports = async (req, res, next) => {
     try {
-        const reports = await Report.find();  // Fetch all reports
+        const reports = await Report.find().populate('user', 'username email');  // Fetch all reports and populate user field
 
         if (!reports || reports.length === 0) {
             return res.status(404).json({ message: 'No reports found.' });
