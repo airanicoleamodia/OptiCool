@@ -45,51 +45,51 @@ export default function Dashboard() {
   const AccuweatherbaseURL = "https://dataservice.accuweather.com";
   const apiKey = "I8m0OklfM6lIEJGIAl7Sa96aZSGY6Enm";
   const locationKey = "759349";
-  
+
   const fetchWeatherData = async () => {
     const currentTime = Date.now();
     if (lastRequestTime && currentTime - lastRequestTime < 2 * 60 * 60 * 1000) {
-        console.log("API call frequency limit reached. Try again after 2 hours.");
-        return;
+      console.log("API call frequency limit reached. Try again after 2 hours.");
+      return;
     }
 
     try {
-        console.log("Fetching weather data...");
-        setIsRequesting(true);
-        const { data } = await axios.get(
-            `${AccuweatherbaseURL}/currentconditions/v1/${locationKey}`,
-            {
-                params: {
-                    apikey: apiKey,
-                    language: "en-us",
-                    details: true,
-                },
-            }
-        );
-        console.log("Weather data fetched:", data);
-        if (data && data.length > 0) {
-            setWeatherData(data[0]);
-            setLastRequestTime(currentTime);
-        } else {
-            console.error("No weather data returned.");
+      console.log("Fetching weather data...");
+      setIsRequesting(true);
+      const { data } = await axios.get(
+        `${AccuweatherbaseURL}/currentconditions/v1/${locationKey}`,
+        {
+          params: {
+            apikey: apiKey,
+            language: "en-us",
+            details: true,
+          },
         }
+      );
+      console.log("Weather data fetched:", data);
+      if (data && data.length > 0) {
+        setWeatherData(data[0]);
+        setLastRequestTime(currentTime);
+      } else {
+        console.error("No weather data returned.");
+      }
     } catch (error) {
-        if (error.response) {
-            console.error("Error response from AccuWeather API:", error.response);
-            if (error.response.status === 404) {
-                console.error("Weather data not found.");
-            } else if (error.response.status === 503) {
-                console.error("Service is temporarily unavailable.");
-            } else {
-                console.error("Error fetching weather data:", error.response.status);
-            }
-        } else if (error.request) {
-            console.error("No response received from AccuWeather API:", error.request);
+      if (error.response) {
+        console.error("Error response from AccuWeather API:", error.response);
+        if (error.response.status === 404) {
+          console.error("Weather data not found.");
+        } else if (error.response.status === 503) {
+          console.error("Service is temporarily unavailable.");
         } else {
-            console.error("Error setting up request to AccuWeather API:", error.message);
+          console.error("Error fetching weather data:", error.response.status);
         }
+      } else if (error.request) {
+        console.error("No response received from AccuWeather API:", error.request);
+      } else {
+        console.error("Error setting up request to AccuWeather API:", error.message);
+      }
     } finally {
-        setIsRequesting(false);
+      setIsRequesting(false);
     }
   };
 
