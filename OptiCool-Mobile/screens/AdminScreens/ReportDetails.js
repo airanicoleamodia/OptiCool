@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity, Modal } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Modal, Alert } from "react-native";
 import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios"; // Import axios for API calls
 import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons for the logo
 import baseURL from "../../assets/common/baseUrl";
+import io from "socket.io-client"; // Import socket.io-client
+
+const socket = io(baseURL); // Initialize socket.io
 
 const ReportDetails = () => {
   const [reports, setReports] = useState([]);
@@ -41,6 +44,22 @@ const ReportDetails = () => {
   const closeModal = () => {
     setModalVisible(false);
     setSelectedReport(null);
+  };
+
+  const handleSolveReport = async () => {
+    try {
+      // Send a notification to the user through socket.io
+      socket.emit("reportSolved", {
+        userId: selectedReport.user._id,
+        message: `Your report for ${selectedReport.appliance} has been marked as solved.`,
+      });
+
+      Alert.alert("Report Solved", "The report has been marked as solved and the user has been notified.");
+      closeModal();
+    } catch (error) {
+      console.error("Error solving report:", error);
+      Alert.alert("Error", "There was an error marking the report as solved. Please try again.");
+    }
   };
 
   return (
@@ -97,6 +116,9 @@ const ReportDetails = () => {
               <Text style={styles.modalText}>
                 Reported By: {selectedReport.user ? `${selectedReport.user.username} - ${selectedReport.user.email}` : "Unknown"}
               </Text>
+              <TouchableOpacity style={styles.solveButton} onPress={handleSolveReport}>
+                <Text style={styles.solveButtonText}>Mark as Solved</Text>
+              </TouchableOpacity>
               <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                 <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>
@@ -178,8 +200,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  closeButton: {
+  solveButton: {
     marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "green",
+    borderRadius: 5,
+  },
+  solveButtonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  closeButton: {
+    marginTop: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: "blue",

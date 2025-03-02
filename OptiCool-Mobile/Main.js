@@ -8,6 +8,7 @@ import DrawerNavigation from "./navigators/DrawerNavigation"; // Updated import
 import { StatusBar } from "react-native";
 import UsageNavigations from "./navigators/UsageNavigations"; // Stack for usage-related screens
 import MenuNavigation from "./navigators/MenuNavigations"; // Stack for menu-related screens
+import MockupDashboard from "./screens/UserScreens/MockupDashboard"; // Import the mock-up dashboard screen
 
 // Other individual screens
 import NotifScreen from "./screens/MenuScreens/NotifScreen";
@@ -23,11 +24,12 @@ import EditPosts from "./screens/AdminScreens/EditPosts"; // Ensure correct impo
 import HelpDetails from "./screens/AdminScreens/HelpDetails";
 import ReportDetails from "./screens/AdminScreens/ReportDetails"; // Ensure correct import
 import PostList from "./screens/AdminScreens/PostList"; // Ensure correct import
+import NotificationScreen from "./screens/NotificationScreen";
 
 const Stack = createStackNavigator();
 
 export default function Main() {
-  const { isLogin } = useSelector((state) => state.auth);
+  const { isLogin, role } = useSelector((state) => state.auth);
 
   return (
     <NavigationContainer>
@@ -46,27 +48,66 @@ export default function Main() {
           <Stack.Screen name="UsageNavigations" component={UsageNavigations} />
           <Stack.Screen name="MenuNavigation" component={MenuNavigation} />
 
-          {/* Individual screens */}
-          <Stack.Screen name="NotifScreen" component={NotifScreen} />
-          <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-          <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
-          <Stack.Screen name="ActiveUsers" component={ActiveUsers} />
-          <Stack.Screen name="ActivityLog" component={ActivityLog} />
-          <Stack.Screen name="UsersAll" component={UsersAll} />
-          <Stack.Screen name="HelpCenter" component={HelpCenter} />
-          <Stack.Screen name="CreatePosts" component={CreatePosts} />
-          <Stack.Screen name="EditPosts" component={EditPosts} />
-          <Stack.Screen name="PostList" component={PostList} />
-          <Stack.Screen
-            name="ReportDetails"
-            component={ReportDetails}
-            options={{ title: "Report Details", headerShown: true }}
-          />
-          <Stack.Screen
-            name="HelpDetails"
-            component={HelpDetails}
-            options={{ title: "Help Details" }}
-          />
+          {/* Role-based screens */}
+          {role === 'SuperAdmin' && (
+            <>
+              <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+              <Stack.Screen name="ActiveUsers" component={ActiveUsers} />
+              <Stack.Screen name="ActivityLog" component={ActivityLog} />
+              <Stack.Screen name="UsersAll" component={UsersAll} />
+              <Stack.Screen name="HelpCenter" component={HelpCenter} />
+              <Stack.Screen name="CreatePosts" component={CreatePosts} />
+              <Stack.Screen name="EditPosts" component={EditPosts} />
+              <Stack.Screen name="PostList" component={PostList} />
+              <Stack.Screen
+                name="ReportDetails"
+                component={ReportDetails}
+                options={{ title: "Report Details", headerShown: true }}
+              />
+              <Stack.Screen
+                name="HelpDetails"
+                component={HelpDetails}
+                options={{ title: "Help Details" }}
+              />
+              <Stack.Screen
+                name="NotificationScreen"
+                component={NotificationScreen}
+              />
+            </>
+          )}
+          {role === 'Admin' && (
+            <>
+              <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+              <Stack.Screen name="ActiveUsers" component={ActiveUsers} />
+              <Stack.Screen name="ActivityLog" component={ActivityLog} />
+              <Stack.Screen name="UsersAll" component={UsersAll} />
+              <Stack.Screen name="HelpCenter" component={HelpCenter} />
+              <Stack.Screen name="CreatePosts" component={CreatePosts} />
+              <Stack.Screen name="EditPosts" component={EditPosts} />
+              <Stack.Screen name="PostList" component={PostList} />
+              <Stack.Screen
+                name="ReportDetails"
+                component={ReportDetails}
+                options={{ title: "Report Details", headerShown: true }}
+              />
+              <Stack.Screen
+                name="HelpDetails"
+                component={HelpDetails}
+                options={{ title: "Help Details" }}
+              />
+              <Stack.Screen
+                name="NotificationScreen"
+                component={NotificationScreen}
+              />
+            </>
+          )}
+          {role === 'User' && (
+            <>
+              <Stack.Screen name="MockupDashboard" component={MockupDashboard} />
+              <Stack.Screen name="NotifScreen" component={NotifScreen} />
+              <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+            </>
+          )}
         </Stack.Navigator>
       ) : (
         <AuthNavigation />
@@ -74,3 +115,5 @@ export default function Main() {
     </NavigationContainer>
   );
 }
+
+

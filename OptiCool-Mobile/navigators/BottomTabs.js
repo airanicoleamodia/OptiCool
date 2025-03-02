@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import Environment from "../screens/EStatusScreens/EnvironmentStatus";
 import Report from "../screens/AdminScreens/EReport";
+import MockupDashboard from "../screens/UserScreens/MockupDashboard"; // Import the mock-up dashboard screen
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +18,9 @@ export default function BottomTabs() {
 
   return (
     <Tab.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName={
+        user.role === "superadmin" || user.role === "admin" ? "Dashboard" : "MockupDashboard"
+      }
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,
@@ -40,96 +43,90 @@ export default function BottomTabs() {
         tabBarInactiveTintColor: "#7a7a7a", // Optional: Gray color for inactive state
       }}
     >
-      <Tab.Screen
-        name="Dashboard"
-        component={Dashboard}
-        options={{
-          tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => {
-            const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
-            return (
-              <MaterialCommunityIcons name="home" size={30} color={iconColor} />
-            );
-          },
-        }}
-      />
-
-      <Tab.Screen
-        name="Status"
-        component={Environment}
-        options={{
-          tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => {
-            const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
-            return (
-              <MaterialCommunityIcons
-                name="widgets"
-                size={30}
-                color={iconColor}
-              />
-            );
-          },
-          // tabBarStyle: { display: "none" }, // Optional: Hides the tab bar on this screen
-        }}
-      />
-
-      <Tab.Screen
-        name="Usage"
-        component={ElectricityUsage}
-        options={{
-          tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => {
-            const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
-            return (
-              <MaterialCommunityIcons
-                name="lightning-bolt"
-                size={30}
-                color={iconColor} // Use dynamic iconColor
-              />
-            );
-          },
-        }}
-      />
-
-      {user.role === "admin" && (
+      {(user.role === "superadmin" || user.role === "admin") ? (
+        <>
+          <Tab.Screen
+            name="Dashboard"
+            component={Dashboard}
+            options={{
+              tabBarShowLabel: false,
+              tabBarIcon: ({ focused }) => {
+                const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
+                return (
+                  <MaterialCommunityIcons name="home" size={30} color={iconColor} />
+                );
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Status"
+            component={Environment}
+            options={{
+              tabBarShowLabel: false,
+              tabBarIcon: ({ focused }) => {
+                const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
+                return (
+                  <MaterialCommunityIcons name="widgets" size={30} color={iconColor} />
+                );
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Usage"
+            component={ElectricityUsage}
+            options={{
+              tabBarShowLabel: false,
+              tabBarIcon: ({ focused }) => {
+                const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
+                return (
+                  <MaterialCommunityIcons name="lightning-bolt" size={30} color={iconColor} />
+                );
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Reports"
+            component={Report}
+            options={{
+              tabBarShowLabel: false,
+              tabBarIcon: ({ focused }) => {
+                const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
+                return (
+                  <MaterialCommunityIcons name="alert-decagram" size={30} color={iconColor} />
+                );
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Accounts"
+            component={ProfileNavigation}
+            options={{
+              tabBarShowLabel: false,
+              headerShown: false,
+              tabBarIcon: ({ focused }) => {
+                const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
+                return (
+                  <MaterialCommunityIcons name="account-circle" size={30} color={iconColor} />
+                );
+              },
+            }}
+          />
+        </>
+      ) : (
         <Tab.Screen
-          name="Reports"
-          component={Report}
+          name="MockupDashboard"
+          component={MockupDashboard}
           options={{
             tabBarShowLabel: false,
             tabBarIcon: ({ focused }) => {
               const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
               return (
-                <MaterialCommunityIcons
-                  name="alert-decagram"
-                  size={30}
-                  color={iconColor} // Use dynamic iconColor
-                />
+                <MaterialCommunityIcons name="home" size={30} color={iconColor} />
               );
             },
           }}
         />
       )}
-
-      <Tab.Screen
-        name="Accounts"
-        component={ProfileNavigation}
-        options={{
-          tabBarShowLabel: false,
-          headerShown: false,
-          tabBarIcon: ({ focused }) => {
-            const iconColor = focused ? "#000000" : "#7a7a7a"; // Black when active, gray when inactive
-            // return <Avatar.Image size={30} source={{ uri: user.avatar.url }} />;
-            return (
-              <MaterialCommunityIcons
-                name="account-circle"
-                size={30}
-                color={iconColor} // Use dynamic iconColor
-              />
-            );
-          },
-        }}
-      />
     </Tab.Navigator>
   );
 }

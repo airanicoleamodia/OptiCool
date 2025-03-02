@@ -136,7 +136,7 @@ export default function Dashboard() {
   const getRoomTemp = async () => {
     try {
       const data = await dmt3API.getDevicesDataAPI();
-      console.log(data);
+      // console.log(data);
       setRoomTemp(data.inside.temperature);
     } catch (err) {
       console.error("Error fetching room temperature:", err.message);
@@ -167,7 +167,10 @@ export default function Dashboard() {
   });
 
   const getPowerConsumption = async () => {
-    dmt3API.getPowerConsumptionAPI("2024-10-01", "2024-10-20");
+    const data = await dmt3API.getPowerConsumptionAPI("2024-10-01", "2024-10-20");
+    axios.post(`${baseURL}/save/data`, {
+      power: data,
+    })
   }
 
   useFocusEffect(
@@ -216,7 +219,7 @@ export default function Dashboard() {
           name="bell"
           size={24}
           color="#000000"
-          onPress={() => alert("Alert clicked!")}
+          onPress={() => navigation.navigate("NotificationScreen")} // Navigate to NotificationScreen
           style={styles.alertIconContainer}
         />
         {/* Dropdown Menu */}
