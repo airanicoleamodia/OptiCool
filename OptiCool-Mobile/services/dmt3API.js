@@ -62,7 +62,7 @@ const adjustACTempAPI = async (tempValue = 24) => {
     }
 
     if (tempValue <= 19) {
-        console.log("Should be set to 16 only");
+        console.log("Should be set to 19 only");
 
         return;
     }

@@ -41,6 +41,7 @@ const UsageTracking = () => {
       setTodayUsage(data.todayUsage);
       setMonthlyUsage(data.monthlyUsage);
     } catch (error) {
+      console.log(error);
       Alert.alert("Error", "Failed to fetch usage data");
       console.error("Error fetching usage data:", error);
     } finally {
