@@ -15,10 +15,12 @@ app.use(morgan('tiny'));
 const userRoutes = require('./routes/userRoutes');
 const ereportRoutes = require('./routes/ereportRoutes');
 const postRoutes = require('./routes/postRoutes');
+const powerConsumptionRoutes = require('./routes/powerConsumptionRoutes'); // Import power consumption routes
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/ereports', ereportRoutes);
 app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/power-consumption', powerConsumptionRoutes); // Use power consumption routes
 
 app.post('/api/v1/save/data', async (req, res) => {
 

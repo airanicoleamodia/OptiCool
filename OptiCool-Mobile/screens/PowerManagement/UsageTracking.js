@@ -22,6 +22,7 @@ const UsageTracking = () => {
   const [todayUsage, setTodayUsage] = useState(null);
   const [monthlyUsage, setMonthlyUsage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [powerData, setPowerData] = useState([]);
 
   useEffect(() => {
     console.log("Component mounted, fetching initial data...");
@@ -30,23 +31,27 @@ const UsageTracking = () => {
 
   const fetchUsageData = async () => {
     setLoading(true);
-    console.log("Fetching usage data from API...");
     try {
-      const data = await dmt3API.getPowerConsumptionAPI(startDate, endDate);
-      console.log("Data fetched successfully:", data);
+      const response = await fetch("http://192.168.40.74:5000/power-consumption"); // Your API endpoint
+      const data = await response.json();
+  
+      const labels = data.map((item) => item.timestamp.slice(11, 16)); // Extract time
+      const values = data.map((item) => item.consumption);
+  
       setChartData({
-        labels: data.labels.length ? data.labels : ["No Data"],
-        datasets: [{ data: data.values.length ? data.values : [0] }],
+        labels: labels.length ? labels : ["No Data"],
+        datasets: [{ data: values.length ? values : [0] }],
       });
-      setTodayUsage(data.todayUsage);
-      setMonthlyUsage(data.monthlyUsage);
+  
+      // Calculate today's and monthly usage
+      setTodayUsage(values.length ? values[values.length - 1] : 0);
+      setMonthlyUsage(values.reduce((acc, curr) => acc + curr, 0) / values.length);
+      setPowerData(data); // Set power data for the table
     } catch (error) {
-      console.log(error);
       Alert.alert("Error", "Failed to fetch usage data");
       console.error("Error fetching usage data:", error);
     } finally {
       setLoading(false);
-      console.log("Finished fetching usage data.");
     }
   };
 
@@ -143,6 +148,20 @@ const UsageTracking = () => {
           <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
             <Text style={styles.searchButtonText}>Search</Text>
           </TouchableOpacity>
+
+          <View style={styles.tableContainer}>
+            <Text style={styles.tableTitle}>Power Consumption Data</Text>
+            <View style={styles.tableHeader}>
+              <Text style={styles.tableHeaderText}>Timestamp</Text>
+              <Text style={styles.tableHeaderText}>Consumption (kWh)</Text>
+            </View>
+            {powerData.map((item, index) => (
+              <View key={index} style={styles.tableRow}>
+                <Text style={styles.tableCell}>{new Date(item.timestamp).toLocaleString()}</Text>
+                <Text style={styles.tableCell}>{item.consumption}</Text>
+              </View>
+            ))}
+          </View>
         </>
       )}
     </ScrollView>
@@ -235,6 +254,40 @@ const styles = StyleSheet.create({
   loadingText: {
     textAlign: "center",
     color: "#000000",
+  },
+  tableContainer: {
+    marginTop: 20,
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  tableTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    paddingBottom: 5,
+    marginBottom: 5,
+  },
+  tableHeaderText: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  tableRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+  },
+  tableCell: {
+    fontSize: 14,
   },
 });
 
