@@ -4,10 +4,10 @@ import { Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios"; // Import axios for API calls
 import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons for the logo
-import baseURL from "../../assets/common/baseUrl";
+import baseUrl from "../../assets/common/baseUrl";
 import io from "socket.io-client"; // Import socket.io-client
 
-const socket = io(baseURL); // Initialize socket.io
+const socket = io(baseUrl); // Initialize socket.io
 
 const ReportDetails = () => {
   const [reports, setReports] = useState([]);
@@ -17,7 +17,7 @@ const ReportDetails = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await axios.get(`${baseURL}/ereports/getreport`, {
+        const response = await axios.get(`${baseUrl}/ereports/getreport`, {
           params: {
             populate: "user", // Populate the user field
           },

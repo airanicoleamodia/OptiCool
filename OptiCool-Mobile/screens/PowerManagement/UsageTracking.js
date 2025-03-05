@@ -12,7 +12,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import axios from "axios";
-import baseURL from "../../assets/common/baseUrl";
+import baseUrl from "../../assets/common/baseUrl";
 
 const UsageTracking = () => {
   const [startDate, setStartDate] = useState(new Date());
@@ -36,7 +36,7 @@ const UsageTracking = () => {
   const fetchPowerData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${baseURL}/api/v1/power-consumption/getpowerconsumption`);
+      const response = await axios.get(`${baseUrl}/power-consumption/getpowerconsumption`);
       const data = response.data;
       setPowerData(data); // Set power data for the table
     } catch (error) {
@@ -47,15 +47,41 @@ const UsageTracking = () => {
     }
   };
 
+  const fetchPowerDataByDate = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${baseUrl}/powerconsumption/range`, {
+        params: {
+          start: startDate.toISOString(),
+          end: endDate.toISOString(),
+        },
+      });
+      const data = response.data;
+      setPowerData(data); // Set power data for the table
+
+      // Update chart data
+      const labels = data.map(item => new Date(item.timestamp).toLocaleDateString());
+      const consumptionData = data.map(item => item.consumption);
+      setChartData({
+        labels,
+        datasets: [{ data: consumptionData }],
+      });
+
+      // Update summary data
+      const totalConsumption = consumptionData.reduce((acc, value) => acc + value, 0);
+      setTodayUsage(consumptionData[consumptionData.length - 1] || 0);
+      setMonthlyUsage(totalConsumption);
+    } catch (error) {
+      Alert.alert("Error", "Failed to fetch power data by date range");
+      console.error("Error fetching power data by date range:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSearch = () => {
     console.log("Search button pressed, fetching data for new date range...");
-    // Mock data for now
-    setChartData({
-      labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      datasets: [{ data: [30, 60, 40, 90, 120, 70] }],
-    });
-    setTodayUsage(60);
-    setMonthlyUsage(400);
+    fetchPowerDataByDate();
   };
 
   return (
