@@ -15,7 +15,7 @@ import NotifScreen from "./screens/MenuScreens/NotifScreen";
 import UpdateProfile from "./screens/UserScreens/UpdateProfile";
 import AdminDashboard from "./screens/AdminScreens/AdminDashboard";
 import ActiveUsers from "./screens/AdminScreens/ActiveUsers";
-import ActivityLog from "./screens/AdminScreens/ActivityLog";
+import ActivityLog from "./screens/AdminScreens/ActivityLog"; // Ensure correct import
 import HelpCenter from "./screens/AdminScreens/HelpCenter";
 import UsersAll from "./screens/AdminScreens/UsersAll";
 import UsageTracking from "./screens/PowerManagement/UsageTracking";
@@ -40,11 +40,10 @@ export default function Main() {
       />
       {isLogin ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* BottomTabs as the main entry point */}
-          <Stack.Screen name="BottomTabs" component={BottomTabs} />
+          {/* DrawerNavigation as the main entry point */}
+          <Stack.Screen name="DrawerNavigation" component={DrawerNavigation} />
 
           {/* Other stack navigators */}
-          <Stack.Screen name="DrawerNavigation" component={DrawerNavigation} />
           <Stack.Screen name="UsageNavigations" component={UsageNavigations} />
           <Stack.Screen name="MenuNavigation" component={MenuNavigation} />
 
