@@ -23,7 +23,6 @@ app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/power-consumption', powerConsumptionRoutes); // Use power consumption routes
 
 app.post('/api/v1/save/data', async (req, res) => {
-
     const jsonData = JSON.stringify(req.body.power, null, 2);
 
     // Write to a file
@@ -31,7 +30,7 @@ app.post('/api/v1/save/data', async (req, res) => {
 
     res.json({
         message: "write success",
-    })
-})
+    });
+});
 
 module.exports = app;

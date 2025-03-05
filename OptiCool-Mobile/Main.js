@@ -41,7 +41,7 @@ export default function Main() {
       {isLogin ? (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {/* BottomTabs as the main entry point */}
-          {/* <Stack.Screen name="BottomTabs" component={BottomTabs} /> */}
+          <Stack.Screen name="BottomTabs" component={BottomTabs} />
 
           {/* Other stack navigators */}
           <Stack.Screen name="DrawerNavigation" component={DrawerNavigation} />

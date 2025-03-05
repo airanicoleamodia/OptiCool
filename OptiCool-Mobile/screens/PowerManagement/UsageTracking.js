@@ -11,45 +11,37 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
-import dmt3API from "../../services/dmt3API"; // Import the API
+import axios from "axios";
+import baseURL from "../../assets/common/baseUrl";
 
 const UsageTracking = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [openStartPicker, setOpenStartPicker] = useState(false);
   const [openEndPicker, setOpenEndPicker] = useState(false);
-  const [chartData, setChartData] = useState(null);
-  const [todayUsage, setTodayUsage] = useState(null);
-  const [monthlyUsage, setMonthlyUsage] = useState(null);
+  const [chartData, setChartData] = useState({
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [{ data: [20, 45, 28, 80, 99, 43] }],
+  });
+  const [todayUsage, setTodayUsage] = useState(50);
+  const [monthlyUsage, setMonthlyUsage] = useState(300);
   const [loading, setLoading] = useState(false);
   const [powerData, setPowerData] = useState([]);
 
   useEffect(() => {
     console.log("Component mounted, fetching initial data...");
-    fetchUsageData();
+    fetchPowerData();
   }, []);
 
-  const fetchUsageData = async () => {
+  const fetchPowerData = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://192.168.40.74:5000/power-consumption"); // Your API endpoint
-      const data = await response.json();
-  
-      const labels = data.map((item) => item.timestamp.slice(11, 16)); // Extract time
-      const values = data.map((item) => item.consumption);
-  
-      setChartData({
-        labels: labels.length ? labels : ["No Data"],
-        datasets: [{ data: values.length ? values : [0] }],
-      });
-  
-      // Calculate today's and monthly usage
-      setTodayUsage(values.length ? values[values.length - 1] : 0);
-      setMonthlyUsage(values.reduce((acc, curr) => acc + curr, 0) / values.length);
+      const response = await axios.get(`${baseURL}/api/v1/power-consumption/getpowerconsumption`);
+      const data = response.data;
       setPowerData(data); // Set power data for the table
     } catch (error) {
-      Alert.alert("Error", "Failed to fetch usage data");
-      console.error("Error fetching usage data:", error);
+      Alert.alert("Error", "Failed to fetch power data");
+      console.error("Error fetching power data:", error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +49,13 @@ const UsageTracking = () => {
 
   const handleSearch = () => {
     console.log("Search button pressed, fetching data for new date range...");
-    fetchUsageData();
+    // Mock data for now
+    setChartData({
+      labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      datasets: [{ data: [30, 60, 40, 90, 120, 70] }],
+    });
+    setTodayUsage(60);
+    setMonthlyUsage(400);
   };
 
   return (
@@ -81,7 +79,7 @@ const UsageTracking = () => {
           </View>
 
           <BarChart
-            data={chartData || { labels: ["No Data"], datasets: [{ data: [0] }] }}
+            data={chartData}
             width={Dimensions.get("window").width - 20}
             height={220}
             yAxisLabel="kW"
@@ -152,13 +150,13 @@ const UsageTracking = () => {
           <View style={styles.tableContainer}>
             <Text style={styles.tableTitle}>Power Consumption Data</Text>
             <View style={styles.tableHeader}>
-              <Text style={styles.tableHeaderText}>Timestamp</Text>
               <Text style={styles.tableHeaderText}>Consumption (kWh)</Text>
+              <Text style={styles.tableHeaderText}>Timestamp</Text>
             </View>
-            {powerData.map((item, index) => (
+            {powerData.map((powerconsumption, index) => (
               <View key={index} style={styles.tableRow}>
-                <Text style={styles.tableCell}>{new Date(item.timestamp).toLocaleString()}</Text>
-                <Text style={styles.tableCell}>{item.consumption}</Text>
+                <Text style={styles.tableCell}>{powerconsumption.consumption}</Text>
+                <Text style={styles.tableCell}>{new Date(powerconsumption.timestamp).toLocaleString()}</Text>
               </View>
             ))}
           </View>

@@ -10,6 +10,8 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import Environment from "../screens/EStatusScreens/EnvironmentStatus";
 import Report from "../screens/AdminScreens/EReport";
 import MockupDashboard from "../screens/UserScreens/MockupDashboard"; // Import the mock-up dashboard screen
+import ReportDetails from "../screens/AdminScreens/ReportDetails"; // Ensure correct import
+import AdminDashboard from "../screens/AdminScreens/AdminDashboard"; // Ensure correct import
 
 const Tab = createBottomTabNavigator();
 
@@ -109,6 +111,22 @@ export default function BottomTabs() {
                   <MaterialCommunityIcons name="account-circle" size={30} color={iconColor} />
                 );
               },
+            }}
+          />
+          <Tab.Screen
+            name="ReportDetails"
+            component={ReportDetails}
+            options={{
+              tabBarButton: () => null, // Hide the tab bar button
+              tabBarVisible: false, // Hide the tab bar
+            }}
+          />
+          <Tab.Screen
+            name="AdminDashboard"
+            component={AdminDashboard}
+            options={{
+              tabBarButton: () => null, // Hide the tab bar button
+              tabBarVisible: false, // Hide the tab bar
             }}
           />
         </>
