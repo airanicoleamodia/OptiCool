@@ -205,7 +205,7 @@ export default function Profile() {
 
           <Button
             mode="contained"
-            onPress={() => navigation.navigate("BottomTabs", { screen: "AdminDashboard" })} // Navigates to AdminDashboard screen within BottomTabs
+            onPress={() => navigation.navigate("AdminDashboard")} // Navigates to AdminDashboard screen
             style={{
               backgroundColor: "#FFFFFF",
               width: "48%", // Adjust width to fit both buttons in a row

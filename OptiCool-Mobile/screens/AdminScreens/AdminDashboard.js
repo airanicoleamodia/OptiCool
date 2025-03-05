@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Modal, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ReportDetails from './ReportDetails';
+import ActivityLog from './ActivityLog';
 import axios from 'axios';
 import baseURL from '../../assets/common/baseUrl';
 
@@ -132,21 +133,6 @@ const AdminDashboard = () => {
                 <Text style={styles.choiceText}>Edit Post</Text>
               </TouchableOpacity>
             </View>
-            {/* <FlatList
-              data={posts}
-              keyExtractor={(item) => item._id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={[
-                    styles.postItem,
-                    item._id === selectedPostId && styles.selectedPostItem,
-                  ]}
-                  onPress={() => setSelectedPostId(item._id)}
-                >
-                  <Text style={styles.postTitle}>{item.title}</Text>
-                </TouchableOpacity>
-              )}
-            /> */}
             <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
