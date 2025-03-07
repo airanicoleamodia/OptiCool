@@ -17,7 +17,8 @@ const HumiditySchema = new mongoose.Schema({
 const Humidity = mongoose.model("Humidity", HumiditySchema);
 
 // Read JSON file
-const data = JSON.parse(fs.readFileSync("C:/Users/Win10/Thesis/1/OptiCool/Server/humidity.json", "utf-8"));
+// const data = JSON.parse(fs.readFileSync("C:/Users/Win10/Thesis/1/OptiCool/Server/humidity.json", "utf-8"));
+const data = JSON.parse("C:\\Users\\arman\\Capstone\\OptiCool\\Server\\data\\humidity.json", "utf-8");
 
 // Remove _id field from data
 const sanitizedData = data.map(({ _id, ...rest }) => rest);

@@ -17,7 +17,7 @@ const PowerConsumptionSchema = new mongoose.Schema({
 const PowerConsumption = mongoose.model("PowerConsumption", PowerConsumptionSchema);
 
 // Read JSON file
-const data = JSON.parse(fs.readFileSync("C:\\Users\\arman\\Capstone\\OptiCool\\Server\\power_consumption.json", "utf-8"));
+const data = JSON.parse(fs.readFileSync("C:\\Users\\arman\\Capstone\\OptiCool\\Server\\data\\power_consumption.json", "utf-8"));
 
 // Insert data into MongoDB
 PowerConsumption.insertMany(data)

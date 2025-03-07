@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
+const path = require("path");
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://angelpagalan:angelpagalan@cluster0.w5pzofs.mongodb.net/Cool", {
@@ -17,7 +18,8 @@ const TemperatureSchema = new mongoose.Schema({
 const Temperature = mongoose.model("Temperature", TemperatureSchema);
 
 // Read JSON file
-const temperatureData = JSON.parse(fs.readFileSync("C:/Users/Win10/Thesis/1/OptiCool/Server/inside_temperature.json", "utf-8"));
+const temperatureDataPath = path.join(__dirname, "../data/inside_temperature.json");
+const temperatureData = JSON.parse(fs.readFileSync(temperatureDataPath, "utf-8"));
 
 // Remove _id field from data
 const sanitizedTemperatureData = temperatureData.map(({ _id, ...rest }) => rest);
@@ -32,7 +34,8 @@ Temperature.insertMany(sanitizedTemperatureData)
   })
   .then((latestTemperatureData) => {
     // Write the latest data to the JSON file
-    fs.writeFileSync("C:/Users/Win10/Thesis/1/OptiCool/Server/inside_temperature.json", JSON.stringify(latestTemperatureData, null, 2));
+    const updatedTemperatureDataPath = path.join(__dirname, "../data/inside_temperature.json");
+    fs.writeFileSync(updatedTemperatureDataPath, JSON.stringify(latestTemperatureData, null, 2));
     console.log("Inside temperature data updated in inside_temperature.json!");
     mongoose.connection.close();
   })
