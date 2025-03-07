@@ -143,6 +143,28 @@ export default function Dashboard() {
     }
   };
 
+  const getPowerConsumption = async () => {
+    const data = await dmt3API.getPowerConsumptionAPI("2024-10-01", new Date().toISOString().slice(0, 10));
+    axios.post(`${baseURL}/save/data`, {
+      power: data,
+    });
+    console.log("Power Consumption Data:", data);
+  };
+
+  const getInsideHumidityData = async () => {
+    const startDate = "2024-10-01";
+    const endDate = new Date().toISOString().slice(0, 10);
+    const data = await dmt3API.getInsideHumidityAPI(startDate, endDate);
+    console.log("Inside Humidity Data:", data);
+  };
+
+  const getInsideTemperatureData = async () => {
+    const startDate = "2024-10-01";
+    const endDate = new Date().toISOString().slice(0, 10);
+    const data = await dmt3API.getInsideTemperatureAPI(startDate, endDate);
+    console.log("Inside Temperature Data:", data);
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (user && user._id) {
@@ -165,13 +187,6 @@ export default function Dashboard() {
       marginLeft: 30,
     },
   });
-
-  const getPowerConsumption = async () => {
-    const data = await dmt3API.getPowerConsumptionAPI("2024-10-01", "2024-10-20");
-    axios.post(`${baseURL}/save/data`, {
-      power: data,
-    })
-  }
 
   useFocusEffect(
     useCallback(() => {
@@ -308,6 +323,33 @@ export default function Dashboard() {
               {weatherData?.Temperature?.Metric?.Value || "--"}°C
             </Text>
           </View>
+
+          {/* Power Consumption Button */}
+          <Button
+            mode="contained"
+            onPress={getPowerConsumption}
+            style={styles.powerButton}
+          >
+            Get Power Consumption
+          </Button>
+
+          {/* Inside Humidity Data Button */}
+          <Button
+            mode="contained"
+            onPress={getInsideHumidityData}
+            style={styles.humidityButton}
+          >
+            Get Inside Humidity Data
+          </Button>
+
+          {/* Inside Temperature Data Button */}
+          <Button
+            mode="contained"
+            onPress={getInsideTemperatureData}
+            style={styles.temperatureButton}
+          >
+            Get Inside Temperature Data
+          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -516,5 +558,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+  },
+  powerButton: {
+    marginTop: 20,
+    backgroundColor: "#4f5e70",
+  },
+  humidityButton: {
+    marginTop: 20,
+    backgroundColor: "#4f5e70",
+  },
+  temperatureButton: {
+    marginTop: 20,
+    backgroundColor: "#4f5e70",
   },
 });

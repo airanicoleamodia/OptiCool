@@ -186,6 +186,24 @@ const getPowerConsumptionAPI = async (startDate, endDate) => {
     return data;
 }
 
+const getHumidityAPI = async (startDate, endDate) => {
+    const { data } = await axios.get(`${dmtUrl}/humidity_data?start_date=${startDate}&end_date=${endDate}`);
+    console.log(data)
+    return data;
+}
+
+const getInsideHumidityAPI = async (startDate, endDate) => {
+    const { data } = await axios.get(`${dmtUrl}/inside_humidity_data?start_date=${startDate}&end_date=${endDate}`);
+    console.log(data)
+    return data;
+};
+
+const getInsideTemperatureAPI = async (startDate, endDate) => {
+    const { data } = await axios.get(`${dmtUrl}/inside_temperature_data?start_date=${startDate}&end_date=${endDate}`);
+    console.log(data)
+    return data;
+};
+
 const getWeeklyUsageAPI = async () => {
     try {
         const { data } = await axios.get(`${dmtUrl}/weekly_usage`);
@@ -228,7 +246,10 @@ export default {
     turnOffDevice,
 
     getPowerConsumptionAPI,
-
+    getHumidityAPI,
+    getInsideHumidityAPI,
+    getInsideTemperatureAPI,
+    getAPDataAPI,
     getWeeklyUsageAPI,
     getMonthlyUsageAPI,
 }
